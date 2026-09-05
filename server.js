@@ -78,6 +78,88 @@ app.post("/api/search", async (req, res) => {
 
 });
 
+// 치지직 로그인 시작
+app.get("/auth/chzzk", (req, res) => {
+
+    const clientId = process.env.CHZZK_CLIENT_ID;
+
+    const redirectUri = "http://localhost:3000/auth/chzzk/callback";
+
+    const state = "stream_game_profile_login";
+
+    const authUrl =
+        `https://chzzk.naver.com/account-interlock` +
+        `?clientId=${clientId}` +
+        `&redirectUri=${encodeURIComponent(redirectUri)}` +
+        `&state=${state}`;
+
+    res.redirect(authUrl);
+
+});
+
+// 치지직 로그인 콜백
+app.get("/auth/chzzk/callback", async (req, res) => {
+
+    const code = req.query.code;
+    const state = req.query.state;
+
+    console.log("치지직 인증 코드:", code);
+    console.log("State:", state);
+
+    try {
+
+        const clientId = process.env.CHZZK_CLIENT_ID;
+        const clientSecret = process.env.CHZZK_CLIENT_SECRET;
+
+        // 치지직 Access Token 발급 요청
+        const tokenResponse = await axios.post(
+            "https://openapi.chzzk.naver.com/auth/v1/token",
+            {
+                grantType: "authorization_code",
+                clientId: clientId,
+                clientSecret: clientSecret,
+                code: code,
+                state: state
+            }
+        );
+
+        console.log("토큰 응답:", tokenResponse.data);
+
+        const accessToken = tokenResponse.data.content.accessToken;
+
+        console.log("Access Token:", accessToken);
+
+        // 치지직 로그인한 유저 정보 조회
+const userResponse = await axios.get(
+    "https://openapi.chzzk.naver.com/open/v1/users/me",
+    {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    }
+);
+
+console.log("유저 정보:", userResponse.data);
+
+const channelId = userResponse.data.content.channelId;
+const nickname = userResponse.data.content.nickname;
+
+res.redirect(
+    `/?channelId=${encodeURIComponent(channelId)}&nickname=${encodeURIComponent(nickname)}`
+);
+
+    } catch (error) {
+
+        console.log(
+            "치지직 토큰 발급 에러:",
+            error.response?.data || error.message
+        );
+
+        res.status(500).send("치지직 토큰 발급 실패");
+
+    }
+
+});
 
 app.listen(PORT, () => {
     console.log(`서버 실행중: http://localhost:${PORT}`);

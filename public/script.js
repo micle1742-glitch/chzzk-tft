@@ -1,3 +1,17 @@
+const params = new URLSearchParams(window.location.search);
+
+const chzzkNickname = params.get("nickname");
+const channelId = params.get("channelId");
+
+console.log("치지직 닉네임:", chzzkNickname);
+console.log("채널 ID:", channelId);
+
+if (chzzkNickname && channelId) {
+    document.getElementById("loginInfo").innerHTML = `
+        <h2>🎉 ${chzzkNickname}님, 치지직 로그인 성공!</h2>
+        <p>채널 연동이 완료되었습니다.</p>
+    `;
+}
 async function searchTier() {
 
     const nickname = document.getElementById("nickname").value;
@@ -38,7 +52,25 @@ if (!data.success) {
 
 const tierInfo = data.tier[0];
 
-document.getElementById("result").innerHTML =
-    `${data.nickname}님의 티어는 ${tierInfo.tier} ${tierInfo.rank} ${tierInfo.leaguePoints}LP 입니다.`;
+document.getElementById("result").innerHTML = `
+    <div class="tier-card">
+        <h2>🎉 ${data.nickname}님 인증 완료!</h2>
+
+        <p>🏆 롤체 티어</p>
+
+        <h1>
+            ${tierInfo.tier} ${tierInfo.rank}
+        </h1>
+
+        <p>
+            ${tierInfo.leaguePoints} LP
+        </p>
+
+        <p>
+            승리: ${tierInfo.wins}승 /
+            패배: ${tierInfo.losses}패
+        </p>
+    </div>
+`;
 
 }
