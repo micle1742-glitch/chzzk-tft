@@ -22,7 +22,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div>
+    <div>href="#"
       <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>GAME TIER</title>
@@ -34,9 +34,9 @@ export default function Home() {
           <span className="beta-badge">BETA</span>
         </a>
         <nav>
-          <a href="#" className="active">홈</a>
+          <a href="/" className="active">홈</a>
           <a href="#">게임</a>
-          <a href="#">티어 인증</a>
+          <a href="/tier">티어 인증</a>
           <a href="#">랭킹</a>
           <a href="#">커뮤니티</a>
         </nav>

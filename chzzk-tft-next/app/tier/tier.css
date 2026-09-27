@@ -1,190 +1,534 @@
+/* =========================================================
+   TIERON
+   TFT Tier Verification & Result Card
+   ========================================================= */
 
-/* =========================
-   Tier Verification
-========================= */
-
-.container {
-  width: min(520px, calc(100% - 40px));
-  margin: 80px auto;
-  padding: 40px;
-
-  background: #15171c;
-  border: 1px solid #2a2d35;
-  border-radius: 20px;
-
-  box-sizing: border-box;
-
-  text-align: center;
-
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
-}
-
-/* 제목 */
-
-.container h1 {
-  margin: 0 0 10px;
-
+/* 전체 화면 */
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #030d0c;
+  background-image: 
+    radial-gradient(circle at 50% 15%, rgba(22, 213, 183, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 80% 80%, rgba(15, 60, 52, 0.2) 0%, transparent 50%);
   color: #ffffff;
-  font-size: 32px;
-  font-weight: 700;
+  font-family: Arial, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  box-sizing: border-box;
 }
 
-.container > p {
-  margin: 0 0 35px;
-
-  color: #8d929d;
-  font-size: 15px;
-}
-
-/* 입력창 */
-
-.container input {
-  display: block;
-
+.tier-page {
   width: 100%;
-  height: 52px;
-
-  margin-bottom: 14px;
-  padding: 0 16px;
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
   box-sizing: border-box;
+}
 
-  background: #1d2027;
-  border: 1px solid #30343d;
-  border-radius: 10px;
+.tier-wrapper {
+  width: 100%;
+  max-width: 430px;
+  display: flex;
+  flex-direction: column;
+}
 
+/* =========================================================
+   홈으로 돌아가기
+   ========================================================= */
+.home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 18px;
+  color: #728c87;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.home-link:hover {
+  color: #18d8ba;
+  transform: translateX(-3px);
+}
+
+/* =========================================================
+   메인 컨테이너
+   ========================================================= */
+.container {
+  width: 100%;
+  padding: 34px 28px 30px;
+  box-sizing: border-box;
+  background: #071c19;
+  border: 1px solid #144941;
+  border-radius: 20px;
   color: #ffffff;
-  font-size: 15px;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.45),
+    0 0 35px rgba(22, 213, 183, 0.05);
+}
 
+/* =========================================================
+   TIERON 브랜드
+   ========================================================= */
+.brand {
+  margin-bottom: 16px;
+  text-align: center;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -1px;
+  color: #ffffff;
+}
+
+.brand span {
+  color: #16d5b7;
+}
+
+/* =========================================================
+   인증 상태 아이콘
+   ========================================================= */
+.verification-icon {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-radius: 50%;
+  font-size: 22px;
+  font-weight: 800;
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* 미인증 상태 */
+.verification-icon.unverified {
+  border: 1px solid rgba(255, 82, 82, 0.45);
+  background: rgba(255, 82, 82, 0.08);
+  color: #ff6868;
+  box-shadow: 0 0 16px rgba(255, 82, 82, 0.08);
+}
+
+/* 인증 완료 상태 */
+.verification-icon.verified {
+  border: 1px solid rgba(22, 213, 183, 0.55);
+  background: rgba(22, 213, 183, 0.1);
+  color: #18d8ba;
+  box-shadow: 0 0 20px rgba(22, 213, 183, 0.15);
+}
+
+/* 제목 및 설명 */
+.container > h1 {
+  margin: 0;
+  text-align: center;
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+}
+
+.description {
+  margin: 8px 0 24px;
+  text-align: center;
+  color: #76938e;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   입력창
+   ========================================================= */
+.container input {
+  width: 100%;
+  height: 48px;
+  box-sizing: border-box;
+  margin-bottom: 11px;
+  padding: 0 16px;
+  background: #051613;
+  border: 1px solid #143e39;
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 14px;
   outline: none;
-
-  transition: 0.2s;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
 .container input::placeholder {
-  color: #686e79;
+  color: #55726d;
 }
 
 .container input:focus {
-  border-color: #72c7ff;
-  box-shadow: 0 0 0 3px rgba(114, 199, 255, 0.12);
+  background: #08201c;
+  border-color: #18d8ba;
+  box-shadow: 0 0 0 3px rgba(24, 216, 186, 0.1);
 }
 
-/* 조회 버튼 */
+.container input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
-.container button {
+/* =========================================================
+   티어 조회 버튼
+   ========================================================= */
+.container > button {
   width: 100%;
-  height: 52px;
-
-  margin-top: 6px;
-
+  height: 50px;
+  margin-top: 5px;
   border: none;
   border-radius: 10px;
-
-  background: #72c7ff;
-  color: #101217;
-
-  font-size: 16px;
-  font-weight: 700;
-
+  background: #16d5b7;
+  color: #041a17;
+  font-size: 15px;
+  font-weight: 800;
   cursor: pointer;
-
+  box-shadow: 0 4px 16px rgba(22, 213, 183, 0.22);
   transition:
-    transform 0.15s,
-    background 0.15s,
-    box-shadow 0.15s;
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
 }
 
-.container button:hover {
-  background: #8bd1ff;
+.container > button:hover:not(:disabled) {
+  background: #23e8c9;
+  box-shadow: 0 6px 24px rgba(22, 213, 183, 0.35);
   transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(114, 199, 255, 0.18);
 }
 
-.container button:active {
+.container > button:active:not(:disabled) {
   transform: translateY(0);
 }
 
-/* 로그인 정보 */
-
-#loginInfo {
-  margin-bottom: 20px;
+.container > button:disabled {
+  background: #105249;
+  color: #8bbcb5;
+  cursor: not-allowed;
+  opacity: 0.85;
+  box-shadow: none;
 }
 
-#loginInfo h2 {
-  margin: 0 0 6px;
-
-  color: #ffffff;
-  font-size: 18px;
-}
-
-#loginInfo p {
-  margin: 0;
-
-  color: #8d929d;
-  font-size: 14px;
-}
-
-/* 결과 영역 */
-
+/* =========================================================
+   결과 영역 및 오류 메시지
+   ========================================================= */
 #result {
-  margin-top: 28px;
+  margin-top: 22px;
 }
 
-/* 에러 메시지 */
-
-#result > p {
-  color: #ff7b7b;
-  font-size: 14px;
+.error-message {
+  margin: 0;
+  padding: 13px;
+  border: 1px solid rgba(255, 90, 90, 0.3);
+  border-radius: 10px;
+  background: rgba(255, 70, 70, 0.08);
+  color: #ff8080;
+  text-align: center;
+  font-size: 13px;
+  animation: resultAppear 0.25s ease;
 }
 
-/* 티어 카드 */
-
+/* =========================================================
+   TIERON 인증 결과 카드 (tier-card)
+   ========================================================= */
 .tier-card {
-  margin-top: 10px;
-  padding: 28px 24px;
-
-  background: #1b1e25;
-  border: 1px solid #30343d;
+  position: relative;
+  overflow: hidden;
+  padding: 24px 20px 18px;
+  background: linear-gradient(155deg, #09221e 0%, #051513 100%);
+  border: 1px solid rgba(22, 213, 183, 0.35);
   border-radius: 16px;
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.4),
+    0 0 25px rgba(22, 213, 183, 0.08);
+  text-align: center;
+  animation: resultAppear 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.tier-card h2 {
-  margin: 0 0 24px;
+/* 카드 뒷배경의 아주 은은한 추상적인 'T' 기하학적 장식 */
+.tier-card::before {
+  content: "";
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  background-image:
+    /* T 상단 가로 바 */
+    linear-gradient(to right, rgba(22, 213, 183, 0.03) 0%, rgba(22, 213, 183, 0.05) 50%, rgba(22, 213, 183, 0.03) 100%),
+    /* T 중앙 세로 바 */
+    linear-gradient(to bottom, rgba(22, 213, 183, 0.05) 0%, rgba(22, 213, 183, 0.01) 100%);
+  background-position: top center, center top;
+  background-size: 150px 24px, 34px 170px;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 0;
+}
 
+/* 카드 내부 요소들을 워터마크 위로 띄움 */
+.tier-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* 1. TIERON VERIFIED 배지 */
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 13px;
+  border: 1px solid rgba(22, 213, 183, 0.45);
+  border-radius: 999px;
+  background: rgba(22, 213, 183, 0.1);
+  color: #18d8ba;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  box-shadow: 0 0 12px rgba(22, 213, 183, 0.12);
+}
+
+/* 2. 인증 완료 부제목 */
+.verified-subtitle {
+  margin: 9px 0 16px;
+  color: #8daea8;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* 3, 4. 플레이어 정보 (지역 KR + 닉네임) */
+.card-player-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.region-tag {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(22, 213, 183, 0.12);
+  border: 1px solid rgba(22, 213, 183, 0.3);
+  color: #16d5b7;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.player-name {
+  margin: 0;
   color: #ffffff;
-  font-size: 21px;
-}
-
-.tier-card p {
-  margin: 10px 0;
-
-  color: #9ba1ac;
-  font-size: 14px;
-}
-
-.tier-card h1 {
-  margin: 12px 0;
-
-  color: #72c7ff;
-  font-size: 36px;
+  font-size: 19px;
   font-weight: 800;
 }
 
-/* 모바일 */
+.player-tag {
+  color: #6d8e88;
+  font-size: 14px;
+  font-weight: 600;
+  margin-left: 3px;
+}
 
-@media (max-width: 600px) {
+/* 5, 6, 7. 티어 비주얼 블록 (임시 엠블럼 + 티어 정보) */
+.tier-visual-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 16px 14px;
+  margin-bottom: 18px;
+  background: rgba(6, 21, 18, 0.6);
+  border: 1px solid rgba(22, 213, 183, 0.2);
+  border-radius: 12px;
+}
+
+/* 임시 기하학적 티어 엠블럼 */
+.tieron-tier-emblem {
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0e352f 0%, #081d1a 100%);
+  border: 1px solid #1cdab9;
+  border-radius: 14px;
+  box-shadow: 0 0 16px rgba(24, 216, 186, 0.18);
+  transform: rotate(45deg);
+}
+
+.emblem-tier-text {
+  transform: rotate(-45deg);
+  font-size: 10px;
+  font-weight: 900;
+  color: #18d8ba;
+  letter-spacing: -0.2px;
+  text-transform: uppercase;
+}
+
+.emblem-rank-text {
+  transform: rotate(-45deg);
+  font-size: 11px;
+  font-weight: 800;
+  color: #ffffff;
+  margin-top: -2px;
+}
+
+.tier-info-text {
+  text-align: left;
+}
+
+.tier-label {
+  margin: 0 0 3px;
+  color: #63847e;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.tier-name {
+  margin: 0;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+}
+
+.lp {
+  margin: 4px 0 0;
+  color: #18d8ba;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+/* 8, 9, 10. 전적 및 승률 (승리, 패배, 승률) */
+.record-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 12px 6px;
+  margin-bottom: 16px;
+  border-top: 1px solid rgba(120, 170, 160, 0.14);
+  border-bottom: 1px solid rgba(120, 170, 160, 0.14);
+}
+
+.record-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.record-item:not(:last-child) {
+  border-right: 1px solid rgba(120, 170, 160, 0.12);
+}
+
+.record-label {
+  font-size: 11px;
+  color: #678680;
+  font-weight: 600;
+}
+
+.record-value {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.record-value.wins {
+  color: #3ee4c8;
+}
+
+.record-value.losses {
+  color: #92aca7;
+}
+
+.record-value.winrate {
+  color: #18d8ba;
+}
+
+/* 11, 12. 확인 체크리스트 */
+.verification-check-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  background: rgba(5, 18, 16, 0.45);
+  border-radius: 8px;
+  text-align: left;
+}
+
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #8caea7;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.check-icon {
+  color: #18d8ba;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+/* 13. VERIFIED BY TIERON 워터마크 */
+.card-footer-mark {
+  margin-top: 4px;
+  color: #4a6661;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* 결과 카드 애니메이션 */
+@keyframes resultAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   반응형 모바일
+   ========================================================= */
+@media (max-width: 480px) {
+  .tier-page {
+    padding: 24px 12px;
+  }
+
   .container {
-    width: calc(100% - 24px);
-    margin: 40px auto;
-    padding: 28px 20px;
+    padding: 26px 18px 22px;
   }
 
-  .container h1 {
-    font-size: 27px;
+  .tier-name {
+    font-size: 21px;
   }
 
-  .tier-card h1 {
-    font-size: 32px;
+  .tieron-tier-emblem {
+    width: 50px;
+    height: 50px;
+  }
+
+  .player-name {
+    font-size: 17px;
   }
 }
