@@ -25,18 +25,18 @@ export default function Home() {
     <div>href="#"
       <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>GAME TIER</title>
+      <title>TIERON</title>
       <header>
-        <a href="/" className="logo-area">
+        <Link href="/" className="logo-area">
           <h1 className="logo">
-            GG<span>TIER</span>
+            TIER<span>ON</span>
           </h1>
           <span className="beta-badge">BETA</span>
-        </a>
+        </Link>
         <nav>
-          <a href="/" className="active">홈</a>
+          <Link href="/" className="active">홈</Link>
           <a href="#">게임</a>
-          <a href="/tier">티어 인증</a>
+          <Link href="/tier">티어 인증</Link>
           <a href="#">랭킹</a>
           <a href="#">커뮤니티</a>
         </nav>
@@ -269,7 +269,7 @@ export default function Home() {
                 <line x1={18} y1={11} x2="18.01" y2={11} />
                 <rect x={2} y={6} width={20} height={12} rx={6} />
               </svg>
-              <span>게임을 더 즐겁게, GG TIER와 함께.</span>
+              <span>게임을 더 즐겁게, TIERON과 함께.</span>
             </div>
             <h2 className="services-title">주요 서비스</h2>
           </div>
@@ -386,7 +386,7 @@ export default function Home() {
           <div className="footer-top">
             <div className="footer-brand">
               <h3 className="footer-logo">
-                GG<span>TIER</span>
+                TIER<span>ON</span>
               </h3>
               <p className="footer-slogan">게임으로 더 즐거워지는 커뮤니티</p>
             </div>

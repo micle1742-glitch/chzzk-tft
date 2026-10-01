@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import "./login.css";
 
 export default function LoginPage() {
@@ -9,7 +10,7 @@ export default function LoginPage() {
 
       <div className="login-container">
 
-        <a href="/" className="back-home-link">
+        <Link href="/" className="back-home-link">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -24,18 +25,18 @@ export default function LoginPage() {
             <path d="m15 18-6-6 6-6" />
           </svg>
           홈으로 돌아가기
-        </a>
+        </Link>
 
         <div className="login-card">
 
           {/* 로고 및 안내 */}
           <div className="login-header">
-            <a href="/" className="login-logo-area">
+            <Link href="/" className="login-logo-area">
               <h1 className="login-logo">
-                GG<span>TIER</span>
+                TIER<span>ON</span>
               </h1>
               <span className="beta-badge">BETA</span>
-            </a>
+            </Link>
 
             <h2>환영합니다!</h2>
             <p>
@@ -176,7 +177,7 @@ export default function LoginPage() {
           {/* 약관 안내 */}
           <div className="login-footer-notice">
             <p>
-              로그인 시 GG TIER의{" "}
+              로그인 시 TIERON의{" "}
               <a href="#">이용약관</a> 및{" "}
               <a href="#">개인정보처리방침</a>에 동의하게 됩니다.
             </p>

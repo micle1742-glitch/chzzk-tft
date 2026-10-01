@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import "./tier.css";
 import { useState } from "react";
 
@@ -74,9 +75,9 @@ export default function TierPage() {
     <div className="tier-page">
       <div className="tier-wrapper">
 
-        <a href="/" className="home-link">
+        <Link href="/" className="home-link">
           ← 홈으로 돌아가기
-        </a>
+        </Link>
 
         <div className="container">
           {/* 브랜드 */}
