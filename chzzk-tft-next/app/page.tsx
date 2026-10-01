@@ -22,7 +22,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div>href="#"
+    <div>
       <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>TIERON</title>
@@ -47,6 +47,16 @@ export default function Home() {
         >
           {loading ? "..." : nickname ? nickname : "로그인"}
         </button>
+        {nickname && (
+          <button
+            onClick={async () => {
+              await fetch("/api/auth/chzzk/logout", { method: "POST" });
+              setNickname(null);
+            }}
+          >
+            로그아웃
+          </button>
+        )}
       </header>
       <main>
         <section className="hero">
@@ -66,7 +76,7 @@ export default function Home() {
               <div className="hero-buttons">
                 <button
                   className="start-btn"
-                  onClick={() => window.location.href = "/auth/chzzk"}
+                  onClick={() => window.location.href = "/api/auth/chzzk"}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
