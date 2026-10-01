@@ -48,8 +48,6 @@ export async function GET(request: NextRequest) {
       }
     );
 
-    console.log("사용자 정보:", userResponse.data);
-
     const channelId = userResponse.data.content.channelId;
     const nickname = userResponse.data.content.nickname;
 
@@ -70,13 +68,6 @@ export async function GET(request: NextRequest) {
     });
 
     response.cookies.set("chzzk_nickname", nickname, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-    });
-
-    response.cookies.set("chzzk_access_token", accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
