@@ -1,14 +1,19 @@
 import axios from "axios";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
 
   const code = searchParams.get("code");
   const state = searchParams.get("state");
+  const savedState = request.cookies.get("chzzk_oauth_state")?.value;
 
-  console.log("치지직 인증 코드:", code);
-  console.log("State:", state);
+  // state가 없거나 로그인 시작 때 저장한 값과 다르면 거부
+  if (!state || !savedState || state !== savedState) {
+    const rejected = NextResponse.redirect(new URL("/login", request.url));
+    rejected.cookies.delete("chzzk_oauth_state");
+    return rejected;
+  }
 
   if (!code) {
     return NextResponse.json(
@@ -52,6 +57,9 @@ export async function GET(request: Request) {
     const response = NextResponse.redirect(
       new URL("/", request.url)
     );
+
+    // 한 번 쓴 state는 폐기
+    response.cookies.delete("chzzk_oauth_state");
 
     // 로그인 정보 저장
     response.cookies.set("chzzk_channel_id", channelId, {
