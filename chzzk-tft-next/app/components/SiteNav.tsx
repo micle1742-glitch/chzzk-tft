@@ -24,9 +24,7 @@ export default async function SiteNav({
         <div className="sn-menu" role="navigation" aria-label="주요 메뉴">
           <a href="/#about">서비스 소개</a>
           <Link href="/riot">Riot 인증</Link>
-          <span className="sn-soon">
-            랭킹·커뮤니티 <small>준비 중</small>
-          </span>
+          <Link href="/community">랭킹·커뮤니티</Link>
           <span className="sn-soon">
             가이드 <small>준비 중</small>
           </span>

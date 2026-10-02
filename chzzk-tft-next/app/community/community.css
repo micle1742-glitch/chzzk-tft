@@ -1,0 +1,513 @@
+/* 랭킹·커뮤니티 (UI만). 색은 기존 랜딩·NAV 값만 사용 */
+.cm-page {
+  --cm-bg: #081312;
+  --cm-card: #0b1c1a;
+  --cm-line: #163632;
+  --cm-accent: #18d8b8;
+  --cm-muted: #8fa19e;
+
+  width: 100%;
+  min-height: 100vh;
+  background: var(--cm-bg);
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}
+
+.cm-page * {
+  box-sizing: border-box;
+}
+
+.cm-page a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.cm-wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 32px 24px 96px;
+}
+
+.cm-wrap-narrow {
+  max-width: 820px;
+}
+
+.cm-eyebrow {
+  margin: 0 0 8px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--cm-accent);
+}
+
+.cm-title {
+  margin: 0;
+  font-size: 36px;
+  letter-spacing: -0.5px;
+}
+
+/* 탭 */
+.cm-tabs {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.cm-tab {
+  padding: 10px 20px;
+  border: 1px solid var(--cm-line);
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--cm-muted);
+}
+
+.cm-tab:hover {
+  color: #ffffff;
+}
+
+.cm-tab.is-active {
+  border-color: var(--cm-accent);
+  color: var(--cm-accent);
+}
+
+/* 예시 데이터 안내 */
+.cm-notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
+  padding: 12px 16px;
+  border: 1px solid var(--cm-line);
+  border-radius: 12px;
+  background: var(--cm-card);
+  font-size: 13px;
+  color: var(--cm-muted);
+  word-break: keep-all;
+}
+
+.cm-notice strong {
+  color: #ffffff;
+}
+
+.cm-notice-dot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cm-accent);
+}
+
+/* 패널 */
+.cm-panel {
+  margin-top: 16px;
+  padding: 28px;
+  border: 1px solid var(--cm-line);
+  border-radius: 20px;
+  background: var(--cm-card);
+}
+
+.cm-panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.cm-h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.cm-sub {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--cm-muted);
+}
+
+.cm-chip {
+  padding: 6px 14px;
+  border: 1px solid var(--cm-line);
+  border-radius: 999px;
+  font-size: 13px;
+  color: var(--cm-muted);
+  white-space: nowrap;
+}
+
+.cm-muted {
+  color: var(--cm-muted);
+}
+
+.cm-right {
+  text-align: right;
+}
+
+/* 아바타: 이미지 대신 닉네임 첫 글자 */
+.cm-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--cm-line);
+  border-radius: 50%;
+  background: var(--cm-bg);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cm-accent);
+}
+
+.cm-avatar-lg {
+  width: 64px;
+  height: 64px;
+  font-size: 24px;
+}
+
+/* 티어: Riot 엠블럼 대신 글자 배지 */
+.cm-tier {
+  display: inline-block;
+  padding: 2px 10px;
+  border: 1px solid var(--cm-line);
+  border-radius: 999px;
+  font-size: 12px;
+  color: #ffffff;
+}
+
+/* 상위 3명 */
+.cm-podium {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.cm-podium-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 28px 16px 24px;
+  border: 1px solid var(--cm-line);
+  border-radius: 16px;
+  background: var(--cm-bg);
+  text-align: center;
+}
+
+.cm-podium-card.is-first {
+  border-color: var(--cm-accent);
+  box-shadow: 0 0 24px rgba(24, 216, 184, 0.12);
+}
+
+.cm-podium-rank {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--cm-muted);
+}
+
+.is-first .cm-podium-rank {
+  color: var(--cm-accent);
+}
+
+.cm-podium-name {
+  margin-top: 8px;
+  font-size: 18px;
+}
+
+.cm-podium-tag {
+  font-size: 12px;
+  color: var(--cm-muted);
+}
+
+.cm-podium-lp {
+  margin-top: 4px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.is-first .cm-podium-lp {
+  color: var(--cm-accent);
+}
+
+/* 표 */
+.cm-table {
+  border-top: 1px solid var(--cm-line);
+}
+
+.cm-row {
+  display: grid;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 8px;
+  border-bottom: 1px solid var(--cm-line);
+  font-size: 14px;
+}
+
+.cm-row-head {
+  font-size: 12px;
+  color: var(--cm-muted);
+}
+
+.cm-rank-row {
+  grid-template-columns: 56px 1fr 160px 80px;
+}
+
+.cm-post-row {
+  grid-template-columns: 72px 1fr 140px 72px 56px;
+}
+
+.cm-row-link:hover {
+  background: rgba(24, 216, 184, 0.04);
+}
+
+.cm-rank-no {
+  font-weight: 700;
+}
+
+.cm-player {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.cm-post-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cm-comment-count {
+  margin-left: 6px;
+  font-size: 12px;
+  color: var(--cm-accent);
+}
+
+.cm-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border: 1px solid var(--cm-line);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--cm-muted);
+}
+
+.cm-badge.is-notice {
+  border-color: var(--cm-accent);
+  color: var(--cm-accent);
+}
+
+/* 게시판 상단 */
+.cm-filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.cm-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cm-cat {
+  padding: 6px 14px;
+  border: 1px solid var(--cm-line);
+  border-radius: 999px;
+  font-size: 13px;
+  color: var(--cm-muted);
+}
+
+.cm-cat.is-active {
+  border-color: var(--cm-accent);
+  color: var(--cm-accent);
+}
+
+.cm-search,
+.cm-textarea {
+  border: 1px solid var(--cm-line);
+  border-radius: 10px;
+  background: var(--cm-bg);
+  color: var(--cm-muted);
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.cm-search {
+  width: 240px;
+  padding: 8px 12px;
+}
+
+.cm-write {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: 1px solid var(--cm-accent);
+  border-radius: 12px;
+  background: var(--cm-accent);
+  color: var(--cm-bg);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cm-write:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.cm-write small {
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(8, 19, 18, 0.2);
+  font-size: 11px;
+}
+
+.cm-pages {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.cm-pg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--cm-line);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--cm-muted);
+}
+
+.cm-pg.is-active {
+  border-color: var(--cm-accent);
+  color: var(--cm-accent);
+}
+
+/* 상세 */
+.cm-back {
+  display: inline-block;
+  font-size: 14px;
+  color: var(--cm-muted);
+}
+
+.cm-back:hover {
+  color: #ffffff;
+}
+
+.cm-article-title {
+  margin: 14px 0 8px;
+  font-size: 28px;
+  line-height: 1.4;
+}
+
+.cm-article-meta {
+  display: flex;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--cm-line);
+  font-size: 13px;
+  color: var(--cm-muted);
+}
+
+.cm-article-body {
+  padding-top: 20px;
+  font-size: 16px;
+  white-space: pre-wrap;
+}
+
+.cm-comment-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.cm-textarea {
+  flex: 1;
+  min-height: 80px;
+  padding: 12px;
+  resize: none;
+}
+
+/* 모바일 */
+@media (max-width: 760px) {
+  .cm-title {
+    font-size: 28px;
+  }
+
+  .cm-panel {
+    padding: 20px 16px;
+  }
+
+  .cm-panel-head,
+  .cm-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cm-search {
+    width: 100%;
+  }
+
+  .cm-podium {
+    grid-template-columns: 1fr;
+  }
+
+  .cm-rank-row {
+    grid-template-columns: 36px 1fr 96px 56px;
+    font-size: 13px;
+  }
+
+  /* 게시글은 표 대신 두 줄 카드: 분류+제목 / 작성자·작성일 */
+  .cm-row-head.cm-post-row {
+    display: none;
+  }
+
+  .cm-post-row {
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas:
+      "cat title title"
+      "author author date";
+    row-gap: 4px;
+  }
+
+  .cm-post-row > :nth-child(1) {
+    grid-area: cat;
+  }
+
+  .cm-post-row > :nth-child(2) {
+    grid-area: title;
+  }
+
+  .cm-post-row > :nth-child(3) {
+    grid-area: author;
+    font-size: 12px;
+  }
+
+  .cm-post-row > :nth-child(4) {
+    grid-area: date;
+    font-size: 12px;
+  }
+
+  /* 댓글 수는 제목 옆 [n]으로 이미 보인다 */
+  .cm-post-row > :nth-child(5) {
+    display: none;
+  }
+
+  .cm-comment-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
