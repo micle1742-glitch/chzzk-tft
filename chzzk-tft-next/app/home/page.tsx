@@ -51,7 +51,8 @@ export default function Home() {
           <button
             onClick={async () => {
               await fetch("/api/auth/chzzk/logout", { method: "POST" });
-              setNickname(null);
+              // 로그아웃 완료 후 로그인 페이지로 (쿠키가 지워진 상태로 새로 불러옴)
+              window.location.href = "/login";
             }}
           >
             로그아웃

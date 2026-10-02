@@ -8,18 +8,23 @@ export async function GET(request: NextRequest) {
   const state = searchParams.get("state");
   const savedState = request.cookies.get("chzzk_oauth_state")?.value;
 
-  // state가 없거나 로그인 시작 때 저장한 값과 다르면 거부
-  if (!state || !savedState || state !== savedState) {
-    const rejected = NextResponse.redirect(new URL("/login", request.url));
-    rejected.cookies.delete("chzzk_oauth_state");
-    return rejected;
+  // 실패·취소는 모두 로그인 페이지로 돌려보낸다 (사유는 정해진 코드만 전달, 세션은 발급하지 않음)
+  const loginError = (reason: "cancelled" | "state" | "failed") => {
+    const res = NextResponse.redirect(
+      new URL(`/login?error=${reason}`, request.url)
+    );
+    res.cookies.delete("chzzk_oauth_state");
+    return res;
+  };
+
+  // 치지직 동의 화면에서 취소했거나 인증 코드 없이 돌아온 경우
+  if (searchParams.get("error") || !code) {
+    return loginError("cancelled");
   }
 
-  if (!code) {
-    return NextResponse.json(
-      { success: false, message: "인증 코드가 없습니다." },
-      { status: 400 }
-    );
+  // state가 없거나 로그인 시작 때 저장한 값과 다르면 거부
+  if (!state || !savedState || state !== savedState) {
+    return loginError("state");
   }
 
   try {
@@ -51,7 +56,12 @@ export async function GET(request: NextRequest) {
     const channelId = userResponse.data.content.channelId;
     const nickname = userResponse.data.content.nickname;
 
-    // 홈페이지로 이동
+    // 사용자 정보가 없으면 세션을 발급하지 않는다
+    if (!channelId || !nickname) {
+      return loginError("failed");
+    }
+
+    // 인증 성공 → 항상 홈페이지(/)로 이동 (이전 방문 페이지나 returnUrl과 무관)
     const response = NextResponse.redirect(
       new URL("/", request.url)
     );
@@ -81,12 +91,6 @@ export async function GET(request: NextRequest) {
       error.response?.data || error.message
     );
 
-    return NextResponse.json(
-      {
-        success: false,
-        message: "치지직 인증 실패",
-      },
-      { status: 500 }
-    );
+    return loginError("failed");
   }
 }

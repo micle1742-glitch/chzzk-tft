@@ -1,8 +1,30 @@
-"use client";
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import "./login.css";
 
-export default function LoginPage() {
+// 콜백이 /login?error=사유 로 돌려보낼 때 보여줄 안내 (정해진 코드만 허용)
+const ERROR_MESSAGES: Record<string, string> = {
+  cancelled: "치지직 로그인이 취소되었거나 완료되지 않았습니다. 다시 시도해 주세요.",
+  state: "로그인 요청을 확인하지 못했습니다. 처음부터 다시 시도해 주세요.",
+  failed: "치지직 로그인에 실패했습니다. 잠시 후 다시 시도해 주세요.",
+};
+
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string | string[] }>;
+}) {
+  // 이미 로그인한 사용자는 로그인 화면 없이 홈(/)으로 (판단 기준은 /api/auth/chzzk/me와 같음)
+  const cookieStore = await cookies();
+  if (cookieStore.get("chzzk_channel_id") && cookieStore.get("chzzk_nickname")) {
+    redirect("/");
+  }
+
+  const { error } = await searchParams;
+  const errorMessage =
+    typeof error === "string" ? ERROR_MESSAGES[error] : undefined;
+
   return (
     <div>
       <div className="login-bg-glow glow-1"></div>
@@ -43,6 +65,12 @@ export default function LoginPage() {
               소셜 계정으로 간편하게 시작하고 티어를 인증하세요.
             </p>
           </div>
+
+          {errorMessage && (
+            <p className="login-error" role="alert">
+              {errorMessage}
+            </p>
+          )}
 
           {/* 소셜 로그인 목록 */}
           <div className="login-buttons">
