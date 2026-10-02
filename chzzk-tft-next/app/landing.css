@@ -78,6 +78,28 @@
   white-space: nowrap;
 }
 
+/* 로그인 상태: 닉네임 + 로그아웃 */
+.ld-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ld-user-name {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  color: var(--ld-muted);
+}
+
+.landing button.ld-btn {
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
 /* 버튼 */
 .ld-btn {
   display: inline-flex;

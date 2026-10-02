@@ -1,8 +1,26 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
+import LogoutButton from "./components/LogoutButton";
 import SignatureLine from "./components/SignatureLine";
 import "./landing.css";
 
-export default function Landing() {
+export default async function Landing() {
+  // 로그인 상태 확인 (판단 기준은 /api/auth/chzzk/me, /login과 같음)
+  const cookieStore = await cookies();
+  const channelId = cookieStore.get("chzzk_channel_id")?.value;
+  const rawNickname = cookieStore.get("chzzk_nickname")?.value;
+  const loggedIn = Boolean(channelId && rawNickname);
+  let nickname = rawNickname ?? "";
+  try {
+    nickname = decodeURIComponent(nickname);
+  } catch {
+    // 디코딩할 수 없으면 있는 그대로 보여준다
+  }
+
+  // 로그인한 사용자가 /login으로 가면 /로 되돌아오므로, 시작 버튼은 /home으로 보낸다
+  const startHref = loggedIn ? "/home" : "/login";
+  const startLabel = loggedIn ? "홈으로 가기" : "치지직으로 시작하기";
+
   return (
     <div className="landing">
       {/* 헤더 (home.css가 header/nav 태그에 전역 스타일을 걸어서 div + role로 둔다) */}
@@ -20,9 +38,16 @@ export default function Landing() {
             가이드 <small>준비 중</small>
           </span>
         </div>
-        <Link href="/login" className="ld-btn ld-btn-ghost">
-          로그인
-        </Link>
+        {loggedIn ? (
+          <div className="ld-user">
+            <span className="ld-user-name">{nickname}</span>
+            <LogoutButton className="ld-btn ld-btn-ghost" />
+          </div>
+        ) : (
+          <Link href="/login" className="ld-btn ld-btn-ghost">
+            로그인
+          </Link>
+        )}
       </div>
 
       <main className="ld-main">
@@ -42,8 +67,8 @@ export default function Landing() {
                 TIERON에서 나의 티어를 확인하고, 카드로 남겨보세요.
               </p>
               <div className="ld-actions">
-                <Link href="/login" className="ld-btn ld-btn-primary">
-                  치지직으로 시작하기
+                <Link href={startHref} className="ld-btn ld-btn-primary">
+                  {startLabel}
                 </Link>
                 <a href="#about" className="ld-btn ld-btn-ghost">
                   서비스 알아보기
@@ -236,8 +261,8 @@ export default function Landing() {
               치지직 계정으로 로그인하고 티어 인증을 시작해 보세요.
             </p>
             <div className="ld-actions">
-              <Link href="/login" className="ld-btn ld-btn-primary">
-                치지직으로 시작하기
+              <Link href={startHref} className="ld-btn ld-btn-primary">
+                {startLabel}
               </Link>
             </div>
           </div>
