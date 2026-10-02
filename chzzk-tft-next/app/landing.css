@@ -1,0 +1,648 @@
+/* 랜딩 (/) 전용. 색은 기존 CSS에서 쓰던 값 + HANDOFF의 진한 초록(#0d3029)만 사용 */
+.landing {
+  --ld-bg: #081312;
+  --ld-card: #0b1c1a;
+  --ld-line: #163632;
+  --ld-accent: #18d8b8;
+  --ld-accent-hover: #3ee4c8;
+  --ld-muted: #8fa19e;
+  --ld-deep: #0d3029;
+
+  min-height: 100vh;
+  background: var(--ld-bg);
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}
+
+.landing * {
+  box-sizing: border-box;
+}
+
+.landing a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ld-wrap {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* 헤더 */
+.ld-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
+.ld-logo {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.ld-logo span {
+  color: var(--ld-accent);
+}
+
+.ld-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  font-size: 14px;
+  color: var(--ld-muted);
+}
+
+.ld-nav a:hover {
+  color: #ffffff;
+}
+
+.ld-soon {
+  cursor: default;
+}
+
+.landing small {
+  margin-left: 6px;
+  padding: 2px 8px;
+  border: 1px solid var(--ld-line);
+  border-radius: 999px;
+  font-size: 11px;
+  color: var(--ld-muted);
+  white-space: nowrap;
+}
+
+/* 버튼 */
+.ld-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.ld-btn-primary {
+  background: var(--ld-accent);
+  color: var(--ld-bg);
+}
+
+.ld-btn-primary:hover {
+  background: var(--ld-accent-hover);
+}
+
+.ld-btn-ghost {
+  border: 1px solid var(--ld-line);
+  color: #ffffff;
+}
+
+.ld-btn-ghost:hover {
+  border-color: var(--ld-accent);
+}
+
+.ld-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+/* 공통 텍스트 */
+.ld-eyebrow {
+  margin: 0 0 16px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--ld-muted);
+}
+
+.ld-title {
+  margin: 0;
+  font-size: 52px;
+  line-height: 1.2;
+  letter-spacing: -1px;
+}
+
+.ld-title span {
+  color: var(--ld-accent);
+}
+
+.ld-lead {
+  margin: 24px 0 0;
+  font-size: 17px;
+  color: var(--ld-muted);
+}
+
+.ld-h2 {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.3;
+  letter-spacing: -0.5px;
+}
+
+/* 섹션 */
+.ld-section {
+  padding: 96px 0;
+}
+
+.ld-dark {
+  background: var(--ld-bg);
+}
+
+.ld-deep {
+  background: var(--ld-card);
+}
+
+.ld-light {
+  background: #ffffff;
+  color: var(--ld-deep);
+}
+
+.ld-light .ld-eyebrow {
+  color: rgba(13, 48, 41, 0.6);
+}
+
+.ld-light small {
+  border-color: rgba(13, 48, 41, 0.2);
+  color: rgba(13, 48, 41, 0.7);
+}
+
+/* 히어로: 거의 검정 바탕, 딥그린은 오른쪽 아래에 은은하게 */
+.ld-hero {
+  padding: 72px 0 96px;
+  background:
+    radial-gradient(60% 80% at 100% 100%, rgba(13, 48, 41, 0.85), transparent 70%),
+    var(--ld-bg);
+  border-bottom: 1px solid var(--ld-line);
+}
+
+.ld-hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: center;
+  gap: 48px;
+}
+
+/* 코드로 만든 카드 미리보기 */
+.ld-card-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.ld-tcard {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 28px;
+  border: 1px solid var(--ld-line);
+  border-radius: 20px;
+  background: var(--ld-card);
+}
+
+.ld-tcard-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ld-tcard-brand {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}
+
+.ld-tcard-brand span {
+  color: var(--ld-accent);
+}
+
+.ld-tcard-badge {
+  padding: 4px 10px;
+  border: 1px solid var(--ld-accent);
+  border-radius: 999px;
+  font-size: 11px;
+  color: var(--ld-accent);
+}
+
+.ld-tcard-player {
+  display: flex;
+  flex-direction: column;
+}
+
+.ld-tcard-player strong {
+  font-size: 20px;
+}
+
+.ld-tcard-player span {
+  font-size: 13px;
+  color: var(--ld-muted);
+}
+
+.ld-tcard-tier {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.ld-emblem {
+  width: 84px;
+  height: 84px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ld-accent);
+  border-radius: 18px;
+}
+
+.ld-emblem span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--ld-accent);
+}
+
+.ld-tcard-tiertext {
+  display: flex;
+  flex-direction: column;
+}
+
+.ld-tcard-label {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--ld-muted);
+}
+
+.ld-tcard-tiertext strong {
+  font-size: 26px;
+  line-height: 1.2;
+}
+
+.ld-tcard-tiertext span:last-child {
+  font-size: 14px;
+  color: var(--ld-muted);
+}
+
+.ld-tcard-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding-top: 18px;
+  border-top: 1px solid var(--ld-line);
+}
+
+.ld-tcard-stats div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ld-tcard-stats span {
+  font-size: 12px;
+  color: var(--ld-muted);
+}
+
+.ld-tcard-stats strong {
+  font-size: 18px;
+}
+
+.ld-tcard-foot {
+  font-size: 12px;
+  color: var(--ld-muted);
+}
+
+.ld-card-caption {
+  margin: 0;
+  font-size: 13px;
+  text-align: center;
+  color: var(--ld-muted);
+}
+
+.ld-card-caption small {
+  display: inline-block;
+}
+
+/* 서비스 소개 */
+.ld-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+.ld-points {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.ld-points li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--ld-line);
+}
+
+.ld-points li:last-child {
+  border-bottom: none;
+}
+
+.ld-points span {
+  color: var(--ld-muted);
+  font-size: 15px;
+}
+
+/* 이용 방법 */
+.ld-steps {
+  margin: 48px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.ld-steps li {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 28px;
+  border: 1px solid rgba(13, 48, 41, 0.12);
+  border-radius: 16px;
+}
+
+.ld-step-no {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ld-deep);
+}
+
+.ld-steps span:not(.ld-step-no) {
+  color: rgba(13, 48, 41, 0.7);
+  font-size: 15px;
+}
+
+.ld-steps small {
+  display: inline-block;
+  margin: 8px 0 0;
+}
+
+/* 핵심 기능 */
+.ld-light-alt {
+  border-top: 1px solid rgba(13, 48, 41, 0.08);
+}
+
+.ld-features {
+  margin-top: 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.ld-feature {
+  padding: 28px;
+  border: 1px solid rgba(13, 48, 41, 0.12);
+  border-radius: 16px;
+}
+
+.ld-feature h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.ld-feature p {
+  margin: 0;
+  color: rgba(13, 48, 41, 0.7);
+  font-size: 15px;
+}
+
+.ld-feature-visual {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 24px 0;
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--ld-bg);
+  color: #ffffff;
+  font-size: 13px;
+}
+
+.ld-prev-fields {
+  display: grid;
+  grid-template-columns: 1.3fr 0.8fr auto;
+  gap: 8px;
+}
+
+.ld-prev-fields span {
+  padding: 10px 12px;
+  border: 1px solid var(--ld-line);
+  border-radius: 8px;
+  color: var(--ld-muted);
+}
+
+.ld-prev-fields .ld-prev-btn {
+  border-color: var(--ld-accent);
+  background: var(--ld-accent);
+  color: var(--ld-bg);
+  font-weight: 700;
+}
+
+.ld-prev-result {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--ld-line);
+}
+
+.ld-prev-result span {
+  color: var(--ld-muted);
+}
+
+.ld-prev-result strong {
+  font-size: 18px;
+}
+
+.ld-prev-note {
+  position: absolute;
+  top: 6px;
+  right: 14px;
+  font-size: 11px;
+  color: var(--ld-muted);
+}
+
+.ld-rank-row {
+  display: grid;
+  grid-template-columns: 48px 1fr 1fr 56px;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--ld-line);
+  color: var(--ld-muted);
+}
+
+.ld-rank-row:last-child {
+  border-bottom: none;
+}
+
+.ld-rank-head {
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.ld-link {
+  font-weight: 700;
+  color: var(--ld-deep);
+  border-bottom: 1px solid var(--ld-deep);
+}
+
+/* CTA */
+.ld-cta {
+  border-top: 1px solid var(--ld-line);
+}
+
+/* 푸터 */
+.ld-footer {
+  border-top: 1px solid var(--ld-line);
+  padding: 32px 0;
+  color: var(--ld-muted);
+  font-size: 13px;
+}
+
+.ld-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ld-footer-note {
+  width: 100%;
+}
+
+.ld-footer .ld-logo {
+  color: #ffffff;
+  font-size: 18px;
+}
+
+/* 시그니처 라인: SignatureLine 컴포넌트가 콘텐츠 위치를 재서 SVG로 그린다 */
+.ld-main {
+  position: relative;
+}
+
+.ld-line-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 태블릿 */
+@media (max-width: 1024px) {
+  .ld-hero-grid {
+    gap: 32px;
+  }
+
+  .ld-title {
+    font-size: 44px;
+  }
+}
+
+/* 작은 태블릿·모바일: 한 열로, 선은 생략 */
+@media (max-width: 860px) {
+  .ld-header {
+    flex-wrap: wrap;
+    gap: 12px 16px;
+  }
+
+  .ld-nav {
+    order: 3;
+    width: 100%;
+    gap: 20px;
+    padding-bottom: 4px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .ld-title {
+    font-size: 36px;
+  }
+
+  .ld-h2 {
+    font-size: 26px;
+  }
+
+  .ld-hero {
+    padding: 40px 0 64px;
+  }
+
+  .ld-hero-grid,
+  .ld-split,
+  .ld-steps,
+  .ld-features {
+    grid-template-columns: 1fr;
+  }
+
+  .ld-section {
+    padding: 64px 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .ld-title {
+    font-size: 30px;
+  }
+
+  .ld-actions {
+    flex-direction: column;
+  }
+
+  .ld-actions .ld-btn {
+    width: 100%;
+  }
+
+  .ld-tcard {
+    padding: 20px;
+  }
+
+  .ld-emblem {
+    width: 68px;
+    height: 68px;
+  }
+
+  .ld-prev-fields {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ld-prev-fields .ld-prev-btn {
+    grid-column: 1 / -1;
+    text-align: center;
+  }
+
+  .ld-rank-row {
+    grid-template-columns: 36px 1fr 1fr 44px;
+  }
+
+  .ld-footer-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
