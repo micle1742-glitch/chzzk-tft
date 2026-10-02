@@ -18,16 +18,15 @@ export default async function SiteNav({
   return (
     <div className="site-nav" role="banner">
       <div className="sn-inner">
-        <Link href="/" className="sn-logo">
+        <Link href="/home" className="sn-logo">
           TIER<span>ON</span>
         </Link>
         <div className="sn-menu" role="navigation" aria-label="주요 메뉴">
           <a href="/#about">서비스 소개</a>
           <Link href="/riot">Riot 인증</Link>
-          <Link href="/community">랭킹·커뮤니티</Link>
-          <span className="sn-soon">
-            가이드 <small>준비 중</small>
-          </span>
+          <Link href="/community">커뮤니티</Link>
+          {/* 가이드 = 서비스를 소개하는 랜딩(/) */}
+          <Link href="/">가이드</Link>
         </div>
         {session ? (
           <div className="sn-user">
