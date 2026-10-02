@@ -17,9 +17,18 @@ export default async function Landing() {
     // 디코딩할 수 없으면 있는 그대로 보여준다
   }
 
-  // 로그인한 사용자가 /login으로 가면 /로 되돌아오므로, 시작 버튼은 /home으로 보낸다
-  const startHref = loggedIn ? "/home" : "/login";
-  const startLabel = loggedIn ? "홈으로 가기" : "치지직으로 시작하기";
+  // 시작 버튼: 로그아웃 상태는 치지직 OAuth 시작 경로로 바로, 로그인 상태는 /home으로.
+  // OAuth 시작 경로는 외부 사이트로 리다이렉트하는 API라서 Link(프리페치) 대신 일반 <a>를 쓴다.
+  const startClass = "ld-btn ld-btn-primary";
+  const startButton = loggedIn ? (
+    <Link href="/home" className={startClass}>
+      홈으로 가기
+    </Link>
+  ) : (
+    <a href="/api/auth/chzzk" className={startClass}>
+      치지직으로 시작하기
+    </a>
+  );
 
   return (
     <div className="landing">
@@ -67,9 +76,7 @@ export default async function Landing() {
                 TIERON에서 나의 티어를 확인하고, 카드로 남겨보세요.
               </p>
               <div className="ld-actions">
-                <Link href={startHref} className="ld-btn ld-btn-primary">
-                  {startLabel}
-                </Link>
+                {startButton}
                 <a href="#about" className="ld-btn ld-btn-ghost">
                   서비스 알아보기
                 </a>
@@ -261,9 +268,7 @@ export default async function Landing() {
               치지직 계정으로 로그인하고 티어 인증을 시작해 보세요.
             </p>
             <div className="ld-actions">
-              <Link href={startHref} className="ld-btn ld-btn-primary">
-                {startLabel}
-              </Link>
+              {startButton}
             </div>
           </div>
         </section>
