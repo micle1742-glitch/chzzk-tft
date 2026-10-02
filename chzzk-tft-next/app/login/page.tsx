@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { getSession } from "../lib/session";
 import "./login.css";
 
 // 콜백이 /login?error=사유 로 돌려보낼 때 보여줄 안내 (정해진 코드만 허용)
@@ -15,9 +15,8 @@ export default async function LoginPage({
 }: {
   searchParams: Promise<{ error?: string | string[] }>;
 }) {
-  // 이미 로그인한 사용자는 로그인 화면 없이 홈(/)으로 (판단 기준은 /api/auth/chzzk/me와 같음)
-  const cookieStore = await cookies();
-  if (cookieStore.get("chzzk_channel_id") && cookieStore.get("chzzk_nickname")) {
+  // 이미 로그인한 사용자는 로그인 화면 없이 홈(/)으로
+  if (await getSession()) {
     redirect("/");
   }
 

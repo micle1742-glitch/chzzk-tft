@@ -1,31 +1,25 @@
 import Link from "next/link";
-import { cookies } from "next/headers";
 import LogoutButton from "./components/LogoutButton";
 import SignatureLine from "./components/SignatureLine";
+import { getSession } from "./lib/session";
 import "./landing.css";
 
 export default async function Landing() {
-  // 로그인 상태 확인 (판단 기준은 /api/auth/chzzk/me, /login과 같음)
-  const cookieStore = await cookies();
-  const channelId = cookieStore.get("chzzk_channel_id")?.value;
-  const rawNickname = cookieStore.get("chzzk_nickname")?.value;
-  const loggedIn = Boolean(channelId && rawNickname);
-  let nickname = rawNickname ?? "";
-  try {
-    nickname = decodeURIComponent(nickname);
-  } catch {
-    // 디코딩할 수 없으면 있는 그대로 보여준다
-  }
+  // 로그인 상태는 서버의 getSession() 결과만 기준으로 한다 (/login, /api/auth/chzzk/me와 같은 함수)
+  const session = await getSession();
+  const loggedIn = session !== null;
+  const nickname = session?.nickname ?? "";
 
-  // 시작 버튼: 로그아웃 상태는 치지직 OAuth 시작 경로로 바로, 로그인 상태는 /home으로.
-  // OAuth 시작 경로는 외부 사이트로 리다이렉트하는 API라서 Link(프리페치) 대신 일반 <a>를 쓴다.
-  const startClass = "ld-btn ld-btn-primary";
+  // 시작 영역: 로그아웃 상태는 치지직 OAuth 시작 경로로 바로 이동한다
+  // (외부로 리다이렉트하는 API라서 Link 프리페치 대신 일반 <a>).
+  // 로그인 상태는 여기가 이미 메인 홈이므로 버튼 대신 로그인한 사용자 정보를 보여준다.
   const startButton = loggedIn ? (
-    <Link href="/home" className={startClass}>
-      홈으로 가기
-    </Link>
+    <span className="ld-status">
+      <span className="ld-status-dot" aria-hidden="true" />
+      {nickname}님으로 로그인됨
+    </span>
   ) : (
-    <a href="/api/auth/chzzk" className={startClass}>
+    <a href="/api/auth/chzzk" className="ld-btn ld-btn-primary">
       치지직으로 시작하기
     </a>
   );

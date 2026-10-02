@@ -668,3 +668,29 @@
     align-items: flex-start;
   }
 }
+
+/* 로그인 상태: 시작 버튼 대신 보여주는 사용자 정보 (버튼과 같은 높이) */
+.ld-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px;
+  border: 1px solid var(--ld-line);
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.ld-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ld-accent);
+}
+
+@media (max-width: 560px) {
+  .ld-actions .ld-status {
+    width: 100%;
+    justify-content: center;
+  }
+}
