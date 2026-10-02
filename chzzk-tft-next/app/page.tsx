@@ -40,25 +40,14 @@ export default async function Landing() {
       <SiteNav logoutRedirect="/home" />
 
       <main className="ld-main">
-        {/* 첫 화면: 가운데 은은한 빛 + 왼쪽 문구·버튼, 오른쪽은 비워 둔다 */}
-        <section className="ld-hero">
-          {/* 배경 장식 (전부 CSS): 빛, 빛을 감싸는 부드러운 빛 줄기, 작은 점, 아래쪽 수평 빛 */}
+        {/* 첫 화면: 가운데 정렬. 위쪽 양 모서리에서 모이는 각진 면과 은은한 그라데이션 */}
+        <section className="ld-hero ld-hero-center">
+          {/* 배경 장식 (전부 CSS): 각진 면 3개 + 문구 뒤 은은한 빛 */}
           <div className="ld-hero-bg" aria-hidden="true">
+            <div className="ld-plane ld-plane-top" />
+            <div className="ld-plane ld-plane-left" />
+            <div className="ld-plane ld-plane-right" />
             <div className="ld-glow" />
-            <div className="ld-flow">
-              <span className="ld-flow-arc ld-flow-top-glow" />
-              <span className="ld-flow-arc ld-flow-top" />
-              <span className="ld-flow-arc ld-flow-bottom-glow" />
-              <span className="ld-flow-arc ld-flow-bottom" />
-              <span className="ld-flow-arc ld-flow-outer" />
-            </div>
-            {[
-              [37, 16], [48, 22], [44, 34], [74, 41], [71, 49], [69, 58],
-              [70, 59], [60, 67], [83, 62], [76, 63], [73, 75], [30, 18],
-            ].map(([x, y], i) => (
-              <span key={i} className="ld-particle" style={{ left: `${x}%`, top: `${y}%` }} />
-            ))}
-            <div className="ld-horizon" />
           </div>
           <div className="ld-wrap ld-hero-inner">
             <div className="ld-hero-copy">

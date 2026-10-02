@@ -173,13 +173,14 @@
   max-width: 600px;
 }
 
-/* 가운데보다 오른쪽에 큰 빛: 글로우 그린 #35E0B5 → 딥그린 → 배경 */
+/* 문구 뒤 은은한 빛: 글로우 그린 #35E0B5 → 딥그린 → 배경 */
 .ld-glow {
   position: absolute;
-  top: 50%;
-  left: 54%;
+  top: 52%;
+  left: 50%;
   transform: translate(-50%, -50%);
   width: min(760px, 110vw);
+  opacity: 0.55;
   aspect-ratio: 1;
   border-radius: 50%;
   background: radial-gradient(
@@ -192,74 +193,29 @@
   filter: blur(36px);
 }
 
-/* 빛을 감싸는 부드러운 빛 줄기 (원 테두리 대신).
-   기울어진 타원의 위·아래 테두리만 남기면 양 끝이 저절로 가늘어져 흐르는 빛처럼 보인다.
-   왼쪽(문구 쪽)은 마스크로 흐려서 제목·버튼과 겹치지 않게 한다. */
-.ld-flow {
-  position: absolute;
-  top: 50%;
-  left: 57%;
-  width: min(820px, 110vw);
-  height: 440px;
-  transform: translate(-50%, -50%) rotate(-12deg);
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 14%, #000 40%, #000 100%);
-  mask-image: linear-gradient(to right, transparent 0%, transparent 14%, #000 40%, #000 100%);
-}
-
-.ld-flow-arc {
+/* 각진 면: 위쪽 양 모서리에서 가운데로 모이는 V자 구도.
+   면마다 딥그린 그라데이션을 다르게 줘서 각진 그림자처럼 보이게 한다 */
+.ld-plane {
   position: absolute;
   inset: 0;
-  border-radius: 50%;
-  border: 0 solid transparent;
 }
 
-.ld-flow-top {
-  border-top: 2px solid rgba(53, 224, 181, 0.7);
-  filter: blur(1.5px);
+/* 위쪽 가운데 면: 조금 밝은 딥그린 */
+.ld-plane-top {
+  clip-path: polygon(0 0, 100% 0, 50% 46%);
+  background: linear-gradient(to bottom, rgba(13, 48, 41, 0.45) 0%, rgba(13, 48, 41, 0.12) 60%, rgba(13, 48, 41, 0) 100%);
 }
 
-.ld-flow-top-glow {
-  border-top: 12px solid rgba(53, 224, 181, 0.28);
-  filter: blur(14px);
+/* 왼쪽 면: 왼쪽 위 모서리가 가장 밝고 안쪽으로 갈수록 어두워진다 */
+.ld-plane-left {
+  clip-path: polygon(0 0, 50% 46%, 0 80%);
+  background: linear-gradient(125deg, rgba(53, 224, 181, 0.16) 0%, rgba(13, 48, 41, 0.22) 18%, rgba(8, 19, 18, 0) 42%);
 }
 
-.ld-flow-bottom {
-  inset: 6% 3%;
-  border-bottom: 2px solid rgba(53, 224, 181, 0.6);
-  filter: blur(1.5px);
-}
-
-.ld-flow-bottom-glow {
-  inset: 6% 3%;
-  border-bottom: 14px solid rgba(53, 224, 181, 0.26);
-  filter: blur(16px);
-}
-
-.ld-flow-outer {
-  inset: -10% -6%;
-  border-bottom: 1px solid rgba(53, 224, 181, 0.2);
-  filter: blur(2px);
-}
-
-/* 작은 점 */
-.ld-particle {
-  position: absolute;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: rgba(53, 224, 181, 0.6);
-}
-
-/* 화면 아래쪽 수평 빛 띠 */
-.ld-horizon {
-  position: absolute;
-  left: 50%;
-  bottom: 12%;
-  transform: translateX(-50%);
-  width: 90%;
-  height: 80px;
-  background: radial-gradient(ellipse at center, rgba(53, 224, 181, 0.18) 0%, rgba(53, 224, 181, 0) 70%);
-  filter: blur(8px);
+/* 오른쪽 면: 왼쪽 면과 대칭 */
+.ld-plane-right {
+  clip-path: polygon(100% 0, 50% 46%, 100% 80%);
+  background: linear-gradient(235deg, rgba(53, 224, 181, 0.16) 0%, rgba(13, 48, 41, 0.22) 18%, rgba(8, 19, 18, 0) 42%);
 }
 
 /* 히어로 문구: 라벨 앞 짧은 선, 큰 제목, 두 번째 줄은 민트 그라데이션 */
@@ -844,5 +800,46 @@
   .ld-actions .ld-status {
     width: 100%;
     justify-content: center;
+  }
+}
+
+/* 가운데 정렬 히어로: 라벨은 테두리 배지, 제목·설명·버튼 모두 가운데 */
+.ld-hero-center .ld-hero-copy {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.ld-hero-center .ld-eyebrow {
+  display: inline-flex;
+  margin: 0 0 28px;
+  padding: 8px 22px;
+  border: 1px solid rgba(53, 224, 181, 0.35);
+  border-radius: 999px;
+  color: #35e0b5;
+  letter-spacing: 4px;
+}
+
+.ld-hero-center .ld-eyebrow::before {
+  content: none;
+}
+
+.ld-hero-center .ld-hero-actions {
+  justify-content: center;
+}
+
+/* 각진 면을 NAV 뒤(화면 맨 위)부터 시작시켜 NAV 아래 경계선이 생기지 않게 한다.
+   세로로는 넘치게 두고 가로로만 잘라 가로 스크롤은 생기지 않게 한다 */
+.ld-hero-center {
+  overflow: clip visible;
+}
+
+.ld-hero-center .ld-hero-bg {
+  top: -90px;
+}
+
+@media (max-width: 860px) {
+  .ld-hero-center .ld-hero-bg {
+    top: -128px;
   }
 }
