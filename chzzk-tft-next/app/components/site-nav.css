@@ -136,5 +136,10 @@
     padding-bottom: 4px;
     overflow-x: auto;
     white-space: nowrap;
+    scrollbar-width: none; /* 가로 스크롤은 되지만 막대는 숨김 */
+  }
+
+  .sn-menu::-webkit-scrollbar {
+    display: none;
   }
 }
