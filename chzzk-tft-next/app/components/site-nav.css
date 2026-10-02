@@ -1,0 +1,140 @@
+/* 공통 NAV. 값은 랜딩 헤더(landing.css)에서 쓰던 것 그대로 */
+.site-nav {
+  --sn-accent: #18d8b8;
+  --sn-line: #163632;
+  --sn-muted: #8fa19e;
+
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}
+
+.site-nav * {
+  box-sizing: border-box;
+}
+
+.sn-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
+.sn-logo {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.sn-logo span {
+  color: var(--sn-accent);
+}
+
+.sn-menu {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  font-size: 14px;
+  color: var(--sn-muted);
+}
+
+.sn-menu a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.sn-menu a:hover {
+  color: #ffffff;
+}
+
+.sn-soon {
+  cursor: default;
+}
+
+.site-nav small {
+  margin-left: 6px;
+  padding: 2px 8px;
+  border: 1px solid var(--sn-line);
+  border-radius: 999px;
+  font-size: 11px;
+  color: var(--sn-muted);
+  white-space: nowrap;
+}
+
+.sn-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sn-user-name {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  color: var(--sn-muted);
+}
+
+.sn-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  border: 1px solid var(--sn-line);
+  border-radius: 999px;
+  background: none;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.6;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.sn-btn:hover {
+  border-color: var(--sn-accent);
+}
+
+/* 가운데 정렬 페이지(/riot, /login)용: NAV는 위에 두고 본문만 가운데 */
+.sn-shell {
+  position: relative; /* /login의 배경 빛(화면 밖으로 나가는 원)이 가로 스크롤을 만들지 않게 안에서 자른다 */
+  overflow: hidden;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.sn-shell-main {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 860px) {
+  .sn-inner {
+    flex-wrap: wrap;
+    gap: 12px 16px;
+  }
+
+  .sn-menu {
+    order: 3;
+    width: 100%;
+    gap: 20px;
+    padding-bottom: 4px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}

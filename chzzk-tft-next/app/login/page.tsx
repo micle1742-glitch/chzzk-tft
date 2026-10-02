@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import SiteNav from "../components/SiteNav";
 import { getSession } from "../lib/session";
 import "./login.css";
 
@@ -25,7 +26,9 @@ export default async function LoginPage({
     typeof error === "string" ? ERROR_MESSAGES[error] : undefined;
 
   return (
-    <div>
+    <div className="sn-shell">
+      <SiteNav />
+      <div className="sn-shell-main">
       <div className="login-bg-glow glow-1"></div>
       <div className="login-bg-glow glow-2"></div>
 
@@ -211,6 +214,7 @@ export default async function LoginPage({
           </div>
 
         </div>
+      </div>
       </div>
     </div>
   );

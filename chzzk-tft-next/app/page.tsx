@@ -1,6 +1,6 @@
 import Link from "next/link";
-import LogoutButton from "./components/LogoutButton";
 import SignatureLine from "./components/SignatureLine";
+import SiteNav from "./components/SiteNav";
 import { getSession } from "./lib/session";
 import "./landing.css";
 
@@ -26,32 +26,8 @@ export default async function Landing() {
 
   return (
     <div className="landing">
-      {/* 헤더 (home.css가 header/nav 태그에 전역 스타일을 걸어서 div + role로 둔다) */}
-      <div className="ld-header" role="banner">
-        <Link href="/" className="ld-logo">
-          TIER<span>ON</span>
-        </Link>
-        <div className="ld-nav" role="navigation" aria-label="주요 메뉴">
-          <a href="#about">서비스 소개</a>
-          <Link href="/riot">Riot 인증</Link>
-          <span className="ld-soon">
-            랭킹·커뮤니티 <small>준비 중</small>
-          </span>
-          <span className="ld-soon">
-            가이드 <small>준비 중</small>
-          </span>
-        </div>
-        {loggedIn ? (
-          <div className="ld-user">
-            <span className="ld-user-name">{nickname}</span>
-            <LogoutButton className="ld-btn ld-btn-ghost" />
-          </div>
-        ) : (
-          <Link href="/login" className="ld-btn ld-btn-ghost">
-            로그인
-          </Link>
-        )}
-      </div>
+      {/* 공통 NAV. 랜딩에서 로그아웃하면 /home으로 */}
+      <SiteNav logoutRedirect="/home" />
 
       <main className="ld-main">
         {/* 히어로 */}
