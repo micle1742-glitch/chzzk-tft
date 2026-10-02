@@ -36,9 +36,19 @@ export default async function Landing() {
           <div className="ld-glow" aria-hidden="true" />
         </section>
 
-        {/* 두 번째 섹션: 티어 인증 카드 (스크롤하면 한 번만 부드럽게 나타남) */}
-        <section className="ld-showcase">
-          <Reveal className="ld-wrap">
+        {/* 두 번째 섹션: 왼쪽 ABOUT TIERON, 오른쪽 티어 인증 카드 (스크롤하면 한 번만 부드럽게 나타남) */}
+        <section className="ld-section ld-dark ld-about" id="about">
+          <Reveal className="ld-wrap ld-split ld-split-center">
+            <div>
+              <p className="ld-eyebrow">
+                ABOUT TIERON
+              </p>
+              <h2 className="ld-h2">
+                TIERON은 TFT 플레이어를 위한
+                <br />
+                티어 인증 서비스입니다.
+              </h2>
+            </div>
             {/* 코드로 만든 카드 미리보기: 카드가 실제로 쓰는 필드만 사용, 값은 예시 */}
             <div className="ld-card-wrap">
               <div className="ld-tcard" aria-hidden="true">
@@ -84,39 +94,6 @@ export default async function Landing() {
               </p>
             </div>
           </Reveal>
-        </section>
-
-        {/* 서비스 소개 */}
-        <section className="ld-section ld-deep" id="about">
-          <div className="ld-wrap ld-split">
-            <div>
-              <p className="ld-eyebrow">
-                ABOUT TIERON
-              </p>
-              <h2 className="ld-h2">
-                TIERON은 TFT 플레이어를 위한
-                <br />
-                티어 인증 서비스입니다.
-              </h2>
-            </div>
-            <ul className="ld-points">
-              <li data-line="about-item">
-                <strong>간편한 치지직 로그인</strong>
-                <span>치지직 계정으로 바로 시작합니다.</span>
-              </li>
-              <li>
-                <strong>Riot API를 활용한 TFT 티어 정보 조회</strong>
-                <span>Riot API가 제공하는 티어, LP, 승·패만 표시합니다.</span>
-              </li>
-              <li>
-                <strong>
-                  티어 인증 카드로 기록하고 공유
-                  <small>준비 중</small>
-                </strong>
-                <span>Riot 계정 소유권을 확인한 뒤 카드를 발급하는 방향입니다.</span>
-              </li>
-            </ul>
-          </div>
         </section>
 
         {/* 이용 방법 (흰 섹션) */}

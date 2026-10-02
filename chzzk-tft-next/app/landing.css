@@ -184,10 +184,13 @@
   pointer-events: none;
 }
 
-/* 두 번째 섹션: 카드 */
-.ld-showcase {
-  padding: 24px 0 120px;
-  background: var(--ld-bg);
+/* 두 번째 섹션: 왼쪽 ABOUT, 오른쪽 카드를 세로 가운데 정렬 */
+.ld-split.ld-split-center {
+  align-items: center;
+}
+
+.ld-about .ld-h2 {
+  word-break: keep-all;
 }
 
 /* 스크롤 등장 (Reveal 컴포넌트) */
@@ -369,31 +372,9 @@
   align-items: start;
 }
 
-.ld-points {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
 
-.ld-points li {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--ld-line);
-}
 
-.ld-points li:last-child {
-  border-bottom: none;
-}
 
-.ld-points span {
-  color: var(--ld-muted);
-  font-size: 15px;
-}
 
 /* 이용 방법 */
 .ld-steps {
