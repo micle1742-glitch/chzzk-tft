@@ -157,33 +157,195 @@
 }
 
 /* 글로우 그린 #35E0B5 중심 → 딥그린 → 배경으로 사라지는 큰 원. 강한 네온 대신 넓게 번지게 */
-/* 빛은 화면 가운데에 깔고, 문구는 그 위 왼쪽에 둔다 */
+/* 배경 장식은 한 레이어에 모으고, 문구는 그 위 왼쪽에 둔다 */
+.ld-hero-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
 .ld-hero-inner {
   position: relative;
   z-index: 1;
 }
 
 .ld-hero-copy {
-  max-width: 560px;
+  max-width: 600px;
 }
 
+/* 가운데보다 오른쪽에 큰 빛: 글로우 그린 #35E0B5 → 딥그린 → 배경 */
 .ld-glow {
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 54%;
   transform: translate(-50%, -50%);
-  width: min(720px, 92vw);
+  width: min(760px, 110vw);
   aspect-ratio: 1;
   border-radius: 50%;
   background: radial-gradient(
     circle at 50% 46%,
-    rgba(53, 224, 181, 0.42) 0%,
+    rgba(53, 224, 181, 0.45) 0%,
     rgba(53, 224, 181, 0.16) 30%,
     rgba(13, 48, 41, 0.75) 52%,
     rgba(13, 48, 41, 0) 72%
   );
   filter: blur(36px);
-  pointer-events: none;
+}
+
+/* 빛을 감싸는 얇은 궤도 원. 왼쪽 위가 밝고 아래로 갈수록 흐려진다 */
+.ld-orbit {
+  position: absolute;
+  top: 50%;
+  left: 54%;
+  transform: translate(-50%, -53%);
+  width: min(660px, 100vw);
+  aspect-ratio: 1;
+  border: 1px solid rgba(53, 224, 181, 0.4);
+  border-radius: 50%;
+  -webkit-mask-image: linear-gradient(160deg, #000 0%, #000 35%, rgba(0, 0, 0, 0.35) 60%, #000 85%);
+  mask-image: linear-gradient(160deg, #000 0%, #000 35%, rgba(0, 0, 0, 0.35) 60%, #000 85%);
+}
+
+/* 궤도 위 반짝임 두 곳 (원 위의 점: 왼쪽 위 125°, 오른쪽 아래 -50°) */
+.ld-flare {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 0%, rgba(242, 255, 250, 0.9) 8%, rgba(53, 224, 181, 0.5) 22%, rgba(53, 224, 181, 0) 60%);
+}
+
+.ld-flare-1 {
+  left: 21.3%;
+  top: 9%;
+}
+
+.ld-flare-2 {
+  left: 82%;
+  top: 88.3%;
+  transform: scale(0.75);
+}
+
+/* 왼쪽 아래로 크게 지나가는 아주 흐린 두 번째 궤도 */
+.ld-orbit-faint {
+  position: absolute;
+  top: 34%;
+  left: -58%;
+  width: 1100px;
+  aspect-ratio: 1;
+  border: 1px solid rgba(53, 224, 181, 0.12);
+  border-radius: 50%;
+}
+
+/* 작은 점 */
+.ld-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(53, 224, 181, 0.6);
+}
+
+/* 화면 아래쪽 수평 빛 띠 */
+.ld-horizon {
+  position: absolute;
+  left: 50%;
+  bottom: 12%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 80px;
+  background: radial-gradient(ellipse at center, rgba(53, 224, 181, 0.18) 0%, rgba(53, 224, 181, 0) 70%);
+  filter: blur(8px);
+}
+
+/* 히어로 문구: 라벨 앞 짧은 선, 큰 제목, 두 번째 줄은 민트 그라데이션 */
+.ld-hero .ld-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  margin-left: -64px;
+  letter-spacing: 5px;
+}
+
+.ld-hero .ld-eyebrow::before {
+  content: "";
+  width: 48px;
+  height: 1px;
+  background: rgba(143, 161, 158, 0.6);
+}
+
+.ld-hero .ld-title {
+  font-size: 64px;
+  line-height: 1.25;
+}
+
+.ld-hero .ld-title span {
+  background: linear-gradient(90deg, #35e0b5 0%, #18d8b8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ld-hero .ld-lead {
+  font-size: 19px;
+}
+
+.ld-hero-actions {
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.ld-hero-actions .ld-btn {
+  min-width: 200px;
+  padding: 16px 36px;
+  font-size: 16px;
+}
+
+/* 시작 버튼: 민트 그라데이션 + 은은한 빛 + 화살표 */
+.ld-btn-hero {
+  gap: 14px;
+  background: linear-gradient(90deg, #35e0b5 0%, #18d8b8 100%);
+  box-shadow: 0 0 28px rgba(53, 224, 181, 0.35);
+}
+
+.ld-btn-hero:hover {
+  background: linear-gradient(90deg, #4be6c0 0%, #3ee4c8 100%);
+}
+
+/* 아래로 스크롤 안내 */
+.ld-scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  z-index: 1;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--ld-muted);
+}
+
+.ld-scroll-line {
+  position: relative;
+  width: 1px;
+  height: 28px;
+  background: rgba(143, 161, 158, 0.6);
+}
+
+.ld-scroll-line::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: -2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ld-accent);
 }
 
 /* 아래 섹션으로 자연스럽게 이어지도록 히어로 아래쪽을 배경색으로 흐림 */
@@ -209,12 +371,13 @@
 
 /* 스크롤 등장 (Reveal 컴포넌트) */
 .ld-reveal {
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  /* 천천히 올라오도록 1.2초, 끝에서 부드럽게 감속 */
+  transition: opacity 1.2s ease, transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .ld-reveal.is-hidden {
   opacity: 0;
-  transform: translateY(24px);
+  transform: translateY(48px);
 }
 
 @media (prefers-reduced-motion: reduce) {
