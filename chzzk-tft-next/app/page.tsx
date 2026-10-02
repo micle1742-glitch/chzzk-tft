@@ -24,16 +24,43 @@ export default async function Landing() {
     </a>
   );
 
+  // 히어로 버튼: 이동 경로·로그인 처리는 위 startButton과 같고 문구만 '티어 인증 시작하기'
+  const heroStart = loggedIn ? (
+    startButton
+  ) : (
+    <a href="/api/auth/chzzk" className="ld-btn ld-btn-primary">
+      티어 인증 시작하기
+    </a>
+  );
+
   return (
     <div className="landing">
       {/* 공통 NAV. 랜딩에서 로그아웃하면 /home으로 */}
       <SiteNav logoutRedirect="/home" />
 
       <main className="ld-main">
-        {/* 첫 화면: 텍스트 없이 가운데 은은한 빛만 */}
+        {/* 첫 화면: 가운데 은은한 빛 + 왼쪽 문구·버튼, 오른쪽은 비워 둔다 */}
         <section className="ld-hero">
-          <h1 className="ld-sr-only">TIERON</h1>
           <div className="ld-glow" aria-hidden="true" />
+          <div className="ld-wrap ld-hero-inner">
+            <div className="ld-hero-copy">
+              <p className="ld-eyebrow">YOUR TIER, VERIFIED</p>
+              <h1 className="ld-title">
+                티어 인증으로
+                <br />
+                <span>더 즐거운 게임을</span>
+              </h1>
+              <p className="ld-lead">
+                TIERON에서 나의 티어를 확인하고, 카드로 남겨보세요.
+              </p>
+              <div className="ld-actions">
+                {heroStart}
+                <a href="#about" className="ld-btn ld-btn-ghost">
+                  서비스 알아보기
+                </a>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* 두 번째 섹션: 왼쪽 ABOUT TIERON, 오른쪽 티어 인증 카드 (스크롤하면 한 번만 부드럽게 나타남) */}

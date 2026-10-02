@@ -157,7 +157,21 @@
 }
 
 /* 글로우 그린 #35E0B5 중심 → 딥그린 → 배경으로 사라지는 큰 원. 강한 네온 대신 넓게 번지게 */
+/* 빛은 화면 가운데에 깔고, 문구는 그 위 왼쪽에 둔다 */
+.ld-hero-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.ld-hero-copy {
+  max-width: 560px;
+}
+
 .ld-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: min(720px, 92vw);
   aspect-ratio: 1;
   border-radius: 50%;
