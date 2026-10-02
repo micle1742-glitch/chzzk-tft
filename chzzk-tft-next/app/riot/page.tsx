@@ -4,7 +4,7 @@ import Link from "next/link";
 import "./tier.css";
 import { useState } from "react";
 
-export default function TierPage() {
+export default function RiotPage() {
   const [nickname, setNickname] = useState("");
   const [tagline, setTagline] = useState("");
 
@@ -93,7 +93,7 @@ export default function TierPage() {
           </div>
 
           {/* 제목 및 설명 */}
-          <h1>TFT 티어 인증</h1>
+          <h1>Riot 계정 인증</h1>
 
           <p className="description">
             Riot 계정의 TFT 티어 정보를 확인합니다.
@@ -145,7 +145,7 @@ export default function TierPage() {
 
                 {/* 2. 인증 완료 문구 */}
                 <p className="verified-subtitle">
-                  TFT 티어 인증이 완료되었습니다.
+                  Riot 계정 인증이 완료되었습니다.
                 </p>
 
                 {/* 3, 4. 지역 KR & 닉네임 */}

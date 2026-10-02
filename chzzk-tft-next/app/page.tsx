@@ -33,7 +33,7 @@ export default async function Landing() {
         </Link>
         <div className="ld-nav" role="navigation" aria-label="주요 메뉴">
           <a href="#about">서비스 소개</a>
-          <Link href="/tier">티어 조회</Link>
+          <Link href="/riot">Riot 인증</Link>
           <span className="ld-soon">
             랭킹·커뮤니티 <small>준비 중</small>
           </span>
@@ -214,7 +214,7 @@ export default async function Landing() {
                   </div>
                   <span className="ld-prev-note">예시</span>
                 </div>
-                <Link href="/tier" className="ld-link">
+                <Link href="/riot" className="ld-link">
                   티어 조회하기 →
                 </Link>
               </div>

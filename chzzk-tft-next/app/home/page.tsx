@@ -36,7 +36,7 @@ export default function Home() {
         <nav>
           <Link href="/" className="active">홈</Link>
           <a href="#">게임</a>
-          <Link href="/tier">티어 인증</Link>
+          <Link href="/riot">Riot 인증</Link>
           <a href="#">랭킹</a>
           <a href="#">커뮤니티</a>
         </nav>
@@ -304,8 +304,8 @@ export default function Home() {
               </div>
             </a>
 
-            {/* 2. 티어 인증 */}
-            <Link href="/tier" className="service-card">
+            {/* 2. Riot 계정 인증 */}
+            <Link href="/riot" className="service-card">
               <div className="service-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width={22} height={22} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                   <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
@@ -317,7 +317,7 @@ export default function Home() {
                 </svg>
               </div>
               <div className="service-text">
-                <h3>티어 인증</h3>
+                <h3>Riot 계정 인증</h3>
                 <p>게임 계정을 연동하고 티어를 인증하세요.</p>
               </div>
               <div className="service-arrow">
