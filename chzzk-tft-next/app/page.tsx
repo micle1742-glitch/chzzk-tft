@@ -43,7 +43,7 @@ export default function Landing() {
               </p>
               <div className="ld-actions">
                 <Link href="/login" className="ld-btn ld-btn-primary">
-                  티어 인증 시작하기
+                  치지직으로 시작하기
                 </Link>
                 <a href="#about" className="ld-btn ld-btn-ghost">
                   서비스 알아보기
@@ -237,7 +237,7 @@ export default function Landing() {
             </p>
             <div className="ld-actions">
               <Link href="/login" className="ld-btn ld-btn-primary">
-                티어 인증 시작하기
+                치지직으로 시작하기
               </Link>
             </div>
           </div>
