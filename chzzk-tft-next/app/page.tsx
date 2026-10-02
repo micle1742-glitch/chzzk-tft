@@ -1,5 +1,5 @@
 import Link from "next/link";
-import SignatureLine from "./components/SignatureLine";
+import Reveal from "./components/Reveal";
 import SiteNav from "./components/SiteNav";
 import { getSession } from "./lib/session";
 import "./landing.css";
@@ -30,29 +30,15 @@ export default async function Landing() {
       <SiteNav logoutRedirect="/home" />
 
       <main className="ld-main">
-        {/* 히어로 */}
+        {/* 첫 화면: 텍스트 없이 가운데 은은한 빛만 */}
         <section className="ld-hero">
-          <div className="ld-wrap ld-hero-grid">
-            <div data-line="hero-copy">
-              <p className="ld-eyebrow" data-line="hero-eyebrow">
-                YOUR TIER, VERIFIED
-              </p>
-              <h1 className="ld-title">
-                티어 인증으로
-                <br />
-                <span>더 즐거운 게임을</span>
-              </h1>
-              <p className="ld-lead">
-                TIERON에서 나의 티어를 확인하고, 카드로 남겨보세요.
-              </p>
-              <div className="ld-actions">
-                {startButton}
-                <a href="#about" className="ld-btn ld-btn-ghost">
-                  서비스 알아보기
-                </a>
-              </div>
-            </div>
+          <h1 className="ld-sr-only">TIERON</h1>
+          <div className="ld-glow" aria-hidden="true" />
+        </section>
 
+        {/* 두 번째 섹션: 티어 인증 카드 (스크롤하면 한 번만 부드럽게 나타남) */}
+        <section className="ld-showcase">
+          <Reveal className="ld-wrap">
             {/* 코드로 만든 카드 미리보기: 카드가 실제로 쓰는 필드만 사용, 값은 예시 */}
             <div className="ld-card-wrap">
               <div className="ld-tcard" aria-hidden="true">
@@ -97,7 +83,7 @@ export default async function Landing() {
                 <small>인증 카드 발급 준비 중</small>
               </p>
             </div>
-          </div>
+          </Reveal>
         </section>
 
         {/* 서비스 소개 */}
@@ -242,8 +228,6 @@ export default async function Landing() {
             </div>
           </div>
         </section>
-
-        <SignatureLine />
       </main>
 
       {/* 푸터 */}
