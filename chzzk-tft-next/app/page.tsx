@@ -42,14 +42,16 @@ export default async function Landing() {
       <main className="ld-main">
         {/* 첫 화면: 가운데 은은한 빛 + 왼쪽 문구·버튼, 오른쪽은 비워 둔다 */}
         <section className="ld-hero">
-          {/* 배경 장식 (전부 CSS): 빛, 궤도 원과 반짝임, 작은 점, 아래쪽 수평 빛 */}
+          {/* 배경 장식 (전부 CSS): 빛, 빛을 감싸는 부드러운 빛 줄기, 작은 점, 아래쪽 수평 빛 */}
           <div className="ld-hero-bg" aria-hidden="true">
             <div className="ld-glow" />
-            <div className="ld-orbit">
-              <span className="ld-flare ld-flare-1" />
-              <span className="ld-flare ld-flare-2" />
+            <div className="ld-flow">
+              <span className="ld-flow-arc ld-flow-top-glow" />
+              <span className="ld-flow-arc ld-flow-top" />
+              <span className="ld-flow-arc ld-flow-bottom-glow" />
+              <span className="ld-flow-arc ld-flow-bottom" />
+              <span className="ld-flow-arc ld-flow-outer" />
             </div>
-            <div className="ld-orbit-faint" />
             {[
               [37, 16], [48, 22], [44, 34], [74, 41], [71, 49], [69, 58],
               [70, 59], [60, 67], [83, 62], [76, 63], [73, 75], [30, 18],

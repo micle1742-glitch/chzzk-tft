@@ -192,50 +192,53 @@
   filter: blur(36px);
 }
 
-/* 빛을 감싸는 얇은 궤도 원. 왼쪽 위가 밝고 아래로 갈수록 흐려진다 */
-.ld-orbit {
+/* 빛을 감싸는 부드러운 빛 줄기 (원 테두리 대신).
+   기울어진 타원의 위·아래 테두리만 남기면 양 끝이 저절로 가늘어져 흐르는 빛처럼 보인다.
+   왼쪽(문구 쪽)은 마스크로 흐려서 제목·버튼과 겹치지 않게 한다. */
+.ld-flow {
   position: absolute;
   top: 50%;
-  left: 54%;
-  transform: translate(-50%, -53%);
-  width: min(660px, 100vw);
-  aspect-ratio: 1;
-  border: 1px solid rgba(53, 224, 181, 0.4);
-  border-radius: 50%;
-  -webkit-mask-image: linear-gradient(160deg, #000 0%, #000 35%, rgba(0, 0, 0, 0.35) 60%, #000 85%);
-  mask-image: linear-gradient(160deg, #000 0%, #000 35%, rgba(0, 0, 0, 0.35) 60%, #000 85%);
+  left: 57%;
+  width: min(820px, 110vw);
+  height: 440px;
+  transform: translate(-50%, -50%) rotate(-12deg);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 14%, #000 40%, #000 100%);
+  mask-image: linear-gradient(to right, transparent 0%, transparent 14%, #000 40%, #000 100%);
 }
 
-/* 궤도 위 반짝임 두 곳 (원 위의 점: 왼쪽 위 125°, 오른쪽 아래 -50°) */
-.ld-flare {
+.ld-flow-arc {
   position: absolute;
-  width: 40px;
-  height: 40px;
-  margin: -20px 0 0 -20px;
+  inset: 0;
   border-radius: 50%;
-  background: radial-gradient(circle, #ffffff 0%, rgba(242, 255, 250, 0.9) 8%, rgba(53, 224, 181, 0.5) 22%, rgba(53, 224, 181, 0) 60%);
+  border: 0 solid transparent;
 }
 
-.ld-flare-1 {
-  left: 21.3%;
-  top: 9%;
+.ld-flow-top {
+  border-top: 2px solid rgba(53, 224, 181, 0.7);
+  filter: blur(1.5px);
 }
 
-.ld-flare-2 {
-  left: 82%;
-  top: 88.3%;
-  transform: scale(0.75);
+.ld-flow-top-glow {
+  border-top: 12px solid rgba(53, 224, 181, 0.28);
+  filter: blur(14px);
 }
 
-/* 왼쪽 아래로 크게 지나가는 아주 흐린 두 번째 궤도 */
-.ld-orbit-faint {
-  position: absolute;
-  top: 34%;
-  left: -58%;
-  width: 1100px;
-  aspect-ratio: 1;
-  border: 1px solid rgba(53, 224, 181, 0.12);
-  border-radius: 50%;
+.ld-flow-bottom {
+  inset: 6% 3%;
+  border-bottom: 2px solid rgba(53, 224, 181, 0.6);
+  filter: blur(1.5px);
+}
+
+.ld-flow-bottom-glow {
+  inset: 6% 3%;
+  border-bottom: 14px solid rgba(53, 224, 181, 0.26);
+  filter: blur(16px);
+}
+
+.ld-flow-outer {
+  inset: -10% -6%;
+  border-bottom: 1px solid rgba(53, 224, 181, 0.2);
+  filter: blur(2px);
 }
 
 /* 작은 점 */
