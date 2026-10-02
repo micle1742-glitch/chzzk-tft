@@ -61,9 +61,9 @@ export async function GET(request: NextRequest) {
       return loginError("failed");
     }
 
-    // 인증 성공 → 항상 홈페이지(/)로 이동 (이전 방문 페이지나 returnUrl과 무관)
+    // 인증 성공 → 항상 로그인 사용자 홈(/home)으로 이동 (이전 방문 페이지나 returnUrl과 무관)
     const response = NextResponse.redirect(
-      new URL("/", request.url)
+      new URL("/home", request.url)
     );
 
     // 한 번 쓴 state는 폐기

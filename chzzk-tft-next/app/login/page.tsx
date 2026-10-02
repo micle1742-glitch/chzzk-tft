@@ -15,9 +15,9 @@ export default async function LoginPage({
 }: {
   searchParams: Promise<{ error?: string | string[] }>;
 }) {
-  // 이미 로그인한 사용자는 로그인 화면 없이 홈(/)으로
+  // 이미 로그인한 사용자는 로그인 화면 없이 로그인 사용자 홈(/home)으로
   if (await getSession()) {
-    redirect("/");
+    redirect("/home");
   }
 
   const { error } = await searchParams;
