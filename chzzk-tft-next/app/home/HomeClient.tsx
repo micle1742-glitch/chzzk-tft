@@ -16,8 +16,22 @@ const HERO_SLIDES = [
 // 한 장을 보여 주는 시간. 전환(페이드) 1초는 home.css의 .hero-slide.is-active transition
 const HERO_SLIDE_INTERVAL_MS = 7000;
 
+// 지원 게임 카드 상단 아트워크. 썸네일(.game-card-thumb.has-image)을 꽉 채워 자른다.
+// 장식이라 alt 비움 — 게임 이름은 카드의 h3. 시안용 이미지 — 배포 전 사용 권한 확인
+function GameThumbImage({ src }: { src: string }) {
+  return (
+    <Image
+      src={src}
+      alt=""
+      fill
+      sizes="(max-width: 960px) 50vw, 200px"
+      className="game-thumb-img"
+    />
+  );
+}
+
 // 헤더는 공통 NAV(SiteNav)가 맡는다. 이 파일은 /home 본문만 그린다.
-export default function HomeClient() {
+export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
   // 현재 장과 직전 장. 직전 장을 아래에 그대로 깔아 두고 새 장만 위에서 페이드인 → 중간에 어두워지지 않는다
   const [slide, setSlide] = useState({ index: 0, prev: -1 });
   const slideIndex = slide.index;
@@ -73,15 +87,25 @@ export default function HomeClient() {
                 다른 유저들과 함께 게임을 즐겨보세요.
               </p>
               <div className="hero-buttons">
-                <button
-                  className="start-btn"
-                  onClick={() => window.location.href = "/api/auth/chzzk"}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
-                  </svg>
-                  치지직 계정으로 시작하기
-                </button>
+                {/* 메인 CTA: 로그인 전에는 치지직 로그인, 로그인 후에는 다음 단계인 Riot 계정 인증(/verify)으로 */}
+                {loggedIn ? (
+                  <Link href="/verify" className="start-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
+                    </svg>
+                    라이엇 인증하기
+                  </Link>
+                ) : (
+                  <button
+                    className="start-btn"
+                    onClick={() => window.location.href = "/api/auth/chzzk"}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
+                    </svg>
+                    치지직 계정으로 시작하기
+                  </button>
+                )}
                 <button className="info-btn">
                   서비스 소개
                 </button>
@@ -159,8 +183,8 @@ export default function HomeClient() {
           <div className="games-grid">
             {/* 1. Teamfight Tactics (활성화) */}
             <div className="game-card active">
-              <div className="game-card-thumb tft-thumb">
-                <span className="game-thumb-emoji">🐧</span>
+              <div className="game-card-thumb tft-thumb has-image">
+                <GameThumbImage src="/games/tft.png" />
               </div>
               <div className="game-card-body">
                 <h3 className="game-name">Teamfight Tactics</h3>
@@ -171,14 +195,7 @@ export default function HomeClient() {
             {/* 2. League of Legends */}
             <div className="game-card locked">
               <div className="game-card-thumb lol-thumb has-image">
-                {/* 게임 아트워크 (장식이라 alt 비움 — 게임 이름은 아래 h3). 시안용 — 배포 전 사용 권한 확인 */}
-                <Image
-                  src="/games/lol.png"
-                  alt=""
-                  fill
-                  sizes="(max-width: 960px) 50vw, 200px"
-                  className="game-thumb-img"
-                />
+                <GameThumbImage src="/games/lol.png" />
                 <div className="lock-overlay">
                   <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                     <rect x={3} y={11} width={18} height={11} rx={2} ry={2} />
@@ -194,14 +211,14 @@ export default function HomeClient() {
             </div>
             {/* 3. VALORANT */}
             <div className="game-card locked">
-              <div className="game-card-thumb val-thumb">
+              <div className="game-card-thumb val-thumb has-image">
+                <GameThumbImage src="/games/valorant.png" />
                 <div className="lock-overlay">
                   <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                     <rect x={3} y={11} width={18} height={11} rx={2} ry={2} />
                     <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                   </svg>
                 </div>
-                <span className="game-thumb-emoji">🎯</span>
               </div>
               <div className="game-card-body">
                 <h3 className="game-name">VALORANT</h3>
@@ -211,14 +228,14 @@ export default function HomeClient() {
             </div>
             {/* 4. Overwatch 2 */}
             <div className="game-card locked">
-              <div className="game-card-thumb ow-thumb">
+              <div className="game-card-thumb ow-thumb has-image">
+                <GameThumbImage src="/games/overwatch.png" />
                 <div className="lock-overlay">
                   <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                     <rect x={3} y={11} width={18} height={11} rx={2} ry={2} />
                     <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                   </svg>
                 </div>
-                <span className="game-thumb-emoji">🛡️</span>
               </div>
               <div className="game-card-body">
                 <h3 className="game-name">Overwatch 2</h3>
@@ -228,14 +245,14 @@ export default function HomeClient() {
             </div>
             {/* 5. MapleStory */}
             <div className="game-card locked">
-              <div className="game-card-thumb maple-thumb">
+              <div className="game-card-thumb maple-thumb has-image">
+                <GameThumbImage src="/games/maplestory.png" />
                 <div className="lock-overlay">
                   <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                     <rect x={3} y={11} width={18} height={11} rx={2} ry={2} />
                     <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                   </svg>
                 </div>
-                <span className="game-thumb-emoji">🍁</span>
               </div>
               <div className="game-card-body">
                 <h3 className="game-name">MapleStory</h3>
@@ -245,14 +262,14 @@ export default function HomeClient() {
             </div>
             {/* 6. 더 많은 게임 */}
             <div className="game-card locked">
-              <div className="game-card-thumb more-thumb">
+              <div className="game-card-thumb more-thumb has-image">
+                <GameThumbImage src="/games/more.png" />
                 <div className="lock-overlay">
                   <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                     <rect x={3} y={11} width={18} height={11} rx={2} ry={2} />
                     <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                   </svg>
                 </div>
-                <span className="game-thumb-emoji">✨</span>
               </div>
               <div className="game-card-body">
                 <h3 className="game-name">더 많은 게임</h3>

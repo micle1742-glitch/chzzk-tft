@@ -19,7 +19,7 @@
   box-sizing: border-box;
 }
 
-/* 랜딩에 있을 때 NAV "서비스 소개"(/#about)·히어로의 #about 링크를 누르면 부드럽게 스크롤.
+/* 랜딩에 있을 때 히어로의 #about 링크·NAV "서비스 소개"(/ 맨 위로)를 누르면 부드럽게 스크롤.
    랜딩이 화면에 있을 때만 적용한다 (Next 16은 페이지 이동 때 smooth를 끄지 않아서, 전역으로 걸면 다른 페이지 이동도 미끄러진다).
    움직임 줄이기 설정을 켠 사용자는 기존처럼 바로 이동 */
 @media (prefers-reduced-motion: no-preference) {

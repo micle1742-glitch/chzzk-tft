@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getSession } from "../lib/session";
 import LogoutButton from "./LogoutButton";
+import ServiceIntroLink from "./ServiceIntroLink";
 import "./site-nav.css";
 
 /*
@@ -9,7 +10,7 @@ import "./site-nav.css";
  * home.css가 header/nav 태그에 전역 스타일을 걸어서 div + role로 둔다.
  */
 export default async function SiteNav({
-  logoutRedirect = "/login",
+  logoutRedirect = "/home", // 로그아웃 후에는 로그인 화면이 아니라 홈으로
 }: {
   logoutRedirect?: string;
 }) {
@@ -31,7 +32,8 @@ export default async function SiteNav({
         <div className="sn-menu" role="navigation" aria-label="주요 메뉴">
           {/* 로고와 같은 /home으로. 로고를 몰라도 홈으로 갈 수 있게 명시적인 메뉴로 둔다 */}
           <Link href="/home">홈</Link>
-          <a href="/#about">서비스 소개</a>
+          {/* 서비스 소개 = 랜딩(/) 맨 위(히어로)부터 */}
+          <ServiceIntroLink />
           <Link href="/riot">Riot 인증</Link>
           <Link href="/community">커뮤니티</Link>
           {/* "가이드"(랜딩 /)는 "서비스 소개"와 역할이 겹쳐 NAV에서 뺐다. 랜딩 자체는 그대로 있음 */}

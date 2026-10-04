@@ -207,6 +207,7 @@ body {
 
     background-color: #18d8b8;
     color: #081312;
+    text-decoration: none; /* 로그인 상태에서는 링크(<a>)로 렌더링되므로 밑줄 제거 */
 }
 
 .start-btn svg {
