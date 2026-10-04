@@ -1,0 +1,212 @@
+/* /verify — 값은 /login 카드(login.css)와 /riot(tier.css)에서 쓰던 것 그대로.
+   body에는 스타일을 걸지 않고 페이지 래퍼(.vf-page)에만 배경을 둔다 */
+.vf-page {
+  background-color: #081312;
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.vf-page * {
+  box-sizing: border-box;
+}
+
+.vf-container {
+  width: 100%;
+  max-width: 440px;
+  padding: 24px 16px 48px;
+}
+
+.vf-card {
+  background-color: #0c1e1c;
+  border: 1px solid #1a3e39;
+  border-radius: 20px;
+  padding: 36px 28px 28px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.vf-brand {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin-bottom: 20px;
+}
+
+.vf-brand span {
+  color: #18d8b8;
+}
+
+.vf-eyebrow {
+  margin: 0 0 8px;
+  color: #18d8b8;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.vf-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.vf-desc {
+  margin: 8px 0 24px;
+  color: #8fa19e;
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+/* 진행 단계 */
+.vf-steps {
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid #1a3e39;
+  border-radius: 12px;
+  background: rgba(6, 21, 18, 0.6);
+  text-align: left;
+}
+
+.vf-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.vf-step strong {
+  display: block;
+  font-size: 14px;
+  color: #b7cfca;
+}
+
+.vf-step small {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: #6f8a85;
+}
+
+.vf-step-mark {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #2a4a45;
+  border-radius: 50%;
+  color: #6f8a85;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.vf-step.done .vf-step-mark {
+  border-color: rgba(24, 216, 184, 0.55);
+  background: rgba(24, 216, 184, 0.12);
+  color: #18d8b8;
+}
+
+.vf-step.done strong {
+  color: #ffffff;
+}
+
+/* 주 버튼 (/riot 조회 버튼과 같은 민트) */
+.vf-primary {
+  width: 100%;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 12px;
+  background: #18d8b8;
+  color: #04110f;
+  font-size: 15px;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.vf-primary:hover:not(:disabled) {
+  background: #2ee3c5;
+}
+
+.vf-primary:disabled {
+  background: #14322e;
+  color: #6f8a85;
+  cursor: not-allowed;
+}
+
+.vf-badge {
+  padding: 2px 8px;
+  border: 1px solid #2a4a45;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.vf-notice {
+  margin: 10px 0 0;
+  color: #6f8a85;
+  font-size: 12px;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+/* 로그인 필요 상태 */
+.vf-login-required {
+  margin-bottom: 16px;
+  padding: 16px;
+  border: 1px solid #1a3e39;
+  border-radius: 12px;
+  background: rgba(6, 21, 18, 0.6);
+}
+
+.vf-login-required strong {
+  display: block;
+  font-size: 15px;
+}
+
+.vf-login-required p {
+  margin: 6px 0 0;
+  color: #8fa19e;
+  font-size: 13px;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+/* 안내 */
+.vf-guide {
+  margin: 24px 0 0;
+  padding: 16px 0 0 18px;
+  list-style: disc; /* Tailwind 기본 스타일이 목록 점을 지워서 다시 켠다 */
+  border-top: 1px solid #163632;
+  color: #8fa19e;
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: left;
+  word-break: keep-all;
+}
+
+.vf-guide li + li {
+  margin-top: 4px;
+}
+
+.vf-sub-link {
+  display: inline-block;
+  margin-top: 18px;
+  color: #8fa19e;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.vf-sub-link:hover {
+  color: #18d8b8;
+}
