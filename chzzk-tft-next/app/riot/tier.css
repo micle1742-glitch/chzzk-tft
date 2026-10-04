@@ -296,6 +296,13 @@ body {
 }
 
 /* 2. 인증 완료 부제목 */
+/* 조회 상태 배지: 인증 배지(민트)와 구분되게 중립색 */
+.verified-badge.lookup-badge {
+  border-color: rgba(141, 174, 168, 0.35);
+  background: rgba(141, 174, 168, 0.08);
+  color: #8daea8;
+}
+
 .verified-subtitle {
   margin: 9px 0 16px;
   color: #8daea8;
@@ -340,6 +347,45 @@ body {
 }
 
 /* 5, 6, 7. 티어 비주얼 블록 (임시 엠블럼 + 티어 정보) */
+/* 게임 전환 탭 (TFT / LoL) — 얇은 테두리의 작은 세그먼트, 애니메이션 없음 */
+.game-tabs {
+  display: inline-flex;
+  gap: 4px;
+  padding: 3px;
+  margin-bottom: 12px;
+  border: 1px solid rgba(22, 213, 183, 0.2);
+  border-radius: 999px;
+  background: rgba(6, 21, 18, 0.6);
+}
+
+.game-tab {
+  min-width: 64px;
+  padding: 5px 14px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: #76938e;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+.game-tab:hover:not(.active) {
+  color: #b7cfca;
+}
+
+.game-tab.active {
+  border-color: rgba(22, 213, 183, 0.35);
+  background: rgba(22, 213, 183, 0.12);
+  color: #16d5b7;
+}
+
+.game-tab:focus-visible {
+  outline: 2px solid rgba(22, 213, 183, 0.6);
+  outline-offset: 2px;
+}
+
 .tier-visual-block {
   display: flex;
   align-items: center;
