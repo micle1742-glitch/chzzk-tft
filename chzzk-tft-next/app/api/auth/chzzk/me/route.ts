@@ -5,8 +5,11 @@ import { getSession } from "../../../../lib/session";
 export async function GET() {
   const session = await getSession();
 
+  // 응답 필드를 직접 고른다 (userId 같은 내부 값이 실수로 나가지 않게 ...session을 쓰지 않음)
   return NextResponse.json(
-    session ? { loggedIn: true, ...session } : { loggedIn: false },
+    session
+      ? { loggedIn: true, channelId: session.channelId, nickname: session.nickname }
+      : { loggedIn: false },
     { headers: { "Cache-Control": "no-store" } }
   );
 }
