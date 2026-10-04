@@ -18,15 +18,23 @@ export default async function SiteNav({
   return (
     <div className="site-nav" role="banner">
       <div className="sn-inner">
-        <Link href="/home" className="sn-logo">
-          TIER<span>ON</span>
-        </Link>
+        <div className="sn-brand">
+          <Link href="/home" className="sn-logo">
+            TIER<span>ON</span>
+          </Link>
+          {/* 서비스 상태 표시 (ON AIR처럼 점이 은은하게 빛남). 링크가 아니라 표시만 */}
+          <span className="sn-status">
+            <span className="sn-status-dot" aria-hidden="true" />
+            BETA
+          </span>
+        </div>
         <div className="sn-menu" role="navigation" aria-label="주요 메뉴">
+          {/* 로고와 같은 /home으로. 로고를 몰라도 홈으로 갈 수 있게 명시적인 메뉴로 둔다 */}
+          <Link href="/home">홈</Link>
           <a href="/#about">서비스 소개</a>
           <Link href="/riot">Riot 인증</Link>
           <Link href="/community">커뮤니티</Link>
-          {/* 가이드 = 서비스를 소개하는 랜딩(/) */}
-          <Link href="/">가이드</Link>
+          {/* "가이드"(랜딩 /)는 "서비스 소개"와 역할이 겹쳐 NAV에서 뺐다. 랜딩 자체는 그대로 있음 */}
         </div>
         {session ? (
           <div className="sn-user">

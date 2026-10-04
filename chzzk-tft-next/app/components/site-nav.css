@@ -38,6 +38,42 @@
   color: var(--sn-accent);
 }
 
+/* 로고 + BETA 상태 표시 묶음.
+   세로 가운데가 아니라 글자 기준선(baseline)을 맞춰서, 캡슐이 로고 하단 라인 쪽으로 약간 내려오게 한다 */
+.sn-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+/* 작은 캡슐형 상태 뱃지: 얇은 민트 테두리 + 거의 투명한 배경 */
+.sn-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px 3px 7px;
+  border: 1px solid rgba(24, 216, 184, 0.4);
+  border-radius: 999px;
+  background: rgba(24, 216, 184, 0.06);
+  color: var(--sn-accent);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* ON AIR 같은 상태 점: 같은 민트로 은은하게만 번지게 (강한 네온 X, 자주 보는 NAV라 깜빡임 없음) */
+.sn-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sn-accent);
+  box-shadow:
+    0 0 0 3px rgba(24, 216, 184, 0.14),
+    0 0 8px rgba(24, 216, 184, 0.55);
+}
+
 .sn-menu {
   display: flex;
   align-items: center;
