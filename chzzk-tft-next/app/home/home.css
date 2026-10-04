@@ -9,138 +9,126 @@ body {
     font-family: Arial, sans-serif;
 }
 
+/* /home 전체 래퍼는 항상 화면 폭 전체를 쓴다.
+   /login·/riot CSS의 body { align-items: center }가 페이지 이동 후에도 남아 있으면 래퍼가 내용 폭(1080px)으로
+   줄어들어 풀블리드 히어로가 가운데 카드처럼 좁아졌다. (100vw는 세로 스크롤바 폭까지 넣어 가로 스크롤을 만들어서 쓰지 않음) */
+.home-page {
+    width: 100%;
+}
+
+/* 히어로: 화면 좌우 끝까지 채우는 배경 이미지 + 가운데 정렬 콘텐츠.
+   배경은 시안용 임시 이미지(public/hero/home-hero.png). 배포 전 사용 권한을 확인한 에셋으로 교체한다 */
 .hero {
     position: relative;
+    overflow: hidden; /* 배경 이미지를 히어로 영역 안에서만 자른다 */
 
-    min-height: 560px;
+    width: 100%;
+    min-height: 640px;
 
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 48px 40px 36px;
+    display: flex;
+    align-items: center;
 
-    overflow: visible;
+    padding: 88px 24px 72px;
+
+    text-align: center;
+}
+
+.hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.hero-bg-img {
+    object-fit: cover;
+    object-position: center;
+}
+
+/* 배경 슬라이드: 기본은 숨김. 직전 장은 아래에 그대로 두고, 현재 장만 위에서 1초 동안 페이드인 (crossfade).
+   전환 효과는 현재 장(.is-active)에만 걸어서, 밀려난 장은 덮인 상태에서 조용히 사라진다 */
+.hero-slide {
+    opacity: 0;
+    z-index: 0;
+}
+
+.hero-slide.is-prev {
+    opacity: 1;
+    z-index: 1;
+}
+
+.hero-slide.is-active {
+    opacity: 1;
+    z-index: 2;
+    transition: opacity 1s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-slide.is-active {
+        transition: none;
+    }
+}
+
+/* 어두운 오버레이: 가운데 글자 뒤는 더 어둡게, 아래는 페이지 바탕색(#081312)으로 자연스럽게 이어지게.
+   배경의 게임풍 색감은 가장자리에서 그대로 보이도록 완전히 덮지 않는다 */
+.hero-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3; /* 모든 슬라이드(z-index 0~2) 위에 같은 오버레이 */
+    background:
+        /* 가운데 글자·CTA 뒤만 어둡게. 설명 문구·버튼이 있는 아래쪽(히어로 높이 55~70%)까지 덮도록 중심을 내리고 세로로 넓혔다
+           (밝은 Maple 배경에서 "서비스 소개" 버튼·설명 문구가 묻히던 문제). 가장자리는 그대로 투명 → 배경 색감 유지 */
+        radial-gradient(ellipse 62% 62% at 50% 54%, rgba(5, 7, 6, 0.68) 0%, rgba(5, 7, 6, 0.42) 55%, transparent 100%),
+        linear-gradient(180deg, rgba(5, 7, 6, 0.55) 0%, rgba(5, 7, 6, 0.15) 30%, rgba(7, 26, 23, 0.55) 72%, #081312 100%);
 }
 
 .hero-content {
     position: relative;
     z-index: 2;
 
-    width: 48%;
-    min-width: 0;
+    width: 100%;
+    max-width: 1032px; /* NAV 콘텐츠 폭(1080 - 좌우 24)과 같게 */
+    margin: 0 auto;
 
-    min-height: 440px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    align-items: center;
 }
 
 .hero-text {
     width: 100%;
-}
-
-.hero-visual {
-    position: absolute;
-    z-index: 1;
-
-    right: -24px;
-    bottom: 36px;
-
-    width: 62%;
-    height: 440px;
 
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-
-    overflow: visible;
-    pointer-events: none;
 }
 
-.hero-visual .glow,
-.hero-visual .game-circle,
-.hero-visual .floating-card {
-    pointer-events: auto;
+/* 1. 작은 영문 서브 문구 */
+.hero-eyebrow {
+    margin: 0;
+
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
 }
 
-.glow {
-    width: 460px;
-    height: 460px;
+/* 2. TIERON 워드마크 (TIER 흰색 + ON 민트, NAV 로고와 같은 색 규칙) */
+.hero-wordmark {
+    margin: 14px 0 0;
 
-    position: absolute;
+    color: #ffffff;
+    font-size: 96px;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -2px;
 
-    background: #18d8b8;
-
-    filter: blur(120px);
-
-    opacity: 0.16;
-
-    border-radius: 50%;
+    text-shadow: 0 6px 30px rgba(0, 0, 0, 0.45);
 }
 
-.game-circle {
-    width: 400px;
-    height: 400px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    position: relative;
-
-    font-size: 140px;
-
-    border-radius: 50%;
-
-    background: linear-gradient(
-        135deg,
-        #163a36,
-        #0c1f1d
-    );
-
-    border: 1px solid #18d8b8;
-
-    box-shadow: 0 0 50px rgba(24, 216, 184, 0.2);
-
-    transition: 0.3s;
-}
-
-.game-circle:hover {
-    transform: scale(1.05);
-}
-
-.floating-card {
-    position: absolute;
-
-    padding: 14px 22px;
-
-    border-radius: 12px;
-
-    background: #102523;
-
-    border: 1px solid #24514c;
-
-    color: white;
-
-    font-weight: bold;
-
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-
-    transition: 0.3s;
-}
-
-.floating-card:hover {
-    transform: translateY(-8px);
-    border-color: #18d8b8;
-}
-
-.card-one {
-    top: 36px;
-    right: 48px;
-}
-
-.card-two {
-    bottom: 20px;
-    left: 40px;
+.hero-wordmark span {
+    color: #18d8b8;
 }
 
 .hero-divider {
@@ -159,19 +147,14 @@ body {
     box-shadow: 0 0 10px rgba(24, 216, 184, 0.15);
 }
 
-.hero-small {
-    margin: 0;
-
-    color: #8fa19e;
-    font-size: 15px;
-    letter-spacing: 0.2px;
-}
-
+/* 3. 기존 문구 "당신의 게임 실력, 이제 인증하세요." */
 .hero h2 {
     font-size: 52px;
     line-height: 1.25;
 
-    margin: 16px 0 18px;
+    margin: 28px 0 16px;
+
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
 }
 
 .hero h2 span {
@@ -190,6 +173,7 @@ body {
 .hero-buttons {
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 12px;
 
@@ -255,13 +239,14 @@ body {
 
     display: flex;
     align-items: flex-start;
+    justify-content: center;
     gap: 40px;
 
-    width: 178%;
+    width: 100%;
     max-width: 860px;
 
-    margin-top: auto;
-    padding-top: 36px;
+    margin-top: 56px;
+    padding-top: 0;
 }
 
 .feature-card {
@@ -458,6 +443,26 @@ body {
 
 .game-card:hover .game-thumb-emoji {
     transform: scale(1.08);
+}
+
+/* 게임 아트워크 썸네일: 영역(높이 104px 고정)을 꽉 채워 자르고, 아래쪽은 카드 본문 색으로 은은하게 이어지게 */
+.game-thumb-img {
+    object-fit: cover;
+    object-position: center;
+}
+
+.game-card-thumb.has-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(180deg, rgba(5, 7, 6, 0.08) 0%, rgba(5, 7, 6, 0.2) 55%, rgba(11, 28, 26, 0.75) 100%);
+    pointer-events: none;
+}
+
+/* 잠금(준비 중) 오버레이는 이미지·그라데이션 위에 */
+.game-card-thumb.has-image .lock-overlay {
+    z-index: 2;
 }
 
 .lock-overlay {
@@ -854,60 +859,62 @@ body {
     line-height: 1.6;
 }
 
+/* 본문 컨테이너 폭을 공통 NAV(.sn-inner: max-width 1080px, 좌우 padding 24px)와 맞춘다.
+   각 섹션의 위·아래 padding은 위 개별 규칙 값을 그대로 쓰고, 좌우와 최대 폭만 덮어쓴다.
+   (.hero는 화면 끝까지 꽉 차는 배경이라 제외하고, 안쪽 .hero-content가 같은 폭을 쓴다) */
+.games-section,
+.services-section,
+.cta-section,
+.footer-container {
+    max-width: 1080px;
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
 @media (max-width: 960px) {
     .hero {
         min-height: auto;
         padding: 40px 24px 48px;
     }
 
-    .hero-content,
-    .hero-visual {
-        width: 100%;
+    .hero-content {
         max-width: none;
     }
 
-    .hero-content {
-        min-height: auto;
+    .hero-eyebrow {
+        font-size: 10px;
+        letter-spacing: 0.24em;
+    }
+
+    .hero-wordmark {
+        font-size: 56px;
+        letter-spacing: -1px;
+    }
+
+    /* 좁은 화면에서는 설명 문구가 거의 화면 폭이라, 가운데 어두운 영역을 가로로 넓혀 문구 양끝까지 덮는다 */
+    .hero-bg::after {
+        background:
+            radial-gradient(ellipse 90% 60% at 50% 54%, rgba(5, 7, 6, 0.7) 0%, rgba(5, 7, 6, 0.45) 60%, transparent 100%),
+            linear-gradient(180deg, rgba(5, 7, 6, 0.55) 0%, rgba(5, 7, 6, 0.15) 30%, rgba(7, 26, 23, 0.55) 72%, #081312 100%);
     }
 
     .hero h2 {
         font-size: 36px;
     }
 
-    .hero-visual {
-        position: relative;
-        top: auto;
-        right: auto;
-        bottom: auto;
-        transform: none;
-
-        height: 420px;
-        margin-top: 28px;
-    }
-
-    .card-one {
-        top: 40px;
-        right: 24px;
-    }
-
-    .card-two {
-        bottom: 40px;
-        left: 24px;
-    }
-
     .features {
         flex-direction: column;
-        gap: 20px;
+        gap: 16px;
         width: 100%;
         max-width: none;
         margin-top: 28px;
         padding-top: 0;
     }
 
-    .game-circle {
-        width: 280px;
-        height: 280px;
-        font-size: 100px;
+    /* 기본값 flex: 1 1 200px는 가로 배치용(폭 기준)인데, 세로로 쌓이면 높이 200px가 되어
+       카드 사이가 크게 벌어진다 → 내용 높이만큼만 차지하게 */
+    .feature-card {
+        flex: 0 0 auto;
     }
 
     .games-section {

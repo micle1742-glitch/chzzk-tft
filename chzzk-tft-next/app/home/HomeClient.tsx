@@ -1,22 +1,69 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import "./home.css";
+
+// 히어로 배경 슬라이드. 첫 장이 첫 화면. (게임별 문구·UI는 아직 없음 — 배경만 바뀐다)
+const HERO_SLIDES = [
+  { src: "/hero/home-hero.png" },
+  { src: "/hero/pubg-hero.png" },
+  { src: "/hero/maple-hero.png" },
+  { src: "/hero/steam-hero.png" },
+];
+
+// 한 장을 보여 주는 시간. 전환(페이드) 1초는 home.css의 .hero-slide.is-active transition
+const HERO_SLIDE_INTERVAL_MS = 7000;
 
 // 헤더는 공통 NAV(SiteNav)가 맡는다. 이 파일은 /home 본문만 그린다.
 export default function HomeClient() {
+  // 현재 장과 직전 장. 직전 장을 아래에 그대로 깔아 두고 새 장만 위에서 페이드인 → 중간에 어두워지지 않는다
+  const [slide, setSlide] = useState({ index: 0, prev: -1 });
+  const slideIndex = slide.index;
+  const prevSlide = slide.prev;
+
+  useEffect(() => {
+    // 움직임 줄이기 설정을 켠 사용자에게는 자동 전환을 하지 않는다 (첫 장 고정)
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const timer = window.setInterval(() => {
+      setSlide((s) => ({ index: (s.index + 1) % HERO_SLIDES.length, prev: s.index }));
+    }, HERO_SLIDE_INTERVAL_MS);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
   return (
-    <div>
+    <div className="home-page">
       <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>TIERON</title>
       <main>
         <section className="hero">
+          {/* 풀블리드 배경 슬라이드 (장식이라 alt 비움). 시안용 임시 이미지 — 배포 전 사용 권한을 확인한 에셋으로 교체.
+              4장을 겹쳐 두고 현재 장만 위로 올려 페이드인한다 → 이미지가 바뀌어도 레이아웃 높이는 그대로 */}
+          <div className="hero-bg" aria-hidden="true">
+            {HERO_SLIDES.map((slide, i) => (
+              <Image
+                key={slide.src}
+                src={slide.src}
+                alt=""
+                fill
+                sizes="100vw"
+                // 첫 장은 우선 로드, 나머지는 바로 받아 두되 우선순위를 낮춰 첫 장을 방해하지 않게
+                loading="eager"
+                fetchPriority={i === 0 ? "high" : "low"}
+                className={`hero-bg-img hero-slide${i === slideIndex ? " is-active" : i === prevSlide ? " is-prev" : ""}`}
+              />
+            ))}
+          </div>
           <div className="hero-content">
             <div className="hero-text">
-              <p className="hero-small">
-                게임으로 더 가까워지는 커뮤니티
-              </p>
+              <p className="hero-eyebrow">Game Account Verification Platform</p>
+              <h1 className="hero-wordmark">
+                TIER<span>ON</span>
+              </h1>
               <h2>
                 당신의 게임 실력,<br />
                 이제 <span>인증하세요.</span>
@@ -83,18 +130,6 @@ export default function HomeClient() {
               </div>
             </div>
           </div>
-          <div className="hero-visual">
-            <div className="glow" />
-            <div className="game-circle">
-              🎮
-            </div>
-            <div className="floating-card card-one">
-              🏆 TIER
-            </div>
-            <div className="floating-card card-two">
-              ⚡ GAME
-            </div>
-          </div>
           <div className="hero-divider" />
         </section>
         {/* 지원 게임 섹션 */}
@@ -135,14 +170,21 @@ export default function HomeClient() {
             </div>
             {/* 2. League of Legends */}
             <div className="game-card locked">
-              <div className="game-card-thumb lol-thumb">
+              <div className="game-card-thumb lol-thumb has-image">
+                {/* 게임 아트워크 (장식이라 alt 비움 — 게임 이름은 아래 h3). 시안용 — 배포 전 사용 권한 확인 */}
+                <Image
+                  src="/games/lol.png"
+                  alt=""
+                  fill
+                  sizes="(max-width: 960px) 50vw, 200px"
+                  className="game-thumb-img"
+                />
                 <div className="lock-overlay">
                   <svg xmlns="http://www.w3.org/2000/svg" width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                     <rect x={3} y={11} width={18} height={11} rx={2} ry={2} />
                     <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                   </svg>
                 </div>
-                <span className="game-thumb-emoji">⚔️</span>
               </div>
               <div className="game-card-body">
                 <h3 className="game-name">League of Legends</h3>
