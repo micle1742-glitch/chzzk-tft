@@ -41,4 +41,4 @@ yarn-error.log*
 next-env.d.ts
 
 # 디자인 시안 이미지는 로컬에서만 참고 (README.md, svg는 추적)
-/docs/design/*.png
+/docs/design/**/*.png
