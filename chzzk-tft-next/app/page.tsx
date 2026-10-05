@@ -13,12 +13,12 @@ export default async function Landing() {
 
   // 시작 영역: 로그아웃 상태는 치지직 OAuth 시작 경로로 바로 이동한다
   // (외부로 리다이렉트하는 API라서 Link 프리페치 대신 일반 <a> — ChzzkLoginLink가 누르면 로그인 중 화면을 띄운다).
-  // 로그인 상태는 여기가 이미 메인 홈이므로 버튼 대신 로그인한 사용자 정보를 보여준다.
+  // 로그인 상태는 여기가 이미 메인 홈이므로 버튼 대신 로그인한 사용자 정보를 보여준다 (누르면 마이페이지로).
   const startButton = loggedIn ? (
-    <span className="ld-status">
+    <Link href="/mypage" className="ld-status" title="마이페이지로 이동">
       <span className="ld-status-dot" aria-hidden="true" />
       {nickname}님으로 로그인됨
-    </span>
+    </Link>
   ) : (
     <ChzzkLoginLink className="ld-btn ld-btn-primary">
       치지직으로 시작하기

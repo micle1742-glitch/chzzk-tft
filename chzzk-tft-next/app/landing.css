@@ -821,8 +821,16 @@
   padding: 12px 22px;
   border: 1px solid var(--ld-line);
   border-radius: 999px;
+  color: #ffffff;
   font-size: 15px;
   font-weight: 700;
+  text-decoration: none;
+}
+
+/* 로그인 표시 = 마이페이지 링크: 평소 모습은 그대로, 올리면 테두리만 민트로 */
+.ld-status:hover,
+.ld-status:focus-visible {
+  border-color: var(--ld-accent);
 }
 
 .ld-status-dot {

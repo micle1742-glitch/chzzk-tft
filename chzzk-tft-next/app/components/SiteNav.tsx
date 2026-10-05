@@ -37,10 +37,15 @@ export default async function SiteNav({
           <Link href="/riot">Riot 인증</Link>
           <Link href="/community">커뮤니티</Link>
           {/* "가이드"(랜딩 /)는 "서비스 소개"와 역할이 겹쳐 NAV에서 뺐다. 랜딩 자체는 그대로 있음 */}
+          {/* 마이페이지 진입: 로그인 상태에서만 메뉴 끝에 표시 */}
+          {session && <Link href="/mypage">마이페이지</Link>}
         </div>
         {session ? (
           <div className="sn-user">
-            <span className="sn-user-name">{session.nickname}</span>
+            {/* 닉네임을 누르면 마이페이지로 */}
+            <Link href="/mypage" className="sn-user-name" title="마이페이지로 이동">
+              {session.nickname}
+            </Link>
             <LogoutButton className="sn-btn" redirectTo={logoutRedirect} />
           </div>
         ) : (

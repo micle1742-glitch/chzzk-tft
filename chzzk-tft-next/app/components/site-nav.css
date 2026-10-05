@@ -118,6 +118,16 @@
   white-space: nowrap;
   font-size: 14px;
   color: var(--sn-muted);
+  text-decoration: none;
+}
+
+/* 닉네임 = 마이페이지 링크: 평소엔 기존 모습 그대로, 올리면 흰 글자 + 얇은 민트 밑줄 */
+.sn-user-name:hover,
+.sn-user-name:focus-visible {
+  color: #ffffff;
+  text-decoration: underline;
+  text-decoration-color: var(--sn-accent);
+  text-underline-offset: 4px;
 }
 
 .sn-btn {
@@ -170,6 +180,15 @@
   .sn-inner {
     flex-wrap: wrap;
     gap: 12px 16px;
+  }
+
+  /* 좁은 화면: 로고·BETA와 같은 줄에 닉네임·로그아웃이 들어가도록 닉네임을 짧게 (…로 줄임) */
+  .sn-user {
+    gap: 10px;
+  }
+
+  .sn-user-name {
+    max-width: 72px;
   }
 
   .sn-menu {
