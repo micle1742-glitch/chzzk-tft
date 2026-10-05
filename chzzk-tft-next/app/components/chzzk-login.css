@@ -1,0 +1,60 @@
+/* 치지직 로그인 로딩 화면 (ChzzkLoginLink). 색은 기존 TIERON 값: 바탕 #081312, 민트 #18d8b8, 보조 글자 #8fa19e */
+.chzzk-login-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+
+  background: rgba(8, 19, 18, 0.92);
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.chzzk-login-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.chzzk-login-spinner {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 6px;
+  border: 2px solid rgba(24, 216, 184, 0.2);
+  border-top-color: #18d8b8;
+  border-radius: 50%;
+  animation: chzzk-login-spin 0.9s linear infinite;
+}
+
+.chzzk-login-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.chzzk-login-sub {
+  margin: 0;
+  color: #8fa19e;
+  font-size: 14px;
+  word-break: keep-all;
+}
+
+@keyframes chzzk-login-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 움직임 줄이기: 회전 없이 원만 표시 (문구로 상태 전달) */
+@media (prefers-reduced-motion: reduce) {
+  .chzzk-login-spinner {
+    animation: none;
+    border-color: #18d8b8;
+  }
+}

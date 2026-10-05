@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import ChzzkLoginLink from "../components/ChzzkLoginLink";
 import "./home.css";
 
 // 히어로 배경 슬라이드. 첫 장이 첫 화면. (게임별 문구·UI는 아직 없음 — 배경만 바뀐다)
@@ -96,15 +97,12 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
                     라이엇 인증하기
                   </Link>
                 ) : (
-                  <button
-                    className="start-btn"
-                    onClick={() => window.location.href = "/api/auth/chzzk"}
-                  >
+                  <ChzzkLoginLink className="start-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
                     </svg>
                     치지직 계정으로 시작하기
-                  </button>
+                  </ChzzkLoginLink>
                 )}
                 <button className="info-btn">
                   서비스 소개

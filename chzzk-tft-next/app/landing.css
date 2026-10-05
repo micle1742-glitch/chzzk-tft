@@ -691,6 +691,27 @@
   width: 100%;
 }
 
+.ld-footer-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ld-footer-link:hover {
+  color: #ffffff;
+}
+
+/* Riot Games 고지 문구: 푸터 맨 아래 한 줄 전체, 본문보다 한 단계 작고 흐리게 (긴 영문도 화면 안에서 줄바꿈) */
+.ld-footer-legal {
+  width: 100%;
+  margin: 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--ld-line);
+  color: #6b8480;
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
 .ld-footer .ld-logo {
   color: #ffffff;
   font-size: 18px;

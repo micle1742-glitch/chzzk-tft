@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import ChzzkLoginLink from "../components/ChzzkLoginLink";
 import SiteNav from "../components/SiteNav";
 import { getSession } from "../lib/session";
 import "./login.css";
@@ -77,11 +78,8 @@ export default async function LoginPage({
           {/* 소셜 로그인 목록 */}
           <div className="login-buttons">
 
-            {/* 치지직 */}
-            <a
-              href="/api/auth/chzzk"
-              className="social-login-btn chzzk-btn"
-            >
+            {/* 치지직 (누르면 로그인 중 화면 표시) */}
+            <ChzzkLoginLink className="social-login-btn chzzk-btn">
               <div className="btn-icon chzzk-icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +103,7 @@ export default async function LoginPage({
               <span className="btn-badge primary">
                 연동 가능
               </span>
-            </a>
+            </ChzzkLoginLink>
 
             {/* Google */}
             <button

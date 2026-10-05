@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ChzzkLoginLink from "./components/ChzzkLoginLink";
 import Reveal from "./components/Reveal";
 import SiteNav from "./components/SiteNav";
 import { getSession } from "./lib/session";
@@ -11,7 +12,7 @@ export default async function Landing() {
   const nickname = session?.nickname ?? "";
 
   // 시작 영역: 로그아웃 상태는 치지직 OAuth 시작 경로로 바로 이동한다
-  // (외부로 리다이렉트하는 API라서 Link 프리페치 대신 일반 <a>).
+  // (외부로 리다이렉트하는 API라서 Link 프리페치 대신 일반 <a> — ChzzkLoginLink가 누르면 로그인 중 화면을 띄운다).
   // 로그인 상태는 여기가 이미 메인 홈이므로 버튼 대신 로그인한 사용자 정보를 보여준다.
   const startButton = loggedIn ? (
     <span className="ld-status">
@@ -19,19 +20,19 @@ export default async function Landing() {
       {nickname}님으로 로그인됨
     </span>
   ) : (
-    <a href="/api/auth/chzzk" className="ld-btn ld-btn-primary">
+    <ChzzkLoginLink className="ld-btn ld-btn-primary">
       치지직으로 시작하기
-    </a>
+    </ChzzkLoginLink>
   );
 
   // 히어로 버튼: 이동 경로·로그인 처리는 위 startButton과 같고 문구만 '티어 인증 시작하기'
   const heroStart = loggedIn ? (
     startButton
   ) : (
-    <a href="/api/auth/chzzk" className="ld-btn ld-btn-primary ld-btn-hero">
+    <ChzzkLoginLink className="ld-btn ld-btn-primary ld-btn-hero">
       티어 인증 시작하기
       <span aria-hidden="true">→</span>
-    </a>
+    </ChzzkLoginLink>
   );
 
   return (
@@ -256,11 +257,17 @@ export default async function Landing() {
             TIERON은 TFT 플레이어를 위한 티어 인증 서비스입니다.
           </span>
           <span className="ld-footer-text">
-            이용약관 · 개인정보처리방침 (준비 중)
+            <Link href="/terms" className="ld-footer-link">이용약관</Link>
+            {" · "}
+            <Link href="/privacy" className="ld-footer-link">개인정보처리방침</Link>
           </span>
           <span className="ld-footer-text ld-footer-note">
             랭킹·커뮤니티와 인증 카드 발급은 준비 중입니다.
           </span>
+          {/* Riot Games 공식 고지 문구 (Riot 정책 문구 그대로 — 임의 수정 금지) */}
+          <p className="ld-footer-legal" lang="en">
+            {"TIERON isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc."}
+          </p>
         </div>
       </div>
     </div>
