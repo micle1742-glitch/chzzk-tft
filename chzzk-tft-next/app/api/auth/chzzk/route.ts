@@ -1,23 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-
-// 요청이 실제로 들어온 origin (예: https://tieron.vercel.app, http://localhost:3000)
-function requestOrigin(request: NextRequest): string {
-  const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host");
-  if (!host) return request.nextUrl.origin;
-
-  const proto =
-    request.headers.get("x-forwarded-proto")?.split(",")[0].trim() ??
-    request.nextUrl.protocol.replace(":", "");
-  return `${proto}://${host}`;
-}
+import { chzzkCredentials, requestOrigin } from "../../../lib/chzzk";
 
 export async function GET(request: NextRequest) {
-  const clientId = process.env.CHZZK_CLIENT_ID;
+  // localhost면 로컬 개발용 앱(CHZZK_LOCAL_*), 배포 도메인이면 운영 앱(CHZZK_*) — app/lib/chzzk.ts
+  const { clientId, idName } = chzzkCredentials(request);
 
   // 환경 변수가 없으면 clientId=undefined로 치지직에 보내지 않고 로그인 화면에 기존 실패 안내를 띄운다
-  // (배포 환경에서는 Vercel 프로젝트 설정 → Environment Variables에 CHZZK_CLIENT_ID를 넣어야 한다)
+  // (로컬은 .env.local, 배포는 Vercel 프로젝트 설정 → Environment Variables)
   if (!clientId) {
-    console.error("환경 변수 CHZZK_CLIENT_ID가 설정되지 않았습니다.");
+    console.error(`환경 변수 ${idName}가 설정되지 않았습니다.`);
     return NextResponse.redirect(new URL("/login?error=failed", request.url));
   }
 

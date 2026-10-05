@@ -1,5 +1,6 @@
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
+import { chzzkCredentials } from "../../../../lib/chzzk";
 import { getSupabase } from "../../../../lib/db";
 import {
   LEGACY_SESSION_COOKIES,
@@ -43,8 +44,12 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const clientId = process.env.CHZZK_CLIENT_ID;
-    const clientSecret = process.env.CHZZK_CLIENT_SECRET;
+    // 로그인 시작 때와 같은 앱: localhost면 CHZZK_LOCAL_*, 배포 도메인이면 CHZZK_* (app/lib/chzzk.ts)
+    const { clientId, clientSecret, idName, secretName } = chzzkCredentials(request);
+    if (!clientId || !clientSecret) {
+      console.error(`환경 변수 ${!clientId ? idName : secretName}가 설정되지 않았습니다.`);
+      return loginError("failed");
+    }
 
     const tokenResponse = await axios.post(
       "https://openapi.chzzk.naver.com/auth/v1/token",
