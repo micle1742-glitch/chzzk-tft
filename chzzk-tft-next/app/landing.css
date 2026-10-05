@@ -887,3 +887,1072 @@
     top: -128px;
   }
 }
+
+/* =========================================================
+   서비스 소개형 랜딩 (Apple 광고 스타일) — app/page.tsx의 .ax 영역
+   DARK(HERO·01 VERIFY·02 PROFILE) → WHITE(03 SHARE·04 STREAMERS) → DARK(FINAL)
+   다크 챕터는 딥틸 + 민트 빛, 화이트 챕터는 여백 넓은 흰 배경(민트 글씨 대신 진한 초록 #0d3029).
+   (위쪽의 예전 ld-hero·ld-about 등 규칙은 더 이상 쓰지 않지만 푸터·Reveal 규칙과 섞여 있어 이번에는 그대로 둔다)
+   ========================================================= */
+.ax {
+  --ax-ink: #f2f0e6;
+  --ax-muted: #a9bab6;
+  --ax-faint: #6d8582;
+  --ax-mint: #18d8b8;
+  --ax-line: rgba(255, 255, 255, 0.09);
+
+  overflow: hidden;
+  color: var(--ax-ink);
+}
+
+/* NAV와 같은 콘텐츠 폭 */
+.ax-wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.ax-label {
+  margin: 0 0 18px;
+  color: var(--ax-mint);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+}
+
+.ax-label b {
+  color: var(--ax-faint);
+  font-weight: 700;
+}
+
+.ax-title {
+  margin: 0;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+  word-break: keep-all;
+}
+
+.ax-title span {
+  color: var(--ax-mint);
+}
+
+.ax-body {
+  max-width: 520px;
+  margin: 22px 0 0;
+  color: var(--ax-muted);
+  font-size: 18px;
+  line-height: 1.7;
+  word-break: keep-all;
+}
+
+.ax-soon {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 7px 14px;
+  border: 1px solid rgba(24, 216, 184, 0.6);
+  border-radius: 999px;
+  background: rgba(24, 216, 184, 0.1);
+  color: #3ee4c8;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ax-soon i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ax-mint);
+  box-shadow: 0 0 8px rgba(24, 216, 184, 0.7);
+}
+
+/* 두 칸 배치 (VERIFY·PROFILE·STREAMERS) */
+.ax-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+/* 버튼 (.landing a 규칙보다 우선하도록 .ax 아래로) */
+.ax-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 34px;
+}
+
+.ax .ax-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 54px;
+  padding: 0 28px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 800;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.ax .ax-btn-primary {
+  background: var(--ax-mint);
+  color: #061210;
+  box-shadow: 0 10px 40px rgba(24, 216, 184, 0.25);
+}
+
+.ax .ax-btn-primary:hover {
+  background: #3ee4c8;
+}
+
+.ax .ax-btn-ghost {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--ax-ink);
+}
+
+.ax .ax-btn-ghost:hover {
+  border-color: var(--ax-mint);
+}
+
+/* 카드 예시 이미지: 이미지 안의 어두운 배경 가장자리를 섹션 배경으로 서서히 사라지게 (확대·자르기 없음) */
+.ax-visual {
+  position: relative;
+  margin: 0;
+}
+
+.ax-visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+  -webkit-mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 62%, transparent 100%);
+  mask-image: radial-gradient(ellipse 72% 72% at 50% 50%, #000 62%, transparent 100%);
+}
+
+.ax-visual figcaption {
+  margin-top: 4px;
+  color: var(--ax-faint);
+  font-size: 12px;
+  text-align: center;
+}
+
+/* ================= DARK 챕터 ================= */
+.ax-dark {
+  background:
+    radial-gradient(ellipse 50% 30% at 80% 8%, rgba(24, 216, 184, 0.12), transparent 70%),
+    linear-gradient(180deg, #050807 0%, #071512 34%, #040706 60%, #0a1d19 100%);
+}
+
+/* HERO: 첫 화면(NAV 아래) 안에 문구·카드·CTA·SCROLL이 모두 들어오게.
+   아래 섹션이 조금 보이도록 화면 높이보다 살짝 짧게 */
+.ax-hero {
+  position: relative;
+  min-height: 540px;
+  height: calc(100svh - 90px - 28px);
+  max-height: 800px;
+  display: flex;
+  align-items: center;
+  padding: 24px 0 64px;
+  /* 화면 전체 폭에 아주 옅은 딥틸 빛: 카드 주변만 밝은 "가운데 상자"처럼 보이지 않게 */
+  background: radial-gradient(ellipse 75% 85% at 66% 45%, rgba(13, 90, 76, 0.16), transparent 75%);
+}
+
+/* 구분선 없이 톤으로 나눈다: HERO 아래쪽을 검정에 가깝게 가라앉혀
+   다음 VERIFY의 딥틸 배경과 자연스럽게 구분되게 (끝은 다시 투명하게 해 경계선이 생기지 않게) */
+.ax-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(3, 5, 4, 0) 50%, rgba(3, 5, 4, 0.8) 84%, rgba(3, 5, 4, 0) 100%);
+  pointer-events: none;
+}
+
+.ax-hero-grid {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.ax-hero h1 {
+  margin: 0;
+  font-size: clamp(40px, 5.2vw, 68px);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+  word-break: keep-all;
+}
+
+.ax-hero h1 span {
+  color: var(--ax-mint);
+}
+
+.ax-visual-hero {
+  justify-self: end;
+  width: 100%;
+  max-width: 560px;
+}
+
+/* 카드 뒤 은은한 민트 빛: 카드 중심에서 멀어질수록 사라진다 (배경 전체는 그대로 어둡게) */
+.ax-visual-hero::before {
+  content: "";
+  position: absolute;
+  /* 카드 주변 공간까지 넓게: 중심은 민트, 바깥은 딥틸을 거쳐 검정으로 */
+  inset: -55% -45%;
+  z-index: 0;
+  background:
+    radial-gradient(closest-side at 52% 50%,
+      rgba(24, 216, 184, 0.16) 0%,
+      rgba(24, 216, 184, 0.09) 30%,
+      rgba(13, 90, 76, 0.12) 55%,
+      rgba(13, 90, 76, 0.04) 78%,
+      transparent 100%);
+  pointer-events: none;
+}
+
+.ax-visual-hero img,
+.ax-visual-hero figcaption {
+  position: relative;
+  z-index: 1;
+}
+
+/* 카드 PNG의 사각형 배경이 넓은 화면에서 세로 경계로 보이지 않게, 가장자리까지 완전히 투명하게 */
+.ax-visual-hero img {
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 58%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 58%, transparent 100%);
+}
+
+/* 카드가 텍스트 쪽으로 살짝 들어오는 겹침 구성: 오른쪽 끝은 그대로 두고 왼쪽으로 커진다.
+   카드 가장자리는 마스크로 투명해서 겹쳐도 글자를 가리지 않고, 글자는 카드 위에 놓인다 */
+.ax-hero-copy {
+  position: relative;
+  z-index: 2;
+}
+
+@media (min-width: 861px) {
+  .ax-visual-hero {
+    width: 128%;
+    max-width: 700px;
+  }
+}
+
+/* 넓은 화면: 카드를 크게(631→약 740px) 키워 화면 안으로 들어오게. 시각적 중심이 카드 쪽으로 오도록 오른쪽 여백까지 쓴다.
+   높이도 화면에 맞춰 제한해 SCROLL까지 한 화면에 들어오게 */
+@media (min-width: 1200px) {
+  .ax-visual-hero {
+    width: 157%;
+    max-width: min(760px, calc((100svh - 90px) * 1.05));
+    margin-right: -20%;
+  }
+}
+
+.ax .ax-hero-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  color: var(--ax-muted);
+  font-size: 14px;
+}
+
+.ax .ax-hero-note:hover {
+  color: var(--ax-ink);
+}
+
+.ax-hero-note i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ax-mint);
+}
+
+.ax .ax-scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--ax-muted);
+  font-size: 11px;
+  letter-spacing: 3px;
+}
+
+.ax-scroll span {
+  width: 1px;
+  height: 28px;
+  background: linear-gradient(180deg, transparent, var(--ax-mint));
+}
+
+/* 01 VERIFY: 짧고 밀도 있게, 오른쪽 3단계 흐름 */
+.ax-verify {
+  position: relative;
+  padding: 96px 0;
+}
+
+.ax-verify::before {
+  content: "01";
+  position: absolute;
+  left: 2%;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: clamp(160px, 26vw, 360px);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(24, 216, 184, 0.1);
+  pointer-events: none;
+}
+
+.ax-verify .ax-wrap {
+  position: relative;
+}
+
+.ax-verify .ax-title {
+  color: #ffffff;
+}
+
+.ax-verify .ax-body {
+  color: #c2d0cc;
+}
+
+.ax-steps {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 단계를 잇는 세로선 */
+.ax-steps::before {
+  content: "";
+  position: absolute;
+  left: 21px;
+  top: 28px;
+  bottom: 60px;
+  width: 1px;
+  background: linear-gradient(180deg, var(--ax-mint), rgba(24, 216, 184, 0.15));
+}
+
+.ax-steps li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  padding: 16px 18px 16px 0;
+  border-bottom: 1px solid var(--ax-line);
+}
+
+.ax-step-no {
+  position: relative;
+  z-index: 1;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(24, 216, 184, 0.6);
+  border-radius: 50%;
+  background: #071512;
+  color: var(--ax-mint);
+  font-weight: 800;
+}
+
+.ax-steps strong {
+  display: block;
+  font-size: 18px;
+}
+
+.ax-steps li span:not(.ax-step-no) {
+  display: block;
+  margin-top: 2px;
+  color: var(--ax-muted);
+  font-size: 14px;
+  word-break: keep-all;
+}
+
+.ax-steps em {
+  font-style: normal;
+  padding: 3px 10px;
+  border: 1px solid var(--ax-line);
+  border-radius: 999px;
+  color: var(--ax-faint);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ax-steps em.is-on {
+  border-color: rgba(24, 216, 184, 0.45);
+  color: var(--ax-mint);
+}
+
+.ax-steps li.is-soon .ax-step-no {
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.25);
+  color: var(--ax-faint);
+}
+
+.ax-steps li.ax-steps-link {
+  display: block;
+  padding: 14px 0 0 60px;
+  border-bottom: none;
+}
+
+.ax .ax-steps-link a {
+  color: var(--ax-mint);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* 02 PROFILE */
+.ax-profile {
+  padding: 96px 0 104px;
+}
+
+/* 게임별 프로필 표: 게임 / 티어 / 인증 상태 (실제 값 없이 항목만) */
+.ax-games {
+  max-width: 480px;
+  margin: 30px 0 0;
+  border-top: 1px solid var(--ax-line);
+}
+
+.ax-games-row {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--ax-line);
+}
+
+.ax-games-head span {
+  color: var(--ax-faint);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.ax-games-head span:last-child {
+  text-align: right;
+}
+
+.ax-games b {
+  font-size: 16px;
+}
+
+.ax-games-row span {
+  color: var(--ax-muted);
+  font-size: 14px;
+}
+
+.ax-games em {
+  justify-self: end;
+  padding: 3px 10px;
+  border: 1px solid rgba(24, 216, 184, 0.35);
+  border-radius: 999px;
+  color: var(--ax-mint);
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.ax-games-row.is-later b,
+.ax-games-row.is-later span {
+  color: var(--ax-faint);
+}
+
+.ax-games-row.is-later em {
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--ax-faint);
+}
+
+/* 이미지가 내용을 압도하지 않게 작게 */
+.ax-split-profile {
+  grid-template-columns: 1.3fr 0.7fr;
+}
+
+.ax-visual-profile {
+  justify-self: center;
+  width: 100%;
+  max-width: 300px;
+}
+
+/* ================= WHITE 챕터 ================= */
+.ax-light {
+  --ax-l-ink: #0b1513;
+  --ax-l-muted: #5b6b68;
+  --ax-l-line: #e4ecea;
+  --ax-l-green: #0d3029;
+
+  background: #ffffff;
+  color: var(--ax-l-ink);
+}
+
+.ax-light .ax-label {
+  color: var(--ax-l-green);
+}
+
+.ax-light .ax-label b {
+  color: #9aaba7;
+}
+
+.ax-light .ax-title span {
+  color: var(--ax-l-green);
+}
+
+.ax-light .ax-body {
+  color: var(--ax-l-muted);
+}
+
+/* 03 SHARE */
+.ax-share {
+  padding: 104px 0 88px;
+}
+
+.ax-mocks {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 44px;
+}
+
+.ax-mock {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ax-mock strong {
+  margin-top: 14px;
+  font-size: 16px;
+}
+
+.ax-mock span {
+  color: var(--ax-l-muted);
+  font-size: 13px;
+  word-break: keep-all;
+}
+
+.ax-mock em,
+.ax-features em {
+  align-self: flex-start;
+  margin-top: 8px;
+  padding: 2px 9px;
+  border: 1px solid var(--ax-l-line);
+  border-radius: 999px;
+  color: #7f8f8c;
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* 예시 UI 그림 영역 (공통) */
+.ax-mock-art {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid var(--ax-l-line);
+  border-radius: 18px;
+  background: #f4f8f7;
+}
+
+.ax-mock-card {
+  background: #050807;
+}
+
+.ax-mock-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 회색 뼈대(skeleton) 도형: 실제 데이터 없이 모양만 */
+.ax-sk-avatar,
+.ax-sk-line,
+.ax-sk-chips i {
+  display: block;
+  background: #dbe5e2;
+  border-radius: 999px;
+}
+
+.ax-mock-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ax-sk-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #bfe9e0, #dbe5e2);
+}
+
+.ax-sk-avatar.is-sm {
+  width: 26px;
+  height: 26px;
+}
+
+.ax-sk-line {
+  width: 46%;
+  height: 8px;
+}
+
+.ax-sk-line.is-short {
+  width: 30%;
+}
+
+.ax-sk-chips {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.ax-sk-chips i {
+  width: 36px;
+  height: 14px;
+  background: #cdeee6;
+}
+
+.ax-mock-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+}
+
+.ax-sk-field {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 8px 8px 14px;
+  border: 1px solid var(--ax-l-line);
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.ax-sk-field .ax-sk-line {
+  flex: 1;
+  width: auto;
+}
+
+.ax-sk-field b {
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: var(--ax-l-green);
+  color: #ffffff;
+  font-size: 11px;
+}
+
+.ax-mock-stream {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+}
+
+.ax-sk-screen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1a2a27, #0b1513);
+}
+
+.ax-sk-overlay {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 34%;
+  height: 26%;
+  border: 1px solid rgba(24, 216, 184, 0.7);
+  border-radius: 6px;
+  background: rgba(24, 216, 184, 0.18);
+}
+
+.ax-mock-note {
+  margin: 20px 0 0;
+  color: #8a9a97;
+  font-size: 12px;
+}
+
+/* 04 VERIFIED STREAMERS */
+.ax-streamers {
+  padding: 88px 0 112px;
+  border-top: 1px solid var(--ax-l-line);
+}
+
+.ax-title-en {
+  font-size: clamp(40px, 6vw, 80px);
+  line-height: 1;
+}
+
+.ax-light .ax-title-en span {
+  color: transparent;
+  background: linear-gradient(90deg, #0d3029, #12a78f);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.ax-features {
+  margin: 32px 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--ax-l-line);
+}
+
+.ax-features li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--ax-l-line);
+}
+
+.ax-features strong {
+  font-size: 17px;
+}
+
+.ax-features em {
+  margin-top: 0;
+}
+
+/* 빈 랭킹 보드 (예시 UI) */
+.ax-board {
+  padding: 22px;
+  border: 1px solid var(--ax-l-line);
+  border-radius: 22px;
+  background: #f7faf9;
+  box-shadow: 0 30px 60px rgba(13, 48, 41, 0.08);
+}
+
+.ax-board-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.ax-board-head span {
+  font-weight: 800;
+}
+
+.ax-board-head em {
+  font-style: normal;
+  color: #7f8f8c;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.ax-board-row {
+  display: grid;
+  grid-template-columns: 20px 26px 1fr 64px;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 6px;
+  border-top: 1px solid var(--ax-l-line);
+}
+
+.ax-board-row b {
+  color: #9aaba7;
+  font-size: 13px;
+}
+
+.ax-board-row .ax-sk-line {
+  width: 70%;
+}
+
+.ax-board-row .ax-sk-line.is-tag {
+  width: 100%;
+  height: 16px;
+  background: #cdeee6;
+}
+
+.ax-board-note {
+  margin: 10px 0 0;
+  color: #8a9a97;
+  font-size: 12px;
+}
+
+/* ================= FINAL (DARK) ================= */
+.ax-final {
+  padding: 132px 0 120px;
+  text-align: center;
+  background:
+    radial-gradient(ellipse 60% 55% at 50% 100%, rgba(24, 216, 184, 0.22), transparent 70%),
+    #030504;
+}
+
+.ax-final h2 {
+  margin: 0;
+  font-size: clamp(44px, 9vw, 120px);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  font-weight: 900;
+}
+
+.ax-final h2 span {
+  display: block;
+}
+
+.ax-final h2 span:nth-child(1) {
+  color: rgba(242, 240, 230, 0.35);
+}
+
+.ax-final h2 span:nth-child(2) {
+  color: rgba(242, 240, 230, 0.65);
+}
+
+.ax-final h2 b {
+  color: var(--ax-mint);
+}
+
+.ax-final .ax-actions {
+  justify-content: center;
+  margin-top: 48px;
+}
+
+/* ================= 반응형 ================= */
+@media (max-width: 1024px) {
+  .ax-mocks {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 860px) {
+  .ax-wrap {
+    padding: 0 20px;
+  }
+
+  .ax-hero-grid,
+  .ax-split {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  /* 모바일 HERO: 카드 이미지는 숨기고 제목·설명·CTA만. 빈 느낌이 없게 위쪽에 은은한 민트 빛 */
+  .ax-hero {
+    height: auto;
+    max-height: none;
+    min-height: 0;
+    padding: 72px 0 128px;
+    background: radial-gradient(ellipse 90% 55% at 85% 20%, rgba(24, 216, 184, 0.1), transparent 70%);
+  }
+
+  .ax-visual-hero {
+    display: none;
+  }
+
+  .ax-verify,
+  .ax-profile {
+    padding: 80px 0;
+  }
+
+  .ax-verify::before {
+    left: auto;
+    right: -4%;
+    top: 18%;
+  }
+
+  .ax-visual-profile {
+    max-width: 300px;
+  }
+
+  .ax-share,
+  .ax-streamers {
+    padding: 80px 0;
+  }
+
+  .ax-body {
+    font-size: 16px;
+  }
+
+  .ax-actions {
+    flex-direction: column;
+  }
+
+  .ax .ax-btn {
+    width: 100%;
+  }
+
+  .ax-final {
+    padding: 104px 0 96px;
+  }
+}
+
+@media (max-width: 560px) {
+  .ax-mocks {
+    gap: 20px 12px;
+  }
+
+  .ax-steps li {
+    grid-template-columns: 44px 1fr;
+  }
+
+  .ax-steps em {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
+/* ---------- 섹션 다듬기 (VERIFY~STREAMERS) ---------- */
+
+/* 01 VERIFY → 02 PROFILE 사이에만 은은한 구분선 (예전 HERO 선과 같은 스타일): 가운데서 양쪽으로 사라지는 민트 선 */
+.ax-profile {
+  position: relative;
+}
+
+.ax-profile::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(24, 216, 184, 0.22) 50%, transparent);
+  pointer-events: none;
+}
+
+/* VERIFY 1단계: 입력칸 모양 (실제 값 없음) */
+.ax-steps li span.ax-step-input {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 5px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--ax-faint);
+  font-size: 13px;
+}
+
+.ax-step-input b {
+  color: var(--ax-muted);
+  font-weight: 600;
+}
+
+/* SHARE: 제목과 짧은 설명을 한 줄에 */
+.ax-share-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.ax-share-head .ax-body {
+  max-width: 340px;
+  margin: 0 0 8px;
+}
+
+/* SNS·커뮤니티 게시글 모양 */
+.ax-mock-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+}
+
+.ax-sk-post {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--ax-l-line);
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.ax-sk-post > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ax-sk-post .ax-sk-line {
+  width: 60%;
+}
+
+.ax-sk-tile {
+  display: block;
+  height: 42px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #0b1513, #134a40);
+}
+
+/* STREAMERS: 기능마다 제목 + 한 줄 설명 */
+.ax-features li > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ax-features span {
+  color: var(--ax-l-muted);
+  font-size: 14px;
+  word-break: keep-all;
+}
+
+.ax-data-note {
+  margin: 18px 0 0;
+  color: #7f8f8c;
+  font-size: 12px;
+}
+
+.ax-board-screen {
+  margin-bottom: 18px;
+}
+
+.ax-board-sub {
+  margin-bottom: 4px;
+}
+
+.ax-board-sub span {
+  font-size: 14px;
+}
+
+@media (max-width: 860px) {
+  .ax-share-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .ax-share-head .ax-body {
+    margin: 18px 0 0;
+  }
+
+  .ax-visual-profile {
+    max-width: 240px;
+  }
+}
+
+@media (max-width: 560px) {
+  .ax-games-row {
+    grid-template-columns: 0.9fr 1.3fr auto;
+    gap: 8px;
+  }
+
+  .ax-games-row span {
+    font-size: 13px;
+  }
+}

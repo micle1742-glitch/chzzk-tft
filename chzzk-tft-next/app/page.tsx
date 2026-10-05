@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import ChzzkLoginLink from "./components/ChzzkLoginLink";
 import Reveal from "./components/Reveal";
@@ -11,28 +12,27 @@ export default async function Landing() {
   const loggedIn = session !== null;
   const nickname = session?.nickname ?? "";
 
-  // 시작 영역: 로그아웃 상태는 치지직 OAuth 시작 경로로 바로 이동한다
+  // 시작 버튼: 로그아웃 상태는 치지직 OAuth 시작 경로로 바로 이동한다
   // (외부로 리다이렉트하는 API라서 Link 프리페치 대신 일반 <a> — ChzzkLoginLink가 누르면 로그인 중 화면을 띄운다).
-  // 로그인 상태는 여기가 이미 메인 홈이므로 버튼 대신 로그인한 사용자 정보를 보여준다 (누르면 마이페이지로).
-  const startButton = loggedIn ? (
-    <Link href="/mypage" className="ld-status" title="마이페이지로 이동">
-      <span className="ld-status-dot" aria-hidden="true" />
-      {nickname}님으로 로그인됨
-    </Link>
+  // 로그인 상태는 다음 단계인 Riot 계정 인증(/verify, 아직 준비 중)과 마이페이지로 안내한다.
+  const heroActions = loggedIn ? (
+    <>
+      <Link href="/verify" className="ax-btn ax-btn-primary">
+        Riot 계정 인증하기 <span aria-hidden="true">→</span>
+      </Link>
+      <Link href="/mypage" className="ax-btn ax-btn-ghost">
+        마이페이지
+      </Link>
+    </>
   ) : (
-    <ChzzkLoginLink className="ld-btn ld-btn-primary">
-      치지직으로 시작하기
-    </ChzzkLoginLink>
-  );
-
-  // 히어로 버튼: 이동 경로·로그인 처리는 위 startButton과 같고 문구만 '티어 인증 시작하기'
-  const heroStart = loggedIn ? (
-    startButton
-  ) : (
-    <ChzzkLoginLink className="ld-btn ld-btn-primary ld-btn-hero">
-      티어 인증 시작하기
-      <span aria-hidden="true">→</span>
-    </ChzzkLoginLink>
+    <>
+      <ChzzkLoginLink className="ax-btn ax-btn-primary">
+        티어 인증 시작하기 <span aria-hidden="true">→</span>
+      </ChzzkLoginLink>
+      <a href="#verify" className="ax-btn ax-btn-ghost">
+        서비스 알아보기
+      </a>
+    </>
   );
 
   return (
@@ -40,210 +40,323 @@ export default async function Landing() {
       {/* 공통 NAV. 랜딩에서 로그아웃하면 /home으로 */}
       <SiteNav logoutRedirect="/home" />
 
-      <main className="ld-main">
-        {/* 첫 화면: 가운데 정렬. 위쪽 양 모서리에서 모이는 각진 면과 은은한 그라데이션 */}
-        <section className="ld-hero ld-hero-center">
-          {/* 배경 장식 (전부 CSS): 각진 면 3개 + 문구 뒤 은은한 빛 */}
-          <div className="ld-hero-bg" aria-hidden="true">
-            <div className="ld-plane ld-plane-top" />
-            <div className="ld-plane ld-plane-left" />
-            <div className="ld-plane ld-plane-right" />
-            <div className="ld-glow" />
-          </div>
-          <div className="ld-wrap ld-hero-inner">
-            <div className="ld-hero-copy">
-              <p className="ld-eyebrow">YOUR TIER, VERIFIED</p>
-              <h1 className="ld-title">
-                티어 인증으로
-                <br />
-                <span>더 즐거운 게임을</span>
-              </h1>
-              <p className="ld-lead">
-                TIERON에서 나의 티어를 확인하고, 카드로 남겨보세요.
-              </p>
-              <div className="ld-actions ld-hero-actions">
-                {heroStart}
-                <a href="#about" className="ld-btn ld-btn-ghost">
-                  서비스 알아보기
-                </a>
+      {/*
+        서비스 소개형 랜딩: DARK(HERO·01 VERIFY·02 PROFILE) → WHITE(03 SHARE·04 STREAMERS) → DARK(FINAL).
+        "무엇인지 → 어떻게 쓰는지 → 무엇을 받는지"를 짧은 섹션으로. 아직 없는 기능(RSO 인증, 공유, 랭킹, OBS)은 모두 "준비 중",
+        예시 UI는 실제 사용자·티어 데이터 없이 "예시 UI"로 표시한다.
+      */}
+      <main className="ax">
+        {/* ===== DARK 챕터 ===== */}
+        <div className="ax-dark">
+          {/* HERO: 첫 화면 안에 문구·카드·CTA·SCROLL이 모두 보이게 */}
+          <section className="ax-hero">
+            <div className="ax-wrap ax-hero-grid">
+              <div className="ax-hero-copy">
+                <p className="ax-label">YOUR TIER, ON TIERON</p>
+                <h1>
+                  티어 인증으로
+                  <br />
+                  <span>더 즐거운 게임을.</span>
+                </h1>
+                <p className="ax-body">
+                  TIERON은 게임 계정을 인증하고
+                  <br />
+                  나만의 게임 프로필을 만들어가는 서비스입니다.
+                </p>
+                <div className="ax-actions">{heroActions}</div>
+                {loggedIn && (
+                  <Link href="/mypage" className="ax-hero-note" title="마이페이지로 이동">
+                    <i aria-hidden="true" />
+                    {nickname}님으로 로그인됨 · Riot 계정 인증은 준비 중
+                  </Link>
+                )}
               </div>
-            </div>
-          </div>
 
-          <a href="#about" className="ld-scroll" aria-label="아래로 스크롤">
-            <span className="ld-scroll-line" aria-hidden="true" />
-            SCROLL
-          </a>
-        </section>
-
-        {/* 두 번째 섹션: 왼쪽 ABOUT TIERON, 오른쪽 티어 인증 카드 (스크롤하면 한 번만 부드럽게 나타남) */}
-        <section className="ld-section ld-dark ld-about" id="about">
-          <Reveal className="ld-wrap ld-split ld-split-center">
-            <div>
-              <p className="ld-eyebrow">
-                ABOUT TIERON
-              </p>
-              <h2 className="ld-h2">
-                TIERON은 TFT 플레이어를 위한
-                <br />
-                티어 인증 서비스입니다.
-              </h2>
+              <figure className="ax-visual ax-visual-hero">
+                <Image
+                  src="/landing/hero-card.png"
+                  alt="TIERON 인증 카드 예시 화면"
+                  width={1536}
+                  height={1024}
+                  sizes="(max-width: 860px) 92vw, 600px"
+                  loading="eager"
+                  fetchPriority="high"
+                />
+                <figcaption>예시 화면 · 인증 카드는 준비 중</figcaption>
+              </figure>
             </div>
-            {/* 코드로 만든 카드 미리보기: 카드가 실제로 쓰는 필드만 사용, 값은 예시 */}
-            <div className="ld-card-wrap">
-              <div className="ld-tcard" aria-hidden="true">
-                <div className="ld-tcard-top">
-                  <span className="ld-tcard-brand">
-                    TIER<span>ON</span>
-                  </span>
-                  <span className="ld-tcard-badge">TIERON 인증</span>
-                </div>
-                <div className="ld-tcard-player">
-                  <strong>닉네임</strong>
-                  <span>#KR1 · KR</span>
-                </div>
-                <div className="ld-tcard-tier">
-                  <div className="ld-emblem">
-                    <span>MASTER</span>
-                  </div>
-                  <div className="ld-tcard-tiertext">
-                    <span className="ld-tcard-label">TFT RANK</span>
-                    <strong>Master</strong>
-                    <span>806 LP</span>
-                  </div>
-                </div>
-                <div className="ld-tcard-stats">
-                  <div>
-                    <span>승</span>
-                    <strong>14</strong>
-                  </div>
-                  <div>
-                    <span>패</span>
-                    <strong>6</strong>
-                  </div>
-                  <div>
-                    <span>승률</span>
-                    <strong>70.0%</strong>
-                  </div>
-                </div>
-                <div className="ld-tcard-foot">12분 전 기준</div>
+
+            <a href="#verify" className="ax-scroll" aria-label="아래로 스크롤">
+              <span aria-hidden="true" />
+              SCROLL
+            </a>
+          </section>
+
+          {/* 01 VERIFY: "확인" 하나만. Riot ID 입력 → 공식 데이터 확인 → 계정 인증(RSO, 준비 중) */}
+          <section className="ax-verify" id="verify">
+            <Reveal className="ax-wrap ax-split">
+              <div>
+                <p className="ax-label">
+                  01 <b>—</b> VERIFY
+                </p>
+                <h2 className="ax-title">
+                  게임 계정을
+                  <br />
+                  <span>확인하고.</span>
+                </h2>
+                <p className="ax-body">
+                  Riot ID만 입력하면 Riot의 공식 게임 정보를 바로 확인할 수 있습니다.
+                  계정 소유 인증은 Riot Sign On(RSO)으로 준비하고 있습니다.
+                </p>
+                <span className="ax-soon">
+                  <i aria-hidden="true" />
+                  RSO 인증 준비 중
+                </span>
               </div>
-              <p className="ld-card-caption">
-                예시 · 내 TFT 티어를 카드로 남기세요.
-                <small>인증 카드 발급 준비 중</small>
-              </p>
+
+              <ol className="ax-steps">
+                <li>
+                  <span className="ax-step-no">1</span>
+                  <div>
+                    <strong>Riot ID 입력</strong>
+                    <span className="ax-step-input" aria-hidden="true">
+                      게임 이름 <b>#태그</b>
+                    </span>
+                  </div>
+                  <em className="is-on">지금 가능</em>
+                </li>
+                <li>
+                  <span className="ax-step-no">2</span>
+                  <div>
+                    <strong>공식 데이터 확인</strong>
+                    <span>Riot API의 TFT·LoL 랭크 정보</span>
+                  </div>
+                  <em className="is-on">지금 가능</em>
+                </li>
+                <li className="is-soon">
+                  <span className="ax-step-no">3</span>
+                  <div>
+                    <strong>계정 인증</strong>
+                    <span>RSO로 내 계정임을 확인</span>
+                  </div>
+                  <em>준비 중</em>
+                </li>
+                <li className="ax-steps-link">
+                  <Link href="/riot">Riot ID로 조회하기 →</Link>
+                </li>
+              </ol>
+            </Reveal>
+          </section>
+
+          {/* 02 PROFILE: "어디에 모으는가" 하나만. 게임별 티어·인증 상태 + 작은 프로필 카드 이미지 */}
+          <section className="ax-profile">
+            <Reveal className="ax-wrap ax-split ax-split-profile">
+              <div>
+                <p className="ax-label">
+                  02 <b>—</b> PROFILE
+                </p>
+                <h2 className="ax-title">
+                  나만의 게임 프로필을
+                  <br />
+                  <span>만들고.</span>
+                </h2>
+                <p className="ax-body">확인한 게임 정보는 게임별로 정리되어 하나의 TIERON 프로필에 모입니다.</p>
+
+                <div className="ax-games" role="table" aria-label="게임별 프로필 항목">
+                  <div className="ax-games-row ax-games-head" role="row">
+                    <span role="columnheader">게임</span>
+                    <span role="columnheader">티어</span>
+                    <span role="columnheader">인증 상태</span>
+                  </div>
+                  <div className="ax-games-row" role="row">
+                    <b role="cell">TFT</b>
+                    <span role="cell">Riot 공식 티어·LP</span>
+                    <em role="cell">준비 중</em>
+                  </div>
+                  <div className="ax-games-row" role="row">
+                    <b role="cell">LoL</b>
+                    <span role="cell">Riot 공식 티어·LP</span>
+                    <em role="cell">준비 중</em>
+                  </div>
+                  <div className="ax-games-row is-later" role="row">
+                    <b role="cell">더 많은 게임</b>
+                    <span role="cell">Steam 등</span>
+                    <em role="cell">확장 예정</em>
+                  </div>
+                </div>
+              </div>
+              <figure className="ax-visual ax-visual-profile">
+                <Image
+                  src="/landing/profile-card.png"
+                  alt="TIERON 프로필 카드 예시 화면"
+                  width={1122}
+                  height={1402}
+                  sizes="(max-width: 860px) 70vw, 300px"
+                />
+                <figcaption>예시 화면</figcaption>
+              </figure>
+            </Reveal>
+          </section>
+        </div>
+
+        {/* ===== WHITE 챕터 (DARK와의 경계에만 은은한 구분선) ===== */}
+        <div className="ax-light">
+          {/* 03 SHARE: "공유와 활용" 하나만. 작은 예시 UI 4개 (모두 준비 중) */}
+          <section className="ax-share">
+            <Reveal className="ax-wrap">
+              <div className="ax-share-head">
+                <div>
+                  <p className="ax-label">
+                    03 <b>—</b> SHARE
+                  </p>
+                  <h2 className="ax-title">
+                    나의 티어를
+                    <br />
+                    <span>공유하세요.</span>
+                  </h2>
+                </div>
+                <p className="ax-body">카드 한 장, 링크 하나로 내 티어를 원하는 곳에 보여주세요.</p>
+              </div>
+
+              <div className="ax-mocks" aria-label="공유 기능 예시 UI">
+                <article className="ax-mock">
+                  <div className="ax-mock-art ax-mock-card" aria-hidden="true">
+                    <Image src="/landing/hero-card.png" alt="" width={1536} height={1024} sizes="240px" />
+                  </div>
+                  <strong>인증 카드</strong>
+                  <span>이미지로 저장해 어디서든.</span>
+                  <em>준비 중</em>
+                </article>
+                <article className="ax-mock">
+                  <div className="ax-mock-art ax-mock-profile" aria-hidden="true">
+                    <i className="ax-sk-avatar" />
+                    <i className="ax-sk-line" />
+                    <i className="ax-sk-line is-short" />
+                    <div className="ax-sk-chips">
+                      <i />
+                      <i />
+                    </div>
+                  </div>
+                  <strong>공개 프로필</strong>
+                  <span>누구나 볼 수 있는 내 페이지.</span>
+                  <em>준비 중</em>
+                </article>
+                <article className="ax-mock">
+                  <div className="ax-mock-art ax-mock-link" aria-hidden="true">
+                    <div className="ax-sk-field">
+                      <i className="ax-sk-line" />
+                      <b>복사</b>
+                    </div>
+                  </div>
+                  <strong>프로필 링크</strong>
+                  <span>주소 하나로 바로 공유.</span>
+                  <em>준비 중</em>
+                </article>
+                <article className="ax-mock">
+                  <div className="ax-mock-art ax-mock-social" aria-hidden="true">
+                    <div className="ax-sk-post">
+                      <i className="ax-sk-avatar is-sm" />
+                      <div>
+                        <i className="ax-sk-line" />
+                        <i className="ax-sk-tile" />
+                      </div>
+                    </div>
+                  </div>
+                  <strong>SNS · 커뮤니티</strong>
+                  <span>게시글에 카드 그대로 첨부.</span>
+                  <em>준비 중</em>
+                </article>
+              </div>
+              <p className="ax-mock-note">모두 예시 UI입니다. 실제 사용자·티어 데이터가 아닙니다.</p>
+            </Reveal>
+          </section>
+
+          {/* 04 VERIFIED STREAMERS: 스트리머용 기능 3개 + 방송 화면·랭킹 예시 UI (이름·티어·순위 없음) */}
+          <section className="ax-streamers">
+            <Reveal className="ax-wrap ax-split">
+              <div>
+                <p className="ax-label">
+                  04 <b>—</b> VERIFIED STREAMERS
+                </p>
+                <h2 className="ax-title">
+                  스트리머라면,
+                  <br />
+                  <span>나의 티어도 콘텐츠가 됩니다.</span>
+                </h2>
+                <ul className="ax-features">
+                  <li>
+                    <div>
+                      <strong>OBS Browser Source</strong>
+                      <span>방송 화면에 TIERON 티어 정보 표시</span>
+                    </div>
+                    <em>준비 중</em>
+                  </li>
+                  <li>
+                    <div>
+                      <strong>Verified Streamer Profile</strong>
+                      <span>치지직 채널과 게임 프로필 연결</span>
+                    </div>
+                    <em>준비 중</em>
+                  </li>
+                  <li>
+                    <div>
+                      <strong>Verified Streamer Ranking</strong>
+                      <span>인증 스트리머를 Riot 공식 티어·LP 순으로 정렬</span>
+                    </div>
+                    <em>준비 중</em>
+                  </li>
+                </ul>
+                <p className="ax-data-note">Riot이 제공하는 공식 게임 정보만 사용합니다.</p>
+              </div>
+
+              <div className="ax-board" aria-label="스트리머 기능 예시 UI">
+                <div className="ax-board-head">
+                  <span>방송 화면</span>
+                  <em>예시 UI · 준비 중</em>
+                </div>
+                <div className="ax-sk-screen ax-board-screen" aria-hidden="true">
+                  <i className="ax-sk-overlay" />
+                </div>
+                <div className="ax-board-head ax-board-sub">
+                  <span>Verified Streamer Ranking</span>
+                  <em>티어·LP 순</em>
+                </div>
+                {[1, 2, 3].map((n) => (
+                  <div className="ax-board-row" key={n} aria-hidden="true">
+                    <b>{n}</b>
+                    <i className="ax-sk-avatar is-sm" />
+                    <i className="ax-sk-line" />
+                    <i className="ax-sk-line is-tag" />
+                  </div>
+                ))}
+                <p className="ax-board-note">실제 스트리머·랭킹 데이터가 아닙니다.</p>
+              </div>
+            </Reveal>
+          </section>
+        </div>
+
+        {/* ===== FINAL (DARK) ===== */}
+        <section className="ax-final">
+          <Reveal className="ax-wrap">
+            <h2>
+              <span>YOUR TIER.</span>
+              <span>YOUR PROFILE.</span>
+              <span>
+                YOUR TIER<b>ON</b>.
+              </span>
+            </h2>
+            <div className="ax-actions">
+              {loggedIn ? (
+                <Link href="/verify" className="ax-btn ax-btn-primary">
+                  TIERON 시작하기 <span aria-hidden="true">→</span>
+                </Link>
+              ) : (
+                <ChzzkLoginLink className="ax-btn ax-btn-primary">
+                  TIERON 시작하기 <span aria-hidden="true">→</span>
+                </ChzzkLoginLink>
+              )}
             </div>
           </Reveal>
-        </section>
-
-        {/* 이용 방법 (흰 섹션) */}
-        <section className="ld-section ld-light">
-          <div className="ld-wrap">
-            <p className="ld-eyebrow">
-              HOW IT WORKS
-            </p>
-            <h2 className="ld-h2">간단한 3단계로 시작하세요.</h2>
-            <ol className="ld-steps">
-              <li>
-                <span className="ld-step-no">01</span>
-                <strong>치지직 로그인</strong>
-                <span>치지직 계정으로 간편하게 로그인합니다.</span>
-              </li>
-              <li>
-                <span className="ld-step-no">02</span>
-                <strong>Riot 계정 연결</strong>
-                <span>
-                  Riot ID 조회와 별개로, 내 계정이 맞는지 소유권을 확인합니다.
-                  <small>준비 중</small>
-                </span>
-              </li>
-              <li>
-                <span className="ld-step-no">03</span>
-                <strong>인증 카드 확인</strong>
-                <span>
-                  내 티어 카드를 확인하고 공유합니다.
-                  <small>준비 중</small>
-                </span>
-              </li>
-            </ol>
-          </div>
-        </section>
-
-        {/* 핵심 기능 (흰 섹션) */}
-        <section className="ld-section ld-light ld-light-alt">
-          <div className="ld-wrap">
-            <p className="ld-eyebrow">
-              KEY FEATURES
-            </p>
-            <h2 className="ld-h2">TIERON의 주요 기능</h2>
-            <div className="ld-features">
-              <div className="ld-feature">
-                <h3>티어 조회</h3>
-                <p>Riot ID로 TFT 티어, LP, 승·패, 승률을 확인합니다.</p>
-                <div className="ld-feature-visual" aria-hidden="true">
-                  <div className="ld-prev-fields">
-                    <span>게임 이름</span>
-                    <span>태그</span>
-                    <span className="ld-prev-btn">티어 조회</span>
-                  </div>
-                  <div className="ld-prev-result">
-                    <span>KR · 닉네임#KR1</span>
-                    <strong>Master 806 LP</strong>
-                    <span>14승 6패 · 승률 70.0%</span>
-                  </div>
-                  <span className="ld-prev-note">예시</span>
-                </div>
-                <Link href="/riot" className="ld-link">
-                  티어 조회하기 →
-                </Link>
-              </div>
-              <div className="ld-feature">
-                <h3>
-                  랭킹·커뮤니티 <small>준비 중</small>
-                </h3>
-                <p>인증된 플레이어들과 순위를 비교하고 이야기를 나눕니다.</p>
-                <div className="ld-feature-visual" aria-hidden="true">
-                  <div className="ld-rank-row ld-rank-head">
-                    <span>순위</span>
-                    <span>플레이어</span>
-                    <span>티어</span>
-                    <span>LP</span>
-                  </div>
-                  <div className="ld-rank-row">
-                    <span>1</span>
-                    <span>—</span>
-                    <span>—</span>
-                    <span>—</span>
-                  </div>
-                  <div className="ld-rank-row">
-                    <span>2</span>
-                    <span>—</span>
-                    <span>—</span>
-                    <span>—</span>
-                  </div>
-                  <div className="ld-rank-row">
-                    <span>3</span>
-                    <span>—</span>
-                    <span>—</span>
-                    <span>—</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 마지막 CTA */}
-        <section className="ld-section ld-dark ld-cta">
-          <div className="ld-wrap">
-            <h2 className="ld-h2">지금, TIERON에서 내 티어를 확인하세요.</h2>
-            <p className="ld-lead">
-              치지직 계정으로 로그인하고 티어 인증을 시작해 보세요.
-            </p>
-            <div className="ld-actions">
-              {startButton}
-            </div>
-          </div>
         </section>
       </main>
 
