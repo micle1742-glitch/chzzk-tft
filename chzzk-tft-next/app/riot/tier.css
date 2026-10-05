@@ -416,11 +416,12 @@ body {
 
 .emblem-tier-text {
   transform: rotate(-45deg);
-  font-size: 10px;
+  font-size: 8px; /* CHALLENGER·GRANDMASTER처럼 긴 티어도 엠블럼 안에 들어가게 (전체 티어명은 옆에 크게 표시) */
   font-weight: 900;
   color: #18d8ba;
-  letter-spacing: -0.2px;
+  letter-spacing: -0.3px;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .emblem-rank-text {
@@ -457,6 +458,16 @@ body {
   color: #18d8ba;
   font-size: 15px;
   font-weight: 800;
+}
+
+/* 랭크 없음·조회 실패 안내 (LP 강조 스타일이 아닌 보조 문구) */
+.tier-state-desc {
+  margin: 6px 0 0;
+  color: #8daea8;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  word-break: keep-all;
 }
 
 /* 8, 9, 10. 전적 및 승률 (승리, 패배, 승률) */

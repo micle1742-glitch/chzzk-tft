@@ -713,6 +713,7 @@ body {
     font-weight: 800;
     letter-spacing: -0.5px;
     color: white;
+    word-break: keep-all; /* 모바일에서 "시작하세 / 요."처럼 단어 중간에서 끊기지 않게 */
 }
 
 .cta-desc {
@@ -858,6 +859,34 @@ body {
     font-size: 12px;
     color: #556b68;
     line-height: 1.6;
+}
+
+/* =========================================================
+   UI polish: 링크로 바뀐 버튼들·준비 중 상태·Riot 고지
+   ========================================================= */
+/* 버튼 모양을 그대로 쓰는 링크(<a>): 밑줄 제거 */
+.info-btn,
+.game-btn,
+.cta-btn {
+    text-decoration: none;
+}
+
+/* 이동할 곳이 없는 안내 문구: 링크처럼 반응하지 않게 */
+.more-games-link.is-static,
+.more-games-link.is-static:hover {
+    color: #8fa19e;
+    transform: none;
+    cursor: default;
+}
+
+/* Riot Games 고지 문구: 저작권 줄 아래, 한 단계 작고 흐리게 */
+.footer-legal {
+    max-width: 760px;
+    margin: 10px auto 0;
+    font-size: 11px;
+    line-height: 1.6;
+    color: #4f6663;
+    overflow-wrap: anywhere;
 }
 
 /* 본문 컨테이너 폭을 공통 NAV(.sn-inner: max-width 1080px, 좌우 padding 24px)와 맞춘다.

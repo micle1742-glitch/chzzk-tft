@@ -26,6 +26,37 @@ body {
 }
 
 /*
+ * 공통 로딩 스피너 (버튼 안 등 작은 진행 표시). 글자색(currentColor)을 따라가서
+ * 민트 버튼(진한 글자)·NAV 버튼(회색 글자) 어디에 넣어도 어울린다. 움직임 줄이기 설정이면 회전하지 않는다.
+ */
+.tn-spinner {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  margin-right: 0.5em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  vertical-align: -0.15em;
+  animation: tn-spin 0.8s linear infinite;
+}
+
+@keyframes tn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tn-spinner {
+    animation: none;
+    border-right-color: currentColor;
+    opacity: 0.6;
+  }
+}
+
+/*
  * 전역 모바일 타이포그래피: 좁은 화면(500px 이하)에서 사이트 전체를 한 단계(90%) 작게 그린다.
  * 페이지별 CSS의 글자 크기가 모두 px 고정값이라, 각 파일을 고치지 않고 비율(계층)을 그대로 유지하며
  * 함께 줄이려고 zoom을 쓴다. 데스크톱(501px 이상)에는 적용되지 않는다.

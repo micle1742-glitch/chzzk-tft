@@ -102,7 +102,7 @@ export default function RiotClient() {
     <div className="tier-page">
       <div className="tier-wrapper">
 
-        <Link href="/" className="home-link">
+        <Link href="/home" className="home-link">
           ← 홈으로 돌아가기
         </Link>
 
@@ -145,7 +145,14 @@ export default function RiotClient() {
             onClick={searchTier}
             disabled={loading}
           >
-            {loading ? "티어 확인 중..." : "티어 조회"}
+            {loading ? (
+              <>
+                <span className="tn-spinner" aria-hidden="true" />
+                티어 확인 중...
+              </>
+            ) : (
+              "티어 조회"
+            )}
           </button>
 
           {/* 결과 영역 */}
@@ -232,12 +239,12 @@ export default function RiotClient() {
                         {gameError ? (
                           <>
                             <h1 className="tier-name">조회 실패</h1>
-                            <p className="lp">{gameText.name} 랭크 정보를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</p>
+                            <p className="tier-state-desc">{gameText.name} 랭크 정보를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</p>
                           </>
                         ) : (
                           <>
                             <h1 className="tier-name">랭크 정보 없음</h1>
-                            <p className="lp">{gameText.queueLabel} 기록이 조회되지 않았습니다.</p>
+                            <p className="tier-state-desc">{gameText.queueLabel} 기록이 조회되지 않았습니다.</p>
                           </>
                         )}
                       </div>

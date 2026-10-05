@@ -35,7 +35,7 @@ export default function LogoutButton({
     >
       {pending ? (
         <>
-          <span className="sn-spinner" aria-hidden="true" />
+          <span className="tn-spinner" aria-hidden="true" />
           로그아웃 중...
         </>
       ) : (

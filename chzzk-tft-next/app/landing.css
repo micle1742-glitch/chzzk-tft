@@ -108,6 +108,7 @@
   font-size: 52px;
   line-height: 1.2;
   letter-spacing: -1px;
+  word-break: keep-all; /* 좁은 화면에서 "게 / 임을"처럼 단어 중간에서 끊기지 않게 */
 }
 
 .ld-title span {
@@ -769,6 +770,11 @@
 @media (max-width: 560px) {
   .ld-title {
     font-size: 30px;
+  }
+
+  /* 좁은 화면에서는 문구·버튼이 히어로 높이를 꽉 채워, 아래에 붙은 SCROLL 표시가 버튼과 겹쳤다 → 그 자리만큼 비워 둔다 */
+  .ld-hero {
+    padding-bottom: 100px;
   }
 
   .ld-actions {

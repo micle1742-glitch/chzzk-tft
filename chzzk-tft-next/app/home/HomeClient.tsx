@@ -104,9 +104,10 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
                     치지직 계정으로 시작하기
                   </ChzzkLoginLink>
                 )}
-                <button className="info-btn">
+                {/* NAV "서비스 소개"와 같은 곳(랜딩 /)으로 */}
+                <Link href="/" className="info-btn">
                   서비스 소개
-                </button>
+                </Link>
               </div>
             </div>
             <div className="features">
@@ -170,13 +171,8 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
               </div>
               <h2 className="games-title">지원 게임</h2>
             </div>
-            <a href="#" className="more-games-link">
-              더 많은 게임이 찾아갑니다
-              <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
-              </svg>
-            </a>
+            {/* 이동할 곳이 아직 없는 안내 문구라 링크(#)가 아닌 텍스트로 둔다 */}
+            <span className="more-games-link is-static">더 많은 게임이 찾아갑니다</span>
           </div>
           <div className="games-grid">
             {/* 1. Teamfight Tactics (활성화) */}
@@ -187,7 +183,8 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
               <div className="game-card-body">
                 <h3 className="game-name">Teamfight Tactics</h3>
                 <p className="game-desc">전략적 팀 전투</p>
-                <button className="game-btn active">이용 가능</button>
+                {/* 지금 이용 가능한 TFT 기능 = 티어 조회(/riot) */}
+                <Link href="/riot" className="game-btn active">이용 가능</Link>
               </div>
             </div>
             {/* 2. League of Legends */}
@@ -293,8 +290,8 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
             <h2 className="services-title">주요 서비스</h2>
           </div>
           <div className="services-grid">
-            {/* 1. 내 프로필 */}
-            <a href="#" className="service-card">
+            {/* 1. 내 프로필 → 마이페이지 */}
+            <Link href="/mypage" className="service-card">
               <div className="service-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width={22} height={22} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                   <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
@@ -310,9 +307,9 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
                   <path d="m9 18 6-6-6-6" />
                 </svg>
               </div>
-            </a>
+            </Link>
 
-            {/* 2. Riot 계정 인증 */}
+            {/* 2. Riot 티어 조회 (/riot은 조회 페이지 — 소유권 인증은 /verify) */}
             <Link href="/riot" className="service-card">
               <div className="service-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width={22} height={22} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -325,8 +322,8 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
                 </svg>
               </div>
               <div className="service-text">
-                <h3>Riot 계정 인증</h3>
-                <p>게임 계정을 연동하고 티어를 인증하세요.</p>
+                <h3>Riot 티어 조회</h3>
+                <p>Riot ID로 TFT·LoL 랭크를 조회하세요.</p>
               </div>
               <div className="service-arrow">
                 <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -334,8 +331,8 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
                 </svg>
               </div>
             </Link>
-            {/* 3. 랭킹 */}
-            <a href="#" className="service-card">
+            {/* 3. 랭킹 — 랭킹·커뮤니티 페이지의 랭킹 탭 */}
+            <Link href="/community?tab=ranking" className="service-card">
               <div className="service-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width={22} height={22} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                   <path d="M3 3v16a2 2 0 0 0 2 2h16" />
@@ -353,9 +350,9 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
                   <path d="m9 18 6-6-6-6" />
                 </svg>
               </div>
-            </a>
+            </Link>
             {/* 4. 커뮤니티 */}
-            <a href="#" className="service-card">
+            <Link href="/community" className="service-card">
               <div className="service-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width={22} height={22} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                   <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
@@ -373,7 +370,7 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
                   <path d="m9 18 6-6-6-6" />
                 </svg>
               </div>
-            </a>
+            </Link>
           </div>
         </section>
         {/* 시작 유도 배너 */}
@@ -381,7 +378,7 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
           <div className="cta-banner">
             <div className="cta-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width={36} height={36} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                <path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.83410.29A2 2 0 0 1 17.22 17.75H6.78a2 2 0 0 1-1.927-1.441L2.019 6.019a.5.5 0 0 1 .798-.519l4.277 3.664a1 1 0 0 0 1.516-.294z" />
+                <path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z" />
                 <path d="M5 21h14" />
               </svg>
             </div>
@@ -389,13 +386,24 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
               <h2 className="cta-title">지금, 당신의 게임 이야기를 시작하세요.</h2>
               <p className="cta-desc">티어 인증을 통해 더 많은 게임 친구들을 만나보세요.</p>
             </div>
-            <button className="cta-btn">
-              지금 시작하기
-              <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
-              </svg>
-            </button>
+            {/* 히어로 메인 CTA와 같은 목적지: 로그인 상태면 Riot 인증(/verify), 아니면 치지직 로그인 */}
+            {loggedIn ? (
+              <Link href="/verify" className="cta-btn">
+                라이엇 인증하기
+                <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </Link>
+            ) : (
+              <ChzzkLoginLink className="cta-btn">
+                지금 시작하기
+                <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </ChzzkLoginLink>
+            )}
           </div>
         </section>
       </main>
@@ -410,37 +418,18 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
               <p className="footer-slogan">게임으로 더 즐거워지는 커뮤니티</p>
             </div>
             <nav className="footer-links">
-              <a href="#">이용약관</a>
-              <a href="#">개인정보처리방침</a>
-              <a href="#">문의하기</a>
+              <Link href="/terms">이용약관</Link>
+              <Link href="/privacy">개인정보처리방침</Link>
+              <a href="mailto:project.contact.kr@gmail.com">문의하기</a>
             </nav>
-            <div className="footer-socials">
-              {/* YouTube */}
-              <a href="#" aria-label="YouTube" className="social-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
-                  <polygon points="10 15 15 12 10 9 10 15" />
-                </svg>
-              </a>
-              {/* Discord */}
-              <a href="#" aria-label="Discord" className="social-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M18 6h0a14.5 14.5 0 0 0-4-1.5 9.6 9.6 0 0 0-.4 1.2 13.8 13.8 0 0 0-3.2 0 9.6 9.6 0 0 0-.4-1.2A14.514.5 0 0 0 6 6 15.3 15.3 0 0 0 3 17.5a14.6 14.6 0 0 0 4.5 2.3 11 11 0 0 0 1-1.6 9.5 9.5 0 0 1-1.6-.8l.4-.3a10.4 10.4 0 0 0 10.2 0l.4.3a9.5 9.5 0 0 1-1.6.8 11 11 0 0 0 1 1.6 14.6 14.6 0 0 0 4.5-2.3A15.3 15.3 0 0 0 18 6Z" />
-                  <circle cx={9} cy={12} r="1.5" />
-                  <circle cx={15} cy={12} r="1.5" />
-                </svg>
-              </a>
-              {/* GitHub */}
-              <a href="#" aria-label="GitHub" className="social-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 .5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-                  <path d="M9 18c-4.51 2-5-2-7-2" />
-                </svg>
-              </a>
-            </div>
+            {/* 소셜 아이콘(YouTube·Discord·GitHub)은 연결할 공식 계정이 아직 없어 링크(#)만 남아 있어서 뺐다 */}
           </div>
           <div className="footer-bottom">
-            <p className="footer-copyright">© 2025 GAMETIER. 본 사이트는 라이엇 게임즈, 치지직 및 각 게임사의 공식 서비스가 아닙니다.</p>
+            <p className="footer-copyright">© 2026 TIERON. 본 사이트는 라이엇 게임즈, 치지직 및 각 게임사의 공식 서비스가 아닙니다.</p>
+            {/* Riot Games 공식 고지 문구 (정책 문구 그대로 — 임의 수정 금지) */}
+            <p className="footer-legal" lang="en">
+              {"TIERON isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc."}
+            </p>
           </div>
         </div>
       </footer>

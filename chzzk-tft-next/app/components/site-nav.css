@@ -141,34 +141,11 @@
   border-color: var(--sn-accent);
 }
 
-/* 로그아웃 요청 중 (LogoutButton): 버튼 안에 작은 스피너 + 문구, 클릭 막힘 */
+/* 로그아웃 요청 중 (LogoutButton): 버튼 안에 공통 스피너(.tn-spinner, globals.css) + 문구, 클릭 막힘 */
 .sn-btn:disabled {
   cursor: default;
   color: var(--sn-muted);
   border-color: var(--sn-line);
-}
-
-.sn-spinner {
-  width: 12px;
-  height: 12px;
-  margin-right: 8px;
-  border: 2px solid rgba(24, 216, 184, 0.25);
-  border-top-color: var(--sn-accent);
-  border-radius: 50%;
-  animation: sn-spin 0.8s linear infinite;
-}
-
-@keyframes sn-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sn-spinner {
-    animation: none;
-    border-color: var(--sn-accent);
-  }
 }
 
 /* 가운데 정렬 페이지(/riot, /login)용: NAV는 위에 두고 본문만 가운데 */

@@ -35,7 +35,7 @@ export default async function LoginPage({
 
       <div className="login-container">
 
-        <Link href="/" className="back-home-link">
+        <Link href="/home" className="back-home-link">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
