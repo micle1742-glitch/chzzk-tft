@@ -1956,3 +1956,208 @@
     font-size: 13px;
   }
 }
+
+/* =========================================================
+   모바일 전용 정리 (860px 이하) — 데스크톱 규칙은 건드리지 않고 이 블록에서만 덮어쓴다.
+   방향: 장식은 줄이고 ① 제목 ② 짧은 설명 ③ 핵심 UI 목업 ④ 준비 중 표시 순으로.
+   ========================================================= */
+@media (max-width: 860px) {
+  .ax-wrap {
+    padding: 0 22px;
+  }
+
+  /* 제목: 글자 크기만이 아니라 줄 간격·폭도 함께 줄여 화면을 덜 차지하게 */
+  .ax-title {
+    font-size: 31px;
+    line-height: 1.18;
+    letter-spacing: -0.03em;
+    max-width: 11em;
+  }
+
+  .ax-title-en {
+    font-size: 36px;
+    line-height: 1.08;
+  }
+
+  .ax-label {
+    margin-bottom: 14px;
+    font-size: 12px;
+    letter-spacing: 0.26em;
+  }
+
+  .ax-body {
+    max-width: 30em;
+    margin-top: 16px;
+    font-size: 15.5px;
+    line-height: 1.7;
+  }
+
+  /* HERO: 카드 이미지는 숨긴 채 텍스트만으로 완성. 첫 화면에서 CTA까지 보이게 */
+  .ax-hero {
+    padding: 52px 0 92px;
+  }
+
+  .ax-hero h1 {
+    font-size: 35px;
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+  }
+
+  .ax-hero .ax-body {
+    max-width: 22em;
+  }
+
+  .ax-actions {
+    gap: 10px;
+    margin-top: 28px;
+  }
+
+  .ax .ax-btn {
+    height: 52px;
+    font-size: 15px;
+  }
+
+  /* 섹션 간격 줄이기 */
+  .ax-verify,
+  .ax-profile,
+  .ax-share,
+  .ax-streamers {
+    padding: 64px 0;
+  }
+
+  .ax-split {
+    gap: 30px;
+  }
+
+  /* 01 장식 숫자: 제목 위 오른쪽 구석으로 옮겨 글자를 가리지 않게 (아주 옅게) */
+  .ax-verify::before {
+    left: auto;
+    right: 14px;
+    top: 14px;
+    transform: none;
+    font-size: 104px;
+    -webkit-text-stroke: 1px rgba(24, 216, 184, 0.1);
+  }
+
+  .ax-verify .ax-wrap {
+    z-index: 1;
+  }
+
+  .ax-soon {
+    margin-top: 18px;
+  }
+
+  .ax-steps li {
+    padding-top: 13px;
+    padding-bottom: 13px;
+  }
+
+  /* 02 PROFILE: 표가 핵심이라 큰 카드 이미지는 모바일에서 숨김 */
+  .ax-visual-profile {
+    display: none;
+  }
+
+  .ax-games {
+    margin-top: 24px;
+  }
+
+  /* 03 SHARE: 이미지 대신 CSS로 그린 카드 목업 (카드 디자인이 바뀌어도 쉽게 고치도록) */
+  .ax-share-head .ax-body {
+    margin-top: 14px;
+  }
+
+  .ax-mocks {
+    margin-top: 32px;
+  }
+
+  .ax-mock-card img {
+    display: none;
+  }
+
+  .ax-mock-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(ellipse 70% 70% at 50% 55%, rgba(24, 216, 184, 0.3), transparent 72%),
+      #050807;
+  }
+
+  .ax-mock-card::before {
+    content: "";
+    width: 44%;
+    aspect-ratio: 3 / 4;
+    border: 1px solid rgba(24, 216, 184, 0.65);
+    border-radius: 12px;
+    background: linear-gradient(160deg, #123a33, #050807 70%);
+    box-shadow: 0 0 22px rgba(24, 216, 184, 0.28);
+  }
+
+  .ax-mock-card::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    width: 22px;
+    height: 22px;
+    transform: translate(-50%, -50%) rotate(45deg);
+    border-radius: 4px;
+    background: linear-gradient(135deg, #9ff0e2, #18d8b8);
+    box-shadow: 0 0 16px rgba(24, 216, 184, 0.5);
+  }
+
+  .ax-mock strong {
+    margin-top: 12px;
+    font-size: 15px;
+  }
+
+  .ax-mock-note {
+    margin-top: 16px;
+  }
+
+  /* 04 STREAMERS: 기능 목록이 먼저, 예시 UI는 더 납작하게 */
+  .ax-features {
+    margin-top: 24px;
+  }
+
+  .ax-features li {
+    padding: 14px 0;
+  }
+
+  .ax-features strong {
+    font-size: 16px;
+  }
+
+  .ax-board {
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .ax-board-screen {
+    aspect-ratio: 16 / 8;
+    margin-bottom: 14px;
+  }
+
+  .ax-board-row {
+    padding: 9px 4px;
+  }
+
+  .ax-final {
+    padding: 88px 0 80px;
+  }
+}
+
+@media (max-width: 560px) {
+  /* 좁은 화면에서 목업 카드의 여백·글자도 한 단계 작게 */
+  .ax-mocks {
+    gap: 22px 12px;
+  }
+
+  .ax-mock span {
+    font-size: 12.5px;
+  }
+
+  .ax-features li {
+    align-items: flex-start;
+  }
+}
