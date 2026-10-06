@@ -27,12 +27,15 @@ export default function Reveal({
     setHidden(true);
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        // 화면에 들어왔거나, 이미 화면 위로 지나간 경우(뒤로가기 후 스크롤 복원) 바로 보이게
+        if (entry.isIntersecting || entry.boundingClientRect.bottom < 0) {
           setHidden(false);
           io.disconnect();
         }
       },
-      { threshold: 0.2 }
+      // 관찰 영역을 화면 위쪽으로만 넓힌다: 스크롤 복원이 섹션을 한 번에 건너뛰어도 "위로 지나감"이 감지되게
+      // (아래쪽은 그대로라 첫 방문 때 화면에 들어오며 나타나는 효과는 변하지 않는다)
+      { threshold: 0.2, rootMargin: "100000px 0px 0px 0px" }
     );
     io.observe(el);
     return () => io.disconnect();
