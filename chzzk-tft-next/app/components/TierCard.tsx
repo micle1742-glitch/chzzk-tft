@@ -13,8 +13,8 @@ export type TierCardData = {
   tier: string; // 예: GOLD
   rank?: string; // 예: II
   lp: number;
-  wins: number;
-  losses: number;
+  wins: number; // TFT: 1등 횟수 (Riot wins) / LoL: 승리
+  losses: number; // TFT: 2~8등 횟수 (Riot losses) / LoL: 패배
   verifiedAt: string; // 표시용 문자열
   region?: string; // 예: KR
 };
@@ -23,7 +23,13 @@ export default function TierCard({ data, sample = false }: { data: TierCardData;
   const total = data.wins + data.losses;
   // 티어 이름 → 색상 클래스 (tier-card.css의 .tc--gold 등). 모르는 값은 기본 민트 glow
   const tierClass = data.tier.trim().toLowerCase().replace(/[^a-z]/g, "");
-  const winRate = total > 0 ? ((data.wins / total) * 100).toFixed(1) : "-";
+  const winRate = total > 0 ? `${((data.wins / total) * 100).toFixed(1)}%` : "-";
+  // TFT는 Riot TFT-LEAGUE-V1 기준 wins = 1등 횟수, losses = 2~8등 횟수 → /riot 결과 카드와 같은 표기
+  // 그 밖의 게임(LoL 등)은 기존 표기 그대로
+  const isTft = data.game.trim().toUpperCase() === "TFT";
+  const labels = isTft
+    ? { wins: "1등", losses: "2~8등", rate: "1등 비율" }
+    : { wins: "WIN", losses: "LOSS", rate: "WIN RATE" };
 
   return (
     <article className={`tc tc--${tierClass}`} aria-label={`${data.riotId}#${data.tagline} ${data.game} 인증 카드`}>
@@ -61,16 +67,16 @@ export default function TierCard({ data, sample = false }: { data: TierCardData;
 
       <dl className="tc-stats">
         <div>
-          <dt>WIN</dt>
+          <dt>{labels.wins}</dt>
           <dd>{data.wins}</dd>
         </div>
         <div>
-          <dt>LOSS</dt>
+          <dt>{labels.losses}</dt>
           <dd>{data.losses}</dd>
         </div>
         <div>
-          <dt>WIN RATE</dt>
-          <dd>{winRate}%</dd>
+          <dt>{labels.rate}</dt>
+          <dd>{winRate}</dd>
         </div>
       </dl>
 

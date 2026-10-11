@@ -196,7 +196,14 @@ export default function RiotClient({ initialName, initialTag }: { initialName: s
   const gameError = current?.status === "error";
   const gameText = GAMES[game];
 
-  // 승/패는 Riot이 숫자로 준 경우에만 표시하고, 승률은 그때만 계산한다 (wins / (wins + losses) * 100)
+  // 승/패는 Riot이 숫자로 준 경우에만 표시하고, 비율은 그때만 계산한다 (wins / (wins + losses) * 100)
+  // TFT는 의미가 다르다 (Riot TFT-LEAGUE-V1): wins = 1등 횟수, losses = 2~8등 횟수
+  //   → "1등 / 2~8등 / 1등 비율"로 표시하고, wins + losses = 현재 시즌 전체 랭크 게임 수
+  // LoL은 기존대로 승리 / 패배 / 승률
+  const isTft = game === "tft";
+  const recordLabels = isTft
+    ? { wins: "1등", losses: "2~8등", rate: "1등 비율" }
+    : { wins: "승리", losses: "패배", rate: "승률" };
   const wins = ranked?.wins;
   const losses = ranked?.losses;
   const hasRecord = typeof wins === "number" && typeof losses === "number";
@@ -360,24 +367,29 @@ export default function RiotClient({ initialName, initialTag }: { initialName: s
                         </div>
                       )}
 
-                      {/* 8, 9, 10. 승리, 패배, 승률 — Riot이 승/패 숫자를 준 경우에만 */}
+                      {/* 8, 9, 10. 승패 기록 — Riot이 숫자를 준 경우에만. TFT는 1등 / 2~8등 / 1등 비율, LoL은 승리 / 패배 / 승률 */}
                       {hasRecord && (
                         <div className="record-grid">
                           <div className="record-item">
-                            <span className="record-label">승리</span>
+                            <span className="record-label">{recordLabels.wins}</span>
                             <span className="record-value wins">{wins}</span>
                           </div>
 
                           <div className="record-item">
-                            <span className="record-label">패배</span>
+                            <span className="record-label">{recordLabels.losses}</span>
                             <span className="record-value losses">{losses}</span>
                           </div>
 
                           <div className="record-item">
-                            <span className="record-label">승률</span>
+                            <span className="record-label">{recordLabels.rate}</span>
                             <span className="record-value winrate">{winRate}</span>
                           </div>
                         </div>
+                      )}
+
+                      {/* TFT 현재 시즌 전체 랭크 게임 수 = wins(1등) + losses(2~8등). 추가 API 호출 없음 */}
+                      {hasRecord && isTft && (
+                        <p className="record-total">현재 시즌 전체 랭크 게임 {totalGames}판</p>
                       )}
                     </div>
 
@@ -452,6 +464,9 @@ function MatchAnalysis({
   const data = state.status === "ok" ? state.data : null;
   const a = data?.analysis;
   const seasonName = data?.season ? `${data.season.label}${data.season.isCurrent ? "(현재 시즌)" : ""}` : "";
+  // 지난 시즌: Riot 데이터로 현재 시즌을 확인했고, 선택한 시즌이 그것이 아닐 때 → 핵심 통계 3개만
+  // (Riot League API는 지난 시즌 전체 판 수를 주지 않는다 — 확인한 매치로만 계산하고 "시즌 전체"라고 표시하지 않는다)
+  const isPastSeason = !!data?.season && data.currentSeasonKnown && !data.season.isCurrent;
 
   // 게임 기간은 해를 넘길 수 있어 연도까지, 목록 기준 시각은 시:분까지
   const day = (ms: number) =>
@@ -466,7 +481,11 @@ function MatchAnalysis({
         <div>
           <p className="ma-eyebrow">MATCH ANALYSIS</p>
           <h2 id="ma-title" className="ma-title">
-            {a && a.games > 0 ? `최근 랭크 ${a.games}판` : "최근 랭크 분석"}
+            {isPastSeason && data?.season
+              ? `${data.season.label} 요약`
+              : a && a.games > 0
+                ? `최근 랭크 ${a.games}판`
+                : "최근 랭크 분석"}
           </h2>
         </div>
         <SeasonSelect seasons={seasons} value={seasonId} onChange={onSeasonChange} disabled={loading} />
@@ -485,7 +504,8 @@ function MatchAnalysis({
         <>
           {seasonName && (
             <p className="ma-season">
-              분석 시즌 <strong>{seasonName}</strong> · 랭크 {a.games}판
+              분석 시즌 <strong>{seasonName}</strong> ·{" "}
+              {isPastSeason ? `최근 확인한 랭크 ${a.games}판 기준` : `랭크 ${a.games}판`}
             </p>
           )}
 
@@ -500,7 +520,29 @@ function MatchAnalysis({
             </p>
           )}
 
-          {a.games > 0 && (
+          {/* 지난 시즌: 랭크 게임 수 · TOP 4 비율 · 1등 비율만 (확인한 판 기준) */}
+          {a.games > 0 && isPastSeason && (
+            <dl className="ma-summary">
+              <div>
+                <dt>랭크 게임 수</dt>
+                <dd>
+                  {a.games}
+                  <small>판</small>
+                </dd>
+              </div>
+              <div>
+                <dt>TOP 4 비율</dt>
+                <dd>{a.top4Rate}%</dd>
+              </div>
+              <div>
+                <dt>1등 비율</dt>
+                <dd>{a.firstRate}%</dd>
+              </div>
+            </dl>
+          )}
+
+          {/* 현재 시즌: 기존 상세 분석 그대로 */}
+          {a.games > 0 && !isPastSeason && (
             <>
               <dl className="ma-stats">
                 <div>
@@ -554,6 +596,12 @@ function MatchAnalysis({
             {a.games > 0 && a.oldestGameAt !== null && a.latestGameAt !== null && (
               <li>
                 기준: {data.season?.label} 랭크 게임 {a.games}판 ({day(a.oldestGameAt)} ~ {day(a.latestGameAt)})
+              </li>
+            )}
+            {isPastSeason && a.games > 0 && (
+              <li>
+                Riot은 지난 시즌 전체 전적 수를 제공하지 않아, 최근 매치 기록에서 확인한 랭크 판으로만 계산했습니다.
+                시즌 전체 통계가 아닙니다.
               </li>
             )}
             {data.seasonStatus === "partial_range" && (

@@ -1008,3 +1008,66 @@ body {
     gap: 12px;
   }
 }
+
+/* 지난 시즌 요약: 핵심 통계 3개를 나란히 (확인한 랭크 판 기준) */
+.ma-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 18px 0 0;
+}
+
+.ma-summary div {
+  padding: 18px 10px 16px;
+  border: 1px solid rgba(22, 213, 183, 0.22);
+  border-radius: 14px;
+  background: rgba(22, 213, 183, 0.04);
+  text-align: center;
+}
+
+.ma-summary dt {
+  color: #76938e;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ma-summary dd {
+  margin: 8px 0 0;
+  color: #ffffff;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.ma-summary dd small {
+  margin-left: 2px;
+  color: #8daea8;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+@media (max-width: 480px) {
+  .ma-summary {
+    gap: 6px;
+  }
+
+  .ma-summary div {
+    padding: 14px 4px 12px;
+  }
+
+  .ma-summary dd {
+    font-size: 22px;
+  }
+}
+
+/* TFT 현재 시즌 전체 랭크 게임 수 (1등 + 2~8등) — 승패 기록 아래 작은 보조 글씨 */
+.record-total {
+  margin: -6px 0 14px;
+  color: #8daea8;
+  font-size: 12px;
+  text-align: center;
+}
+
+.is-compact .record-total {
+  margin: -4px 0 10px;
+}
