@@ -1,0 +1,46 @@
+/* 시즌 선택 드롭다운 (SeasonSelect) — 자주 쓰는 입력이라 애니메이션 없음 */
+.season-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+}
+
+/* 화면에는 숨기고 스크린리더만 읽는 라벨 (드롭다운 값 자체가 "세트 18 (현재 시즌)"이라 시각 라벨은 생략) */
+.season-select-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.season-select select {
+  max-width: 100%;
+  height: 34px;
+  padding: 0 30px 0 12px;
+  border: 1px solid #1d4a43;
+  border-radius: 999px;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%238daea8' stroke-width='1.5'/%3E%3C/svg%3E")
+      no-repeat right 12px center,
+    #071c19;
+  color: #e8f3f1;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  appearance: none;
+}
+
+.season-select select:focus-visible {
+  outline: none;
+  border-color: #18d8ba;
+}
+
+.season-select select:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

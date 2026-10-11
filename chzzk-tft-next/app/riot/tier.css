@@ -589,3 +589,422 @@ body {
     font-size: 17px;
   }
 }
+
+/* =========================================================
+   TFT 전적 분석 (카드와 분리된 영역, RiotClient의 MatchAnalysis)
+   카드보다 한 단계 차분하게: 얇은 테두리 + 어두운 바탕, 민트는 4등 이내 강조에만
+   ========================================================= */
+.match-analysis {
+  margin-top: 16px;
+  padding: 22px 20px 18px;
+  border: 1px solid #144941;
+  border-radius: 16px;
+  background: #051513;
+  text-align: left;
+}
+
+.ma-eyebrow {
+  margin: 0;
+  color: #16d5b7;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.ma-title {
+  margin: 6px 0 0;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.ma-state {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 0;
+  color: #8daea8;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.ma-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 16px 0 0;
+}
+
+.ma-stats div {
+  padding: 12px 6px;
+  border: 1px solid rgba(22, 213, 183, 0.16);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.ma-stats dt {
+  color: #76938e;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.ma-stats dd {
+  margin: 4px 0 0;
+  color: #ffffff;
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.ma-block {
+  margin-top: 18px;
+}
+
+.ma-block-title {
+  margin: 0 0 8px;
+  color: #76938e;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* 등수 분포: 1~8등 막대 */
+.ma-dist {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ma-dist li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.ma-dist-bar {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  height: 64px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+
+.ma-dist-bar span {
+  display: block;
+  width: 100%;
+  min-height: 2px;
+  border-radius: 6px 6px 0 0;
+  background: #3a5651;
+}
+
+.ma-dist li.is-top4 .ma-dist-bar span {
+  background: #16d5b7;
+}
+
+.ma-dist-count {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ma-dist-label {
+  color: #6d8e88;
+  font-size: 11px;
+}
+
+/* 최근 등수: 최신순 칩 */
+.ma-recent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ma-recent li {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid #1d3934;
+  border-radius: 8px;
+  color: #8daea8;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ma-recent li.is-top4 {
+  border-color: rgba(22, 213, 183, 0.45);
+  color: #18d8ba;
+}
+
+.ma-basis {
+  margin: 16px 0 0;
+  padding: 12px 0 0;
+  border-top: 1px solid #12302b;
+  list-style: none;
+  color: #6d8e88;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.ma-basis .ma-warn {
+  color: #d9b45a;
+}
+
+/* 분석 제목 + 시즌 선택 한 줄 (좁으면 아래로 줄바꿈) */
+.ma-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px 12px;
+}
+
+.ma-season {
+  margin: 10px 0 0;
+  color: #8daea8;
+  font-size: 13px;
+}
+
+.ma-season strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+@media (max-width: 480px) {
+  .ma-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ma-dist {
+    gap: 4px;
+  }
+}
+
+/* =========================================================
+   조회 결과 화면 (/riot/result — RiotClient)
+   검색은 작은 한 줄, 데스크톱은 왼쪽(검색·티어 카드) / 오른쪽(전적 분석) 두 칸, 모바일은 위아래
+   ========================================================= */
+.tier-page.is-result {
+  align-items: flex-start;
+}
+
+/* 공통 레이아웃(sn-shell-main)은 본문을 세로 가운데에 두지만, 결과 화면은 NAV 바로 아래부터 (공통 CSS는 그대로) */
+.sn-shell-main:has(> .tier-page.is-result) {
+  align-items: flex-start;
+}
+
+.riot-result {
+  width: 100%;
+  max-width: 1080px;
+  display: flex;
+  flex-direction: column;
+}
+
+.riot-result .home-link {
+  align-self: flex-start;
+}
+
+.riot-result-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 440px) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+/* 오른쪽 칸 맨 위에 붙도록 (세로 배치일 때의 간격은 grid gap이 맡는다) */
+.riot-result .riot-result-side .match-analysis {
+  margin-top: 0;
+}
+
+.result-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 28px 0;
+  color: #8daea8;
+  font-size: 14px;
+}
+
+.container.is-compact {
+  padding: 16px 16px 20px;
+}
+
+.container.is-compact #result {
+  margin-top: 16px;
+}
+
+.search-compact {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 게임 이름 # 태그를 하나의 입력칸처럼 */
+.search-compact-fields {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  background: #051613;
+  border: 1px solid #143e39;
+  border-radius: 10px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-compact-fields:focus-within {
+  border-color: #18d8ba;
+  box-shadow: 0 0 0 3px rgba(24, 216, 186, 0.1);
+}
+
+.container .search-compact input {
+  height: 38px;
+  margin: 0;
+  padding: 0 10px;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  font-size: 13px;
+}
+
+.container .search-compact input:focus {
+  background: transparent;
+  box-shadow: none;
+}
+
+.container .search-compact input#nickname {
+  flex: 1;
+  min-width: 0;
+}
+
+.container .search-compact input#tagline {
+  flex: none;
+  width: 72px;
+  padding-left: 4px;
+}
+
+.search-compact-hash {
+  color: #55726d;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.search-compact button {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 10px;
+  background: #16d5b7;
+  color: #041a17;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.search-compact button:hover:not(:disabled) {
+  background: #23e8c9;
+}
+
+.search-compact button:disabled {
+  background: #105249;
+  color: #8bbcb5;
+  cursor: not-allowed;
+}
+
+/* 조회 후 티어 카드: 글자 크기·정보는 그대로, 위아래 여백만 줄여 MATCH ANALYSIS가 더 빨리 보이게 */
+.is-compact .tier-card {
+  padding: 16px 18px 12px;
+}
+
+.is-compact .verified-subtitle {
+  margin: 6px 0 10px;
+}
+
+.is-compact .card-player-info {
+  margin-bottom: 12px;
+}
+
+.is-compact .game-tabs {
+  margin-bottom: 10px;
+}
+
+.is-compact .tier-visual-block {
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+
+.is-compact .record-grid {
+  padding: 10px 6px;
+  margin-bottom: 12px;
+}
+
+.is-compact .verification-check-list {
+  padding: 8px 12px;
+  margin-bottom: 8px;
+}
+
+.is-compact .card-footer-mark {
+  margin-top: 2px;
+}
+
+/* 조회 후에는 전적 분석이 핵심: 테두리를 조금 더 또렷하게, 제목을 조금 크게 */
+.is-compact .match-analysis {
+  margin-top: 12px;
+  padding: 24px 22px 20px;
+  border-color: #1d5a50;
+}
+
+.is-compact .ma-title {
+  font-size: 22px;
+}
+
+@media (max-width: 480px) {
+  .container.is-compact {
+    padding: 14px 12px 16px;
+  }
+
+  .is-compact .match-analysis {
+    padding: 20px 16px 16px;
+  }
+}
+
+/* 아주 좁은 화면: 버튼을 아래 줄로 */
+@media (max-width: 360px) {
+  .search-compact {
+    flex-wrap: wrap;
+  }
+
+  .search-compact button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* 결과 화면: 좁은 화면은 한 칸으로 (검색·카드 → 전적 분석 순서) */
+@media (max-width: 900px) {
+  .riot-result {
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .riot-result-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
