@@ -8,6 +8,9 @@
   --ld-muted: #8fa19e;
   --ld-deep: #0d3029;
 
+  /* 항상 화면 폭 전체 (/home의 .home-page와 같은 이유): /login·/riot CSS의 body { align-items: center }가
+     페이지 이동 후에도 남아 있으면 래퍼가 내용 폭(1080px)으로 줄어든다 */
+  width: 100%;
   min-height: 100vh;
   background: var(--ld-bg);
   color: #ffffff;
