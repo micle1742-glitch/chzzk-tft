@@ -34,19 +34,23 @@ export default async function SiteNav({
           <Link href="/home">홈</Link>
           {/* 서비스 소개 = 랜딩(/) 맨 위(히어로)부터 */}
           <ServiceIntroLink />
-          <Link href="/riot">Riot 인증</Link>
+          {/* Riot ID로 티어·전적을 찾는 페이지 (예전 메뉴 이름 "Riot 인증" — 소유권 인증이 아니라서 바꿈) */}
+          <Link href="/riot">전적 검색</Link>
           <Link href="/community">커뮤니티</Link>
           {/* 스트리머용 OBS 오버레이 설정 (로그인 없이 사용 가능) */}
           <Link href="/overlay/settings">OBS 오버레이</Link>
           {/* "가이드"(랜딩 /)는 "서비스 소개"와 역할이 겹쳐 NAV에서 뺐다. 랜딩 자체는 그대로 있음 */}
-          {/* 마이페이지 진입: 로그인 상태에서만 메뉴 끝에 표시 */}
-          {session && <Link href="/mypage">마이페이지</Link>}
+          {/* 마이페이지는 메뉴 항목 대신 오른쪽 닉네임·사람 아이콘으로 들어간다 */}
         </div>
         {session ? (
           <div className="sn-user">
-            {/* 닉네임을 누르면 마이페이지로 */}
-            <Link href="/mypage" className="sn-user-name" title="마이페이지로 이동">
-              {session.nickname}
+            {/* 사람 아이콘 + 치지직 닉네임 → 마이페이지 */}
+            <Link href="/mypage" className="sn-user-link" title="마이페이지로 이동" aria-label={`${session.nickname} 마이페이지`}>
+              <svg className="sn-user-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 21a8 8 0 0 1 16 0" />
+              </svg>
+              <span className="sn-user-name">{session.nickname}</span>
             </Link>
             <LogoutButton className="sn-btn" redirectTo={logoutRedirect} />
           </div>

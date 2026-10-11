@@ -111,6 +111,18 @@
   gap: 12px;
 }
 
+.sn-user-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--sn-muted);
+  text-decoration: none;
+}
+
+.sn-user-icon {
+  flex: none;
+}
+
 .sn-user-name {
   max-width: 140px;
   overflow: hidden;
@@ -122,6 +134,13 @@
 }
 
 /* 닉네임 = 마이페이지 링크: 평소엔 기존 모습 그대로, 올리면 흰 글자 + 얇은 민트 밑줄 */
+.sn-user-link:hover,
+.sn-user-link:focus-visible {
+  color: #ffffff;
+}
+
+.sn-user-link:hover .sn-user-name,
+.sn-user-link:focus-visible .sn-user-name,
 .sn-user-name:hover,
 .sn-user-name:focus-visible {
   color: #ffffff;
