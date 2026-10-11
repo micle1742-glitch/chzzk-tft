@@ -36,6 +36,8 @@ export default async function SiteNav({
           <ServiceIntroLink />
           <Link href="/riot">Riot 인증</Link>
           <Link href="/community">커뮤니티</Link>
+          {/* 스트리머용 OBS 오버레이 설정 (로그인 없이 사용 가능) */}
+          <Link href="/overlay/settings">OBS 오버레이</Link>
           {/* "가이드"(랜딩 /)는 "서비스 소개"와 역할이 겹쳐 NAV에서 뺐다. 랜딩 자체는 그대로 있음 */}
           {/* 마이페이지 진입: 로그인 상태에서만 메뉴 끝에 표시 */}
           {session && <Link href="/mypage">마이페이지</Link>}
