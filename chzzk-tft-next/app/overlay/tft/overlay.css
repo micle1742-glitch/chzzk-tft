@@ -9,6 +9,7 @@
 
 /* ---------- 테마 색 ----------
  * dark  (기본): 검정 글자 #111111 — 밝은 방송 화면용. LP는 티어 색의 진한 버전, 글자에 얇은 밝은 윤곽
+ *               카드 외곽·티어 박스·배지 테두리 모두 민트→검정→민트 대각선 그라디언트 (아래 ::before)
  * light       : 흰 글자 #FFFFFF  — 어두운 방송 화면용. LP는 티어 색 그대로, 글자에 얇은 어두운 윤곽
  * 테두리: dark는 검정 #000000 (카드·티어 칸·배지 모두), light는 민트 (카드 #087F68, 티어 칸·배지 #35E0B5)
  */
@@ -60,6 +61,50 @@
   --tc-brand: var(--ov-accent);
   color: var(--ov-ink);
   text-shadow: var(--ov-text-shadow);
+}
+
+/*
+ * 다크 테마의 모든 테두리(카드 외곽·티어 박스·"RIOT API 조회" 배지): 민트 → 검정 → 민트 대각선 그라디언트
+ * - 안쪽은 투명 그대로: 배경 두 겹(padding-box/border-box) 방식은 안쪽을 칠해야 해서 쓰지 않는다
+ * - 원래 테두리는 두께를 그대로 두고 색만 투명 → 크기·배치 변화 없음
+ * - 그 자리에 가운데를 마스크로 비운 그라디언트 고리(::before)를 겹친다. 두께는 --ov-ring(원래 테두리 두께),
+ *   둥글기는 원래 요소 값 그대로(inherit: 카드 24px, 티어 박스 18px, 배지 999px). 그림자·광택 없음
+ * - -webkit-mask-composite: xor는 오래된 OBS Chromium에서도 동작한다 (표준 mask-composite: exclude 함께)
+ * - 오류·Riot ID 누락 안내도 카드 외곽이라 같은 테두리
+ * 라이트 테마는 그대로 단일 선 (카드 #087F68, 티어 박스·배지 #35E0B5)
+ */
+.ov-theme-dark {
+  /* 차분한 민트(#087F68)에서 검정으로, 다시 민트로 */
+  --ov-ring-gradient: linear-gradient(135deg, #087f68 0%, #000000 45%, #087f68 100%);
+}
+
+.ov-theme-dark .tc.ov-card,
+.ov-theme-dark .tc.ov-card.tc--challenger {
+  --ov-ring: 2px;
+  border-color: transparent;
+}
+
+/* 티어 박스·배지: 고리를 붙이기 위한 기준 위치 (레이아웃 변화 없음) */
+.ov-theme-dark .tc.ov-card .tc-tier,
+.ov-theme-dark .tc.ov-card .ov-source {
+  --ov-ring: 1px;
+  position: relative;
+  border-color: transparent;
+}
+
+.ov-theme-dark .tc.ov-card::before,
+.ov-theme-dark .tc.ov-card .tc-tier::before,
+.ov-theme-dark .tc.ov-card .ov-source::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--ov-ring) * -1); /* 테두리 영역까지 (요소 바깥 크기와 같음) */
+  padding: var(--ov-ring); /* 고리 두께 = 원래 테두리 두께 */
+  border-radius: inherit;
+  background: var(--ov-ring-gradient);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  pointer-events: none;
 }
 
 /* 티어 칸: 바탕 투명, 테두리만 */
