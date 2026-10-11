@@ -1,5 +1,7 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
+// 티어 조회는 기다리거나 막지 않는다. 호출 수만 서버 공용 제한기 합계에 넣고, 429면 쿨다운을 알려 전적 분석이 쉬게 한다
+import { retryAfterOf, riotLimiter } from "../../lib/riot";
 
 // Riot 리그 API(TFT league-v1, LoL league-v4) 응답 배열의 항목. 두 게임이 같은 필드를 쓴다
 type LeagueEntry = {
@@ -122,6 +124,7 @@ export async function POST(request: Request) {
     const headers = { "X-Riot-Token": apiKey };
 
     // 1. Riot ID → PUUID 조회
+    riotLimiter.record();
     const accountResponse = await axios.get<{ puuid: string; gameName: string; tagLine: string }>(
       `https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(nickname)}/${encodeURIComponent(tagline)}`,
       { headers, timeout: RIOT_TIMEOUT_MS }
@@ -131,6 +134,8 @@ export async function POST(request: Request) {
 
     // 2. 같은 PUUID로 TFT·LoL 리그 정보를 동시에 조회
     //    한쪽이 실패해도 다른 쪽 결과는 돌려준다 (Riot ID 자체가 없을 때의 실패는 위 1번에서 기존대로 처리)
+    riotLimiter.record();
+    riotLimiter.record();
     const [tftResult, lolResult] = await Promise.allSettled([
       axios.get<LeagueEntry[]>(
         `https://kr.api.riotgames.com/tft/league/v1/by-puuid/${puuid}`,
@@ -141,6 +146,10 @@ export async function POST(request: Request) {
         { headers, timeout: RIOT_TIMEOUT_MS }
       ),
     ]);
+
+    for (const r of [tftResult, lolResult]) {
+      if (r.status === "rejected" && retryAfterOf(r.reason) !== undefined) riotLimiter.reportRateLimited(retryAfterOf(r.reason));
+    }
 
     // gameName·tagLine: Account API가 돌려준 공식 표기 (입력값과 대소문자 등이 다를 수 있음)
     // tier: 기존 호환용 TFT 큐별 배열 그대로 (TFT 조회 실패 시 null)
@@ -159,6 +168,7 @@ export async function POST(request: Request) {
     // Account API(Riot ID → PUUID) 단계의 실패. Riot 응답 상태 코드로만 구분한다
     if (axios.isAxiosError(error)) {
       const status = error.response?.status;
+      if (status === 429) riotLimiter.reportRateLimited(retryAfterOf(error));
 
       // 404: Riot이 "Data not found"로 응답 → 입력한 Riot ID에 해당하는 계정이 없음
       if (status === 404) {

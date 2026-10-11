@@ -15,6 +15,7 @@ export const metadata: Metadata = {
  * - DB users: chzzk_id, display_name, is_public, created_at, last_login_at / sessions: 토큰 SHA-256 해시, 만료 7일
  * - 쿠키: tieron_session(7일), chzzk_oauth_state(10분) / localStorage·분석 도구 없음
  * - Riot 조회(api/search): Riot ID를 Riot API에 전달, 결과는 저장하지 않음
+ * - TFT 전적 분석(api/tft/matches): 매치 캐시에 PUUID·등수·매치 공통 정보만 저장, 30일 보관 (docs/sql/005)
  * Riot 계정 DB 저장(riot_accounts)은 아직 사용하지 않으므로 쓰지 않는다.
  */
 export default function PrivacyPage() {
@@ -25,11 +26,11 @@ export default function PrivacyPage() {
       <main className="lg-doc">
         <p className="lg-eyebrow">PRIVACY POLICY</p>
         <h1>개인정보처리방침</h1>
-        <p className="lg-meta">시행일: 2026년 10월 5일</p>
+        <p className="lg-meta">시행일: 2026년 10월 11일 (이전: 2026년 10월 5일)</p>
 
         <p className="lg-notice">
           TIERON은 현재 <strong>BETA(시험 운영)</strong> 단계입니다. 이 방침은 지금 실제로 제공하는 기능(치지직
-          로그인, Riot 랭크 조회)을 기준으로 작성했으며, 기능이 추가되면 처리하는 정보와 함께 이 페이지를
+          로그인, Riot 랭크 조회, TFT 전적 분석)을 기준으로 작성했으며, 기능이 추가되면 처리하는 정보와 함께 이 페이지를
           갱신합니다.
         </p>
 
@@ -80,6 +81,35 @@ export default function PrivacyPage() {
           표시됩니다. 이 기능은 로그인하지 않아도 이용할 수 있습니다.
         </p>
         <p>
+          <strong>TFT 전적 분석을 이용할 때</strong> 같은 방법으로 Riot Games API에서 최근 TFT 매치 정보를 받아
+          통계(평균 등수, 4등 이내 비율 등)를 계산합니다. 같은 매치를 반복해서 요청하지 않도록, 아래 정보만 서버에
+          일시 보관(캐시)합니다. 입력한 Riot ID(게임 이름#태그)와 다른 참가자의 Riot ID는 저장하지 않습니다.
+        </p>
+        <div className="lg-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>항목</th>
+                <th>내용</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>매치 공통 정보</td>
+                <td>매치 ID, 게임 종류(큐), 게임 시각·길이, 시즌(세트) 번호, 게임 버전</td>
+              </tr>
+              <tr>
+                <td>참가자 정보</td>
+                <td>그 매치 참가자 8명의 Riot 계정 식별값(PUUID)과 최종 등수</td>
+              </tr>
+              <tr>
+                <td>최근 매치 목록</td>
+                <td>Riot 계정 식별값(PUUID)별 최근 매치 ID 목록과 받은 시각</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
           Riot 계정 연결·소유권 인증 기능은 아직 제공하지 않으므로, 현재 Riot 계정 정보를 이용자 계정과 연결해
           저장하지 않습니다.
         </p>
@@ -90,6 +120,7 @@ export default function PrivacyPage() {
           <li>화면에 로그인한 사용자의 닉네임 표시</li>
           <li>로그인 요청 위조 방지 등 서비스 보안</li>
           <li>Riot 랭크 조회 결과 제공</li>
+          <li>TFT 전적 분석 결과 제공과 Riot API 요청 횟수 절감(캐시)</li>
         </ul>
 
         <h2>3. 보관 기간</h2>
@@ -103,7 +134,11 @@ export default function PrivacyPage() {
             세션은 로그인에 사용되지 않습니다.
           </li>
           <li>
-            <strong>Riot 조회 정보</strong>: 저장하지 않습니다.
+            <strong>Riot 랭크 조회 정보</strong>: 저장하지 않습니다.
+          </li>
+          <li>
+            <strong>TFT 전적 분석 캐시</strong>: 받은 날부터 30일간 보관한 뒤 삭제합니다. 최근 매치 목록은 5분이
+            지나면 Riot API에서 새로 받습니다.
           </li>
           <li>
             서비스 오류를 확인하기 위해 서버 운영 기록(로그)에 오류 정보가 일시적으로 남을 수 있습니다.
@@ -165,12 +200,12 @@ export default function PrivacyPage() {
               </tr>
               <tr>
                 <td>Riot Games API</td>
-                <td>랭크 조회</td>
-                <td>조회할 때 입력한 Riot ID</td>
+                <td>랭크 조회, TFT 전적 분석</td>
+                <td>조회할 때 입력한 Riot ID와 그 계정의 식별값(PUUID)</td>
               </tr>
               <tr>
                 <td>Supabase</td>
-                <td>데이터베이스 (계정·세션 저장)</td>
+                <td>데이터베이스 (계정·세션 저장, TFT 전적 분석 캐시)</td>
                 <td>1번 표의 정보</td>
               </tr>
               <tr>
