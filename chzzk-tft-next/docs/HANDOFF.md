@@ -69,6 +69,18 @@
 - Riot 호출 제한: 서버 공용 제한기(`app/lib/riot.ts` riotLimiter, 초당 15회·2분 80회, 429면 Retry-After 쿨다운). 전적 분석·현재 시즌 확인은 이 제한을 지키고, 티어 조회(`/api/search`)는 막지 않고 호출 수만 합산한다.
   - **한계: 제한기는 서버 메모리라 Vercel 인스턴스끼리 공유되지 않는다.** 인스턴스가 여러 개면 합계가 한도를 넘을 수 있다 → Production 키 승인(한도 상향) 또는 공유 저장소(DB·Redis) 도입이 별도 과제.
 
+### OBS 오버레이 (2026-10)
+- 설정 `/overlay/settings`: 1 Riot 계정 조회 → 2 티어 카드 확인 → 3 미리보기 및 사용(테마·OBS 안내) → 4 비밀 주소 발급·재발급·삭제. OBS 브라우저 소스 권장 크기 520×340.
+- 오버레이 화면: 비밀 주소 `/overlay/tft/[token]?theme=dark|light`(권장, Riot ID가 주소에 없음). 예전 `/overlay/tft?name=&tag=`도 계속 동작하지만 설정 화면에서는 안내하지 않는다. 배경 투명, 열 때 한 번 + 3분마다 갱신.
+- 카드 하단의 **오늘 랭크 순위**: 오늘(KST 00:00~다음 날 00:00)에 **시작한** 랭크(1100) 판의 실제 등수만, 최신이 왼쪽. 최대 10판 표시 후 "+N". 요청 한도 등으로 다 확인하지 못하면 "일부만 확인"으로 표시한다(추정해서 채우지 않음). 로직: `app/lib/tft-today.ts`, `runTftMatches`(mode today).
+- 비밀 주소 보안 (`docs/sql/007·008`, `app/lib/overlays.ts`, `app/api/overlay/*`)
+  - 오버레이 토큰(주소)과 관리 키(재발급·삭제 권한)는 서로 다른 32바이트 난수. DB에는 SHA-256 해시만 저장하고 원문은 발급·재발급 응답에서 한 번만 준다 → 잃어버리면 재발급.
+  - 관리 키는 응답 본문이 아닌 HttpOnly·Secure(배포)·SameSite=Strict 쿠키(경로 `/api/overlay`)로만. 토큰만으로는 관리할 수 없다.
+  - 재발급하면 이전 토큰은 즉시 무효. 없는·폐기된·형식이 틀린 토큰은 같은 404. 상태를 바꾸는 요청은 같은 출처만, IP별 횟수 제한.
+  - 90일 동안 조회되지 않은 오버레이는 정리 대상(`coalesce(last_seen_at, created_at)`).
+  - Riot 소유권 인증이 아니다 — 누구 Riot ID로든 발급되는 조회 정보. 화면에 인증 표시를 하지 않는다.
+- 한계: 로그인 없이 발급하므로 관리 키 쿠키를 잃으면(쿠키 삭제·다른 브라우저) 그 오버레이를 관리할 수 없다 → 치지직 로그인 필수화 때 `user_id` 기반 관리로 옮긴다. 횟수 제한·60초 결과 재사용은 서버 메모리라 인스턴스끼리 공유되지 않는다. 시각 컬럼 갱신은 DB `now()`가 아니라 "서버 시각과 행의 DB 시각 중 늦은 값"(정확히 하려면 RPC 함수 필요).
+
 ## 6. 사용자 모델과 권한
 
 | 단계 | 의미 | 가능한 것 |
@@ -89,6 +101,8 @@
   - `users`: id, chzzk_id(unique), 표시 이름, 가입일, 공개 설정 등 필요한 최소 정보
   - `riot_accounts`: PUUID, 게임 이름, 태그, 지역, user_id, 인증 상태, `verification_method`
   - `tier_verifications`: riot_account_id, 티어, 랭크, LP, **승, 패**, 기준 시각 (승률은 저장하지 않고 계산)
+  - `overlays` (적용됨, `docs/sql/007·008`): 비밀 OBS 오버레이. token_hash·manage_key_hash(SHA-256), user_id(nullable), puuid, 표시용 Riot ID, created/rotated/last_seen/revoked 시각. RLS + service_role만
+  - TFT 매치 캐시 3개 (적용됨, `docs/sql/005·006`): tft_matches, tft_match_participants, tft_match_id_lookups. 30일 보관
 - 저장하는 개인정보는 최소화하고, 개인정보 처리방침에 무엇을 왜 저장하는지 적는다.
 
 ## 8. Riot 소유권 인증 (방식 미확정)
@@ -116,6 +130,8 @@
 | 티어 조회 | `/tier` | 닉네임 검색, 조회 카드(조회 상태) | 있음, 수정 |
 | 공개 프로필 | `/u/[id]` | 인증 카드 공유, OG 이미지 | 만들기 |
 | 랭킹·커뮤니티 | `/community` | 탭(`?tab=ranking`)으로 게시판/랭킹. 내비 이름은 "랭킹·커뮤니티" 하나로 통일 | 게시판 최소 기능, 랭킹은 준비 중 |
+| OBS 오버레이 설정 | `/overlay/settings` | 계정 조회·카드 확인·테마·비밀 주소 발급 (5번 "OBS 오버레이") | 완성 |
+| OBS 오버레이 | `/overlay/tft/[token]` | 방송용 투명 카드 + 오늘 랭크 순위 | 완성 |
 | 가이드, 약관, 개인정보, 404 | | 정적 | 짧게 |
 | 카드 꾸미기, 게임 선택 | | | 준비 중 입구 카드만 |
 

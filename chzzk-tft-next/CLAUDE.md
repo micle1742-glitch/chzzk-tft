@@ -46,6 +46,7 @@ PowerShell 실행 정책 때문에 `npx`/`npm` 대신 `.cmd`를 쓴다.
 |---|---|
 | 개발 서버 | `npm.cmd run dev` → http://localhost:3000 , /tier |
 | 타입 검사 | `npm.cmd exec tsc -- --noEmit` |
+| lint · 테스트 · 빌드 | `npm.cmd run lint`, `npm.cmd run test`, `npm.cmd run build` |
 | 상태 확인 | `git status`, `git diff` |
 
 **실행 전 반드시 사용자 확인이 필요한 명령:** `git reset`, `git restore`, `git clean`, `rm`, `del`, `npm install`, 파일 전체 overwrite.
@@ -73,6 +74,11 @@ app/
 ```
 
 목표 구조는 HANDOFF.md 9번이며 랜딩 리디자인 때 옮긴다.
+
+OBS 오버레이 (상세: HANDOFF.md 5번 "OBS 오버레이")
+- 화면: `app/overlay/settings/`(설정·비밀 주소 발급), `app/overlay/tft/[token]/`(비밀 주소 오버레이), `app/overlay/tft/`(Riot ID 주소, 기존 호환)
+- API: `app/api/overlay/`(발급·rotate·revoke·status·data), `app/api/tft/matches`(mode today) — 조회 본체는 `app/lib/tft-matches.ts`
+- 토큰: `app/lib/overlay-token.ts`(server-only, 구현은 `overlay-token-core.ts`), DB: `app/lib/overlays.ts`, 테이블 SQL: `docs/sql/007·008`
 
 ## /tier 현재 구현
 
@@ -127,7 +133,8 @@ app/
 
 - "multiple lockfiles" 경고: 상위 `chzzk-tft` 폴더에도 package-lock.json이 있어서 발생. 실행엔 문제없음, 나중에 정리.
 - (개선 예정) 전적 분석의 시즌 목록에 현재 시즌만 보이는 경우가 있다. 최근 매치 300개가 모두 현재 세트이거나, 한 요청의 상세 조회 한도(45개) 때문에 과거 세트 탐색이 끝나지 않은 경우로 추정 — 탐색 로직은 아직 그대로 (app/lib/tft-season-scan.ts, api/tft/matches).
-- Riot API 공용 속도 제한기(app/lib/riot.ts)는 서버 메모리라 Vercel 인스턴스끼리 공유되지 않는다 (HANDOFF 5번 "전적 분석 영역").
+- Riot API 공용 속도 제한기(app/lib/riot.ts)는 서버 메모리라 Vercel 인스턴스끼리 공유되지 않는다 (HANDOFF 5번 "전적 분석 영역"). 오버레이 API의 IP별 횟수 제한·60초 결과 재사용도 같은 한계.
+- 비밀 오버레이는 로그인 없이 발급하므로 관리 키 쿠키를 잃으면 관리할 수 없다 → 치지직 로그인 필수화 때 `user_id` 기반으로 옮긴다. 개발 서버에서 발급 테스트를 반복하면 IP별 제한(10분 5회)에 걸린다 (서버 재시작 시 초기화).
 - Riot Development API Key는 24시간마다 만료된다. `Unknown apikey (401)`이 나오면 키 재발급 후 `.env.local` 교체 + 서버 재시작.
 
 ## 사용자에게 설명하는 방식 (중요)
