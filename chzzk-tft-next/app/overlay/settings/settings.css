@@ -467,3 +467,74 @@
     flex: 1;
   }
 }
+
+/* ---------- 치지직 로그인 안내 (1단계 제목 옆) — 4단계 비밀 주소 발급·관리에 필요 ---------- */
+.os-step-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px 12px;
+  margin-bottom: 14px;
+}
+
+.os-step-head .os-step-title {
+  margin: 0;
+}
+
+.os-login {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.os-login-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.os-btn.os-login-btn {
+  height: 34px;
+  padding: 0 14px;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.os-login-star {
+  color: #ff6b6b;
+  font-weight: 800;
+}
+
+.os-login-note {
+  margin: 0;
+  color: var(--os-faint);
+  font-size: 12px;
+}
+
+.os-login-state {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 0;
+  color: var(--os-muted);
+  font-size: 13px;
+}
+
+.os-login-state strong {
+  color: #ffffff;
+}
+
+.os-login-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--os-accent);
+}
+
+@media (max-width: 480px) {
+  .os-login {
+    align-items: flex-start;
+  }
+}

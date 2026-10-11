@@ -7,7 +7,8 @@ import type { OverlayTheme } from "../tft/OverlayCard";
 
 /*
  * 비밀 오버레이 주소 (/overlay/tft/<토큰>) 발급·재발급·삭제 — 설정 페이지의 한 칸
- * - 관리 키는 서버가 HttpOnly 쿠키로만 다룬다. 이 코드는 관리 키를 보거나 저장하지 않는다
+ * - 관리 권한은 치지직 로그인 계정 (서버가 세션으로 확인). 이 코드는 관리 키·세션 값을 보거나 저장하지 않는다
+ * - 로그인 필수화 전에 이 브라우저에서 발급한 오버레이는 상태 확인 때 서버가 이 계정에 연결한다 (linked 알림)
  * - 토큰(주소)은 발급·재발급 응답에서 한 번만 받아 이 화면의 메모리(state)에만 둔다
  *   (localStorage·URL에 저장하지 않음 → 새로 고치면 다시 볼 수 없고, 필요하면 재발급)
  * - 주소는 방송 화면에 비칠 수 있어 기본으로 가려 두고, "보기"·복사 버튼으로만 꺼낸다
@@ -15,6 +16,7 @@ import type { OverlayTheme } from "../tft/OverlayCard";
  */
 
 type Status =
+  | { kind: "guest" } // 로그인 안 함: 상태 확인·발급 요청을 보내지 않는다
   | { kind: "loading" }
   | { kind: "none" }
   | { kind: "managed"; gameName: string; tagLine: string; createdAt: string; rotatedAt: string | null }
@@ -30,11 +32,12 @@ function messageFor(action: "issue" | "rotate" | "revoke", status: number, body:
   if (status === 429) {
     return wait ? `요청이 많습니다. ${wait}초 뒤에 다시 시도해 주세요.` : "요청이 많습니다. 잠시 후 다시 시도해 주세요.";
   }
+  if (status === 401) return "로그인이 만료되었습니다. 페이지를 새로 고쳐 다시 로그인해 주세요.";
   if (status === 403) return "보안 확인에 실패했습니다. 페이지를 새로 고친 뒤 다시 시도해 주세요.";
-  if (status === 409) return "이 브라우저에서 이미 관리 중인 오버레이가 있습니다. 아래에서 재발급하거나 삭제한 뒤 다시 발급해 주세요.";
+  if (status === 409) return "이 계정에 이미 발급한 오버레이가 있습니다. 아래에서 재발급하거나 삭제한 뒤 다시 발급해 주세요.";
   if (status === 404) {
     if (action === "issue" && b.reason === "account_not_found") return "Riot ID를 찾을 수 없습니다. 1단계에서 계정을 다시 확인해 주세요.";
-    return "관리할 오버레이를 찾을 수 없습니다. 이미 삭제되었거나 이 브라우저에 관리 정보가 없습니다.";
+    return "관리할 오버레이를 찾을 수 없습니다. 이미 삭제되었을 수 있습니다.";
   }
   if (status === 400) return "입력한 Riot ID를 확인해 주세요.";
   return "지금은 처리할 수 없습니다. 잠시 후 다시 시도해 주세요.";
@@ -46,12 +49,15 @@ const dateText = (iso: string) =>
 export default function SecretOverlayPanel({
   account,
   theme,
+  loggedIn,
 }: {
   // 1단계에서 확인한 Riot ID (확인 전이면 null)
   account: { gameName: string; tagLine: string } | null;
   theme: OverlayTheme;
+  // 치지직 로그인 여부 (서버 세션 기준). 발급·재발급·삭제 권한은 서버가 다시 확인한다
+  loggedIn: boolean;
 }) {
-  const [status, setStatus] = useState<Status>({ kind: "loading" });
+  const [status, setStatus] = useState<Status>(loggedIn ? { kind: "loading" } : { kind: "guest" });
   // 방금 발급·재발급한 주소의 경로 (/overlay/tft/<토큰>). 메모리에만
   const [path, setPath] = useState<string | null>(null);
   const [reveal, setReveal] = useState(false);
@@ -79,12 +85,20 @@ export default function SecretOverlayPanel({
 
   // 화면을 열 때 이 브라우저의 관리 상태를 한 번 확인 (응답 후에만 state를 바꾼다)
   useEffect(() => {
+    if (!loggedIn) return;
     let cancelled = false;
     fetch("/api/overlay/status", { method: "POST", cache: "no-store" })
       .then(async (response) => {
         const data: OverlayStatusResponse | { success: false } = await response.json();
         if (cancelled) return;
+        if (response.status === 401) {
+          setError("로그인이 만료되었습니다. 페이지를 새로 고쳐 다시 로그인해 주세요.");
+          return setStatus({ kind: "error" });
+        }
         if (!response.ok || !data.success) return setStatus({ kind: "error" });
+        if (data.managed && data.linked) {
+          setNotice("이 브라우저에서 이전에 발급한 오버레이를 로그인한 계정에 연결했습니다. 이제 로그인하면 어디서든 관리할 수 있습니다.");
+        }
         setStatus(
           data.managed
             ? { kind: "managed", gameName: data.gameName, tagLine: data.tagLine, createdAt: data.createdAt, rotatedAt: data.rotatedAt }
@@ -97,7 +111,7 @@ export default function SecretOverlayPanel({
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [loggedIn]);
 
   async function run(action: "issue" | "rotate" | "revoke") {
     setBusy(action);
@@ -167,6 +181,9 @@ export default function SecretOverlayPanel({
         OBS에 넣을 주소입니다. Riot ID 대신 추측할 수 없는 값을 써서, 주소가 새면 재발급으로 바로 막을 수 있습니다.
       </p>
 
+      {status.kind === "guest" && (
+        <p className="os-hint">1단계 옆의 “치지직 로그인하기”로 로그인하면 비밀 주소를 발급하고 관리할 수 있습니다.</p>
+      )}
       {status.kind === "loading" && <p className="os-hint">관리 상태를 확인하는 중…</p>}
       {status.kind === "error" && (
         <p className="os-error" role="alert">
@@ -176,7 +193,7 @@ export default function SecretOverlayPanel({
 
       {status.kind === "none" && (
         <>
-          <p className="os-hint">이 브라우저에서 관리 중인 비밀 주소가 없습니다.</p>
+          <p className="os-hint">이 계정으로 발급한 비밀 주소가 없습니다.</p>
           <button
             type="button"
             className="os-btn os-btn-primary os-btn-block"
@@ -296,10 +313,7 @@ export default function SecretOverlayPanel({
       )}
 
       <ul className="os-secret-notes">
-        <li>
-          재발급·삭제 권한은 이 브라우저에만 저장됩니다. 브라우저 쿠키를 지우거나 다른 브라우저·기기에서는 이 오버레이를
-          관리할 수 없습니다.
-        </li>
+        <li>오버레이는 로그인한 치지직 계정에 연결됩니다. 다른 브라우저·기기에서도 같은 계정으로 로그인하면 관리할 수 있습니다.</li>
         <li>주소는 발급할 때 한 번만 보여 줍니다. 다시 볼 수 없으니 잃어버리면 재발급해 주세요.</li>
         <li>Riot API로 조회한 공개 정보를 표시할 뿐, 계정 소유를 인증하지 않습니다.</li>
       </ul>

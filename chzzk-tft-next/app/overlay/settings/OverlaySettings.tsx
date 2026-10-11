@@ -4,6 +4,7 @@ import { useState } from "react";
 // 타입만 가져온다 (서버 코드는 번들에 포함되지 않음)
 import type { RankedEntry, SearchResponse } from "../../api/search/route";
 import OverlayCard, { type OverlayTheme, type OverlayToday, type OverlayView } from "../tft/OverlayCard";
+import ChzzkLoginLink from "../../components/ChzzkLoginLink";
 import SecretOverlayPanel from "./SecretOverlayPanel";
 
 /*
@@ -13,6 +14,7 @@ import SecretOverlayPanel from "./SecretOverlayPanel";
  * 3. 미리보기 및 사용: 테마 선택 + 미리보기(오른쪽, 모바일은 위) + OBS에 넣는 방법
  * 4. 비밀 주소 발급·재발급·삭제 (SecretOverlayPanel, /api/overlay/*) — OBS에 넣는 주소는 이것 하나
  *    (예전의 Riot ID가 들어간 주소 /overlay/tft?name=&tag=는 화면에서 안내하지 않지만, 이미 쓰는 사람을 위해 계속 동작한다)
+ * - 치지직 로그인: 1단계 제목 옆에 로그인 버튼(로그인 후 이 페이지로 복귀) 또는 로그인 상태. 4단계 발급·관리에만 필요
  * - 미리보기는 /overlay/tft와 같은 OverlayCard. 확인 전에는 "예시"임을 분명히 표시한 예시 카드
  * - Riot ID 조회 정보일 뿐 계정 소유권 인증이 아니다 (RSO 승인 전) — 인증 표현을 쓰지 않는다
  */
@@ -47,7 +49,12 @@ function tierText(ok: { ranked: RankedEntry | null; tftError: boolean }): string
   return `${tier}${division}${typeof leaguePoints === "number" ? ` · ${leaguePoints} LP` : ""}`;
 }
 
-export default function OverlaySettings() {
+export default function OverlaySettings({
+  // 로그인한 치지직 닉네임 (로그인 안 했으면 null) — 서버의 getSession() 결과
+  chzzkName,
+}: {
+  chzzkName: string | null;
+}) {
   const [name, setName] = useState("");
   const [tag, setTag] = useState("");
   const [theme, setTheme] = useState<OverlayTheme>("dark");
@@ -109,9 +116,31 @@ export default function OverlaySettings() {
         <div className="os-steps">
           {/* 1. Riot ID 확인 */}
           <section className="os-card" aria-labelledby="os-step1">
-            <h2 id="os-step1" className="os-step-title">
-              <span className="os-step-no">1</span> Riot 계정 조회
-            </h2>
+            <div className="os-step-head">
+              <h2 id="os-step1" className="os-step-title">
+                <span className="os-step-no">1</span> Riot 계정 조회
+              </h2>
+              {chzzkName ? (
+                <p className="os-login-state">
+                  <span className="os-login-dot" aria-hidden="true" />
+                  치지직 <strong>{chzzkName}</strong> 로그인됨
+                </p>
+              ) : (
+                <div className="os-login">
+                  <div className="os-login-row">
+                    <ChzzkLoginLink className="os-btn os-btn-ghost os-login-btn" next="/overlay/settings">
+                      치지직 로그인하기
+                    </ChzzkLoginLink>
+                    <span className="os-login-star" aria-hidden="true">
+                      *
+                    </span>
+                  </div>
+                  <p className="os-login-note">
+                    <span className="os-login-star">*</span> 오버레이 URL 발급 및 관리에 필요합니다.
+                  </p>
+                </div>
+              )}
+            </div>
             <form
               className="os-id-form"
               onSubmit={(e) => {
@@ -225,7 +254,11 @@ export default function OverlaySettings() {
           </section>
 
           {/* 4. 비밀 주소 (Riot ID가 주소에 없음) */}
-          <SecretOverlayPanel account={ok ? { gameName: ok.gameName, tagLine: ok.tagLine } : null} theme={theme} />
+          <SecretOverlayPanel
+            account={ok ? { gameName: ok.gameName, tagLine: ok.tagLine } : null}
+            theme={theme}
+            loggedIn={chzzkName !== null}
+          />
         </div>
 
         {/* 미리보기: /overlay/tft와 같은 카드. 카드가 투명하므로 방송 화면처럼 바탕을 깐다 */}

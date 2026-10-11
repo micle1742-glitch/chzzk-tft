@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { chzzkCredentials, requestOrigin } from "../../../lib/chzzk";
+import { LOGIN_NEXT_COOKIE, safeNextPath } from "../../../lib/login-redirect";
 
 export async function GET(request: NextRequest) {
   // localhost면 로컬 개발용 앱(CHZZK_LOCAL_*), 배포 도메인이면 운영 앱(CHZZK_*) — app/lib/chzzk.ts
@@ -28,13 +29,19 @@ export async function GET(request: NextRequest) {
   const response = NextResponse.redirect(authUrl);
 
   // 콜백에서 비교할 수 있도록 같은 값을 브라우저 쿠키에 10분간 보관
-  response.cookies.set("chzzk_oauth_state", state, {
+  const tempCookie = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: "lax" as const,
     path: "/",
     maxAge: 60 * 10,
-  });
+  };
+  response.cookies.set("chzzk_oauth_state", state, tempCookie);
+
+  // 로그인 후 돌아갈 경로(?next=): 우리 사이트 안의 경로만 같은 기간 보관, 없거나 틀리면 이전 값도 지운다 (콜백이 다시 검사)
+  const next = safeNextPath(request.nextUrl.searchParams.get("next"));
+  if (next) response.cookies.set(LOGIN_NEXT_COOKIE, next, tempCookie);
+  else response.cookies.delete(LOGIN_NEXT_COOKIE);
 
   return response;
 }

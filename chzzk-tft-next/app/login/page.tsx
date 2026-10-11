@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import ChzzkLoginLink from "../components/ChzzkLoginLink";
 import SiteNav from "../components/SiteNav";
+import { safeNextPath } from "../lib/login-redirect";
 import { getSession } from "../lib/session";
 import "./login.css";
 
@@ -15,14 +16,17 @@ const ERROR_MESSAGES: Record<string, string> = {
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string | string[] }>;
+  searchParams: Promise<{ error?: string | string[]; next?: string | string[] }>;
 }) {
-  // 이미 로그인한 사용자는 로그인 화면 없이 로그인 사용자 홈(/home)으로
+  const { error, next: rawNext } = await searchParams;
+  // 로그인 후 돌아갈 경로 (보호된 페이지가 ?next=로 넘김). 우리 사이트 안의 경로만, 아니면 /home
+  const next = safeNextPath(typeof rawNext === "string" ? rawNext : undefined);
+
+  // 이미 로그인한 사용자는 로그인 화면 없이 가려던 페이지(없으면 /home)로
   if (await getSession()) {
-    redirect("/home");
+    redirect(next ?? "/home");
   }
 
-  const { error } = await searchParams;
   const errorMessage =
     typeof error === "string" ? ERROR_MESSAGES[error] : undefined;
 
@@ -79,7 +83,7 @@ export default async function LoginPage({
           <div className="login-buttons">
 
             {/* 치지직 (누르면 로그인 중 화면 표시) */}
-            <ChzzkLoginLink className="social-login-btn chzzk-btn">
+            <ChzzkLoginLink className="social-login-btn chzzk-btn" next={next ?? undefined}>
               <div className="btn-icon chzzk-icon">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

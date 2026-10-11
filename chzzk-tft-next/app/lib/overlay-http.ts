@@ -11,6 +11,7 @@ import { clientIp, isSameOrigin, sharedWindowCounter } from "./request-guard";
 
 const FAILURES = {
   invalid: { status: 400, message: "요청 형식이 올바르지 않습니다." },
+  unauthorized: { status: 401, message: "로그인이 필요합니다. 다시 로그인해 주세요." },
   forbidden: { status: 403, message: "허용되지 않은 요청입니다." },
   not_found: { status: 404, message: "오버레이를 찾을 수 없습니다. 주소를 다시 발급해 주세요." },
   account_not_found: {
@@ -19,7 +20,7 @@ const FAILURES = {
   },
   already_issued: {
     status: 409,
-    message: "이 브라우저에서 이미 발급한 오버레이 주소가 있습니다. 재발급하거나 삭제한 뒤 다시 발급해 주세요.",
+    message: "이미 발급한 오버레이 주소가 있습니다. 재발급하거나 삭제한 뒤 다시 발급해 주세요.",
   },
   too_many: { status: 429, message: "요청이 많습니다. 잠시 후 다시 시도해주세요." },
   unavailable: { status: 503, message: "지금은 처리할 수 없습니다. 잠시 후 다시 시도해주세요." },

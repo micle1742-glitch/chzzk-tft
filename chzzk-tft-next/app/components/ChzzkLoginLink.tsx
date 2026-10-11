@@ -5,14 +5,17 @@ import "./chzzk-login.css";
 
 /*
  * 치지직 로그인 시작 링크. 기존과 같은 /api/auth/chzzk로 이동한다 (OAuth 흐름은 그대로).
+ * next: 로그인 후 돌아갈 내부 경로 (서버가 다시 검사한다 — app/lib/login-redirect.ts)
  * 누르는 순간 화면 전체에 "로그인 중입니다" 로딩을 덮어, 치지직으로 넘어가기 전 대기 시간에 상태를 알려 준다.
  */
 export default function ChzzkLoginLink({
   className,
   children,
+  next,
 }: {
   className?: string;
   children: ReactNode;
+  next?: string;
 }) {
   const [loading, setLoading] = useState(false);
 
@@ -28,7 +31,7 @@ export default function ChzzkLoginLink({
   return (
     <>
       <a
-        href="/api/auth/chzzk"
+        href={next ? `/api/auth/chzzk?next=${encodeURIComponent(next)}` : "/api/auth/chzzk"}
         className={className}
         aria-disabled={loading || undefined}
         onClick={(e) => {

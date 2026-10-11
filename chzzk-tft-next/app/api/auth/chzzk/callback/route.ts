@@ -2,6 +2,7 @@ import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import { chzzkCredentials } from "../../../../lib/chzzk";
 import { getSupabase } from "../../../../lib/db";
+import { LOGIN_NEXT_COOKIE, safeNextPath } from "../../../../lib/login-redirect";
 import {
   LEGACY_SESSION_COOKIES,
   SESSION_COOKIE,
@@ -21,14 +22,18 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get("code");
   const state = searchParams.get("state");
   const savedState = request.cookies.get("chzzk_oauth_state")?.value;
+  // 로그인 후 돌아갈 경로 (로그인 시작 때 저장, 우리 사이트 안의 경로만 — 아니면 null)
+  const next = safeNextPath(request.cookies.get(LOGIN_NEXT_COOKIE)?.value);
 
   // 실패·취소는 모두 로그인 페이지로 돌려보낸다 (사유는 정해진 코드만 전달, 세션은 발급하지 않음)
   // 기존 tieron_session은 건드리지 않는다: 누군가 ?error= 링크를 열게 해서 강제로 로그아웃시키지 못하게
   const loginError = (reason: "cancelled" | "state" | "failed") => {
+    // 다시 시도해도 원래 가려던 페이지로 돌아가도록 next를 로그인 화면에 넘긴다
     const res = NextResponse.redirect(
-      new URL(`/login?error=${reason}`, request.url)
+      new URL(`/login?error=${reason}${next ? `&next=${encodeURIComponent(next)}` : ""}`, request.url)
     );
     res.cookies.delete("chzzk_oauth_state");
+    res.cookies.delete(LOGIN_NEXT_COOKIE);
     clearLegacyCookies(res);
     return res;
   };
@@ -107,13 +112,14 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // 인증 성공 → 항상 로그인 사용자 홈(/home)으로 이동 (이전 방문 페이지나 returnUrl과 무관)
+    // 인증 성공 → 로그인 전에 가려던 페이지(검사된 내부 경로)로, 없으면 로그인 사용자 홈(/home)
     const response = NextResponse.redirect(
-      new URL("/home", request.url)
+      new URL(next ?? "/home", request.url)
     );
 
-    // 한 번 쓴 state는 폐기
+    // 한 번 쓴 state·복귀 경로는 폐기
     response.cookies.delete("chzzk_oauth_state");
+    response.cookies.delete(LOGIN_NEXT_COOKIE);
     clearLegacyCookies(response);
 
     // 쿠키에는 토큰 원문만 (DB에는 해시)

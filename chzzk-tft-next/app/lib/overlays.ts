@@ -5,7 +5,8 @@ import { createOverlaySecrets, generateOverlayToken, hashOverlaySecret, isOverla
 /*
  * 비밀 OBS 오버레이 DB 처리 (docs/sql/007_create_overlays.sql, 008 권한)
  * - 토큰(주소)·관리 키(재발급·삭제) 원문은 저장하지 않는다. SHA-256 해시로만 찾고 바꾼다
- * - 토큰으로는 조회만, 관리 키로는 관리만 — 두 값은 서로 다른 칸에서만 찾는다
+ * - 토큰으로는 조회만. 관리(재발급·삭제)는 로그인 세션의 user_id로 (아래 "로그인 계정 기준 관리")
+ *   관리 키는 로그인 필수화 전에 발급된 오버레이를 계정에 연결할 때만 쓴다 (claimOverlayForUser)
  * - 폐기(revoked_at)된 행은 "없는 행"과 똑같이 null을 돌려준다
  * - 오류 메시지·로그에는 DB 오류 코드만 (토큰·관리 키·해시·PUUID 미포함)
  *
@@ -136,6 +137,80 @@ export async function revokeOverlay(manageKey: unknown): Promise<boolean> {
     .is("revoked_at", null)
     .select("id");
   if (error) throw dbError("폐기", error.code);
+  return !!data && data.length === 1;
+}
+
+/*
+ * 로그인 계정 기준 관리 (치지직 로그인 필수화 이후의 기본 방식)
+ * - 권한은 세션의 user_id로만 판단한다. 다른 사용자의 오버레이는 조회·재발급·삭제 대상에 들어오지 않는다
+ * - 사용자당 활성 오버레이는 하나 (발급 API가 확인. DB 제약은 없어서 동시에 두 번 발급되면 둘 다 아래 함수가 다룬다)
+ */
+
+// 로그인 사용자의 활성 오버레이 (여러 개면 가장 최근 것)
+export async function findOverlayByUser(userId: string): Promise<OverlayRow | null> {
+  const { data, error } = await getSupabase()
+    .from(TABLE)
+    .select(ROW_COLUMNS)
+    .eq("user_id", userId)
+    .is("revoked_at", null)
+    .order("created_at", { ascending: false })
+    .limit(1);
+  if (error) throw dbError("조회", error.code);
+  return ((data?.[0] as OverlayRow | undefined) ?? null);
+}
+
+// 재발급 (로그인 사용자 본인 것만). 새 토큰 원문, 대상이 없으면 null
+export async function rotateOverlayTokenForUser(userId: string): Promise<string | null> {
+  const row = await findOverlayByUser(userId);
+  if (!row) return null;
+  const token = generateOverlayToken();
+  const { data, error } = await getSupabase()
+    .from(TABLE)
+    .update({ token_hash: hashOverlaySecret(token), rotated_at: notBefore(row.created_at, row.rotated_at) })
+    .eq("id", row.id)
+    .eq("user_id", userId)
+    .is("revoked_at", null)
+    .select("id");
+  if (error) throw dbError("재발급", error.code);
+  return data && data.length === 1 ? token : null;
+}
+
+// 폐기 (로그인 사용자의 활성 오버레이 전부). 하나라도 폐기했으면 true
+export async function revokeOverlaysForUser(userId: string): Promise<boolean> {
+  const db = getSupabase();
+  const { data: rows, error } = await db
+    .from(TABLE)
+    .select(ROW_COLUMNS)
+    .eq("user_id", userId)
+    .is("revoked_at", null);
+  if (error) throw dbError("조회", error.code);
+  let revoked = 0;
+  for (const row of (rows ?? []) as OverlayRow[]) {
+    const result = await db
+      .from(TABLE)
+      .update({ revoked_at: notBefore(row.created_at, row.rotated_at, row.last_seen_at) })
+      .eq("id", row.id)
+      .eq("user_id", userId)
+      .is("revoked_at", null)
+      .select("id");
+    if (result.error) throw dbError("폐기", result.error.code);
+    revoked += result.data?.length ?? 0;
+  }
+  return revoked > 0;
+}
+
+// 로그인 없이 발급했던 오버레이를 관리 키(쿠키)로 확인해 로그인 계정에 연결. 아직 주인이 없는 행만. 연결했으면 true
+export async function claimOverlayForUser(manageKey: unknown, userId: string): Promise<boolean> {
+  const row = await findOverlayByManageKey(manageKey);
+  if (!row) return false;
+  const { data, error } = await getSupabase()
+    .from(TABLE)
+    .update({ user_id: userId })
+    .eq("id", row.id)
+    .is("user_id", null)
+    .is("revoked_at", null)
+    .select("id");
+  if (error) throw dbError("계정 연결", error.code);
   return !!data && data.length === 1;
 }
 
