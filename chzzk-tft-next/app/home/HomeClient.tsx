@@ -290,7 +290,7 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
             <h2 className="services-title">주요 서비스</h2>
           </div>
           <div className="services-grid">
-            {/* 1. 내 프로필 → 마이페이지 */}
+            {/* 1. 내 프로필 → 마이페이지 (로그인 필요 — 비로그인이면 로그인 후 이 페이지로 돌아온다) */}
             <Link href="/mypage" className="service-card">
               <div className="service-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width={22} height={22} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -300,7 +300,7 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
               </div>
               <div className="service-text">
                 <h3>내 프로필</h3>
-                <p>내 게임 티어와 전적을 한눈에 확인하세요.</p>
+                <p>치지직 로그인 계정의 프로필과 연결 정보를 관리하세요.</p>
               </div>
               <div className="service-arrow">
                 <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -309,7 +309,7 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
               </div>
             </Link>
 
-            {/* 2. Riot 티어 조회 (/riot은 조회 페이지 — 소유권 인증은 /verify) */}
+            {/* 2. 전적 검색 (/riot — Riot ID로 티어·전적 조회, 로그인 없이 이용 가능. 소유권 인증은 3번 /verify) */}
             <Link href="/riot" className="service-card">
               <div className="service-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width={22} height={22} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -322,8 +322,8 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
                 </svg>
               </div>
               <div className="service-text">
-                <h3>Riot 티어 조회</h3>
-                <p>Riot ID로 TFT·LoL 랭크를 조회하세요.</p>
+                <h3>전적 검색</h3>
+                <p>Riot ID로 TFT·LoL 티어와 전적을 조회하세요.</p>
               </div>
               <div className="service-arrow">
                 <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -331,19 +331,16 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
                 </svg>
               </div>
             </Link>
-            {/* 3. 랭킹 — 랭킹·커뮤니티 페이지의 랭킹 탭 */}
-            <Link href="/community?tab=ranking" className="service-card">
+            {/* 3. 라이엇 계정 인증 → /verify (RSO 승인 전이라 페이지도 "준비 중" — 인증된 것처럼 표시하지 않는다) */}
+            <Link href="/verify" className="service-card">
               <div className="service-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width={22} height={22} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 3v16a2 2 0 0 0 2 2h16" />
-                  <path d="M18 17V9" />
-                  <path d="M13 17V5" />
-                  <path d="M8 17v-3" />
+                  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
                 </svg>
               </div>
               <div className="service-text">
-                <h3>랭킹</h3>
-                <p>다른 스트리머와 시청자들의 티어를 확인해보세요.</p>
+                <h3>라이엇 계정 인증</h3>
+                <p>준비 중 · Riot 공식 연동(RSO) 승인 후 내 계정 소유를 인증할 수 있습니다.</p>
               </div>
               <div className="service-arrow">
                 <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -351,7 +348,7 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
                 </svg>
               </div>
             </Link>
-            {/* 4. 커뮤니티 */}
+            {/* 4. 랭킹·커뮤니티 → /community (게시판·랭킹 탭 화면만 있음, 데이터는 예시 — 페이지에도 표시) */}
             <Link href="/community" className="service-card">
               <div className="service-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width={22} height={22} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -362,8 +359,8 @@ export default function HomeClient({ loggedIn }: { loggedIn: boolean }) {
                 </svg>
               </div>
               <div className="service-text">
-                <h3>커뮤니티</h3>
-                <p>게임 이야기로 함께 소통하세요.</p>
+                <h3>랭킹·커뮤니티</h3>
+                <p>준비 중 · 게시판과 랭킹은 지금 예시 화면으로만 볼 수 있습니다.</p>
               </div>
               <div className="service-arrow">
                 <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
