@@ -222,6 +222,63 @@
 .ov-theme-dark .tc--grandmaster { --ov-lp: #a3202f; }
 .ov-theme-dark .tc--challenger { --ov-lp: #0b6fa8; }
 
+/* ---------- 오늘 랭크 순위 (카드 안 하단, 구분선 없음) ----------
+ * 배경·테두리 없이 글자만 (투명). 색은 테마 변수 재사용: 글자 --ov-ink, 라벨·흐린 등수 --ov-muted, 1등 --ov-accent
+ * 카드 안쪽 폭에 맞춰 줄바꿈 → 카드 밖으로 넘치지 않음 */
+.ov-today {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  min-width: 0;
+  margin-top: 12px;
+  padding: 0 2px;
+  color: var(--ov-ink);
+  text-shadow: var(--ov-text-shadow);
+}
+
+/* 순위가 들어가는 카드: 위쪽 간격만 조금 줄여 늘어나는 높이를 줄인다 (가로 크기·테두리는 그대로) */
+.ov-card--today .ov-player {
+  margin-top: 12px;
+}
+
+.ov-card--today .tc-tier.ov-tier {
+  margin-top: 12px;
+  padding: 12px 14px;
+}
+
+.ov-today-label {
+  color: var(--ov-muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.ov-today-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 9px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 17px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.ov-today-list .is-first {
+  color: var(--ov-accent);
+}
+
+.ov-today-list .is-low {
+  color: var(--ov-muted);
+}
+
+.ov-today-note {
+  color: var(--ov-muted);
+  font-size: 12px;
+}
+
 /* 좁은 소스(예: 300px 폭)에서도 넘치지 않게 */
 @media (max-width: 420px) {
   .ov-root {
