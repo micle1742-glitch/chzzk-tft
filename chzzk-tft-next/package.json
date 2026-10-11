@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test app/lib/tft-analysis.test.mjs app/lib/tft-season-scan.test.mjs app/lib/riot-limiter.test.mjs"
+    "test": "node --test app/lib/tft-analysis.test.mjs app/lib/tft-season-scan.test.mjs app/lib/riot-limiter.test.mjs app/lib/tft-today.test.mjs app/lib/overlay-token.test.mjs app/lib/request-guard.test.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.2",
